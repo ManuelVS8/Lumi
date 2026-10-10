@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
-<meta name="app-version" content="1.0.3">
+<meta name="app-version" content="1.0.7">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas e inglés jugando">
@@ -614,8 +614,28 @@ function nextToast(){
 }
 let sayT=null;
 function say(t,ms=2800){const b=$('#bubble');b.textContent=t.replace('{n}',S.name||'tu mascota');b.classList.remove('hidden','popin');void b.offsetWidth;b.classList.add('popin');clearTimeout(sayT);sayT=setTimeout(()=>b.classList.add('hidden'),ms);}
-function openPanel(html,cls=''){$('#panel').className='panel '+cls;$('#panel').innerHTML=html;$('#overlay').classList.remove('hidden');$('#panel').scrollTop=0;$$('#panel [data-x]').forEach(b=>b.onclick=closePanel);}
-function closePanel(){game=null;$('#overlay').classList.add('hidden');$('#panel').innerHTML='';if('speechSynthesis' in window)speechSynthesis.cancel();}
+function openPanel(html,cls='',back=null){panelBack=back;ensureGuard();$('#panel').className='panel '+cls;$('#panel').innerHTML=html;$('#overlay').classList.remove('hidden');$('#panel').scrollTop=0;$$('#panel [data-x]').forEach(b=>b.onclick=closePanel);}
+function closePanel(){game=null;panelBack=null;setTimeout(syncHome,60);$('#overlay').classList.add('hidden');$('#panel').innerHTML='';if('speechSynthesis' in window)speechSynthesis.cancel();}
+/* Botón Atrás del móvil: retrocede paso a paso (juego → menú → habitación → cocina) sin salir de la app */
+let guardOn=false,ignorePop=false,panelBack=null;
+const atHome=()=>$('#overlay').classList.contains('hidden')&&room==='cocina'&&!classMode;
+function ensureGuard(){if(!guardOn){try{history.pushState({mascota:1},'');guardOn=true;}catch(e){}}}
+function syncHome(){if(guardOn&&atHome()){ignorePop=true;guardOn=false;history.back();}}
+function goBack(){
+  if(!$('#overlay').classList.contains('hidden')){
+    if(panelBack==='block')return;
+    if(typeof panelBack==='function')panelBack();else closePanel();
+    return;
+  }
+  if(classMode){exitClass();return;}
+  if(room!=='cocina')goRoom('cocina');
+}
+window.addEventListener('popstate',()=>{
+  if(ignorePop){ignorePop=false;return;}
+  guardOn=false;
+  goBack();
+  if(!atHome())ensureGuard();
+});
 function cleanClone(){const c=$('#petSvg').cloneNode(true);c.removeAttribute('id');c.querySelectorAll('.bub').forEach(x=>x.remove());c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));return c;}
 
 function updateUI(){
@@ -714,6 +734,7 @@ function goRoom(r,init){
   if(room==='dormitorio'&&S.sleeping&&r!=='dormitorio')wake('¡Me has despertado! 🥱');
   if(room==='bano'&&r!=='bano')$('#bubbles').innerHTML='';
   room=r;soapOn=false;
+  if(r!=='cocina')ensureGuard();else setTimeout(syncHome,60);
   const st=$('#stage');st.className='room-'+r;st.classList.toggle('sleeping',S.sleeping);
   $('#roomTitle').textContent=ROOMS[r].icon+' '+ROOMS[r].name;
   st.classList.toggle('evening',isEvening());
@@ -1047,7 +1068,7 @@ function finishGame(r){
   const msg=ratio>=.99?'¡Perfecto!':ratio>=.7?'¡Muy bien!':ratio>=.4?'¡Bien hecho!':'¡Sigue practicando!';
   openPanel(`<div class="result"><div class="ptitle">${r.title}</div><div class="stars">${stars}</div><div class="reward">${msg}</div><div>${r.detail}</div>
     ${r.badge?`<div class="badge">${r.badge}</div>`:''}${r.note?`<div class="sub">${r.note}</div>`:''}<div class="reward">+${r.coins} 🪙 · +${r.xp} XP</div>
-    <div class="btns"><button class="btn" data-x>Volver</button>${r.menu?'<button class="btn" id="gMenu">Elegir otro</button>':''}<button class="btn primary" id="again">Otra vez</button></div></div>`);
+    <div class="btns"><button class="btn" data-x>Volver</button>${r.menu?'<button class="btn" id="gMenu">Elegir otro</button>':''}<button class="btn primary" id="again">Otra vez</button></div></div>`,'',r.menu||null);
   sfx(r.badge?'badge':ratio>=.7?'level':'ok');
   $('#again').onclick=()=>tryPlay(r.again);
   if(r.menu)$('#gMenu').onclick=r.menu;
@@ -1093,7 +1114,7 @@ function startNinja(opt){
   const g={id:'ninja',opt,facts,base:facts.length,retried:new Set(),qi:0,hits:0,errors:0,coins:0,combo:0,fruits:[],halves:[],parts:[],texts:[],trail:[],pending:[],wave:0,answered:false,running:true,time:0,last:0};
   game=g;
   openPanel(`<div class="ghead"><b>⚔️ ${title}</b><span id="nInfo"></span><button class="x" data-x>✕</button></div>
-    <div class="nq" id="nQ"></div><div id="nWrap"><canvas id="nCv"></canvas><div class="nflash" id="nFlash" style="opacity:0"></div></div>`,'game');
+    <div class="nq" id="nQ"></div><div id="nWrap"><canvas id="nCv"></canvas><div class="nflash" id="nFlash" style="opacity:0"></div></div>`,'game',()=>{game=null;openTables();});
   const cv=$('#nCv'),wrap=$('#nWrap'),ctx=cv.getContext('2d');
   let W=0,H=0;
   function size(){const dpr=Math.min(2,window.devicePixelRatio||1);W=wrap.clientWidth;H=wrap.clientHeight;cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0);}
@@ -1221,7 +1242,7 @@ function openField(f){
   openPanel(`<div class="ghead"><b>${f.e} ${f.en} · ${f.es}</b><button class="x" data-x>✕</button></div>
     <div class="sub">Toca cada tarjeta para escucharla.${hasEnVoice()?'':' (Este dispositivo no tiene voz en inglés.)'}</div>
     <div class="wgrid">${f.words.map((w,i)=>`<button class="wcard" data-i="${i}"><div class="we">${w[0]}</div><b>${w[1]}</b><small>${w[2]}</small></button>`).join('')}</div>
-    <div class="btns"><button class="btn" id="fBack">⬅ Temas</button><button class="btn" id="fSpell">✍️ Dictado</button>${f.tpl?'<button class="btn" id="fSent">💬 Frases</button>':''}<button class="btn primary" id="fGo">🎯 Reto 🏅</button></div>`);
+    <div class="btns"><button class="btn" id="fBack">⬅ Temas</button><button class="btn" id="fSpell">✍️ Dictado</button>${f.tpl?'<button class="btn" id="fSent">💬 Frases</button>':''}<button class="btn primary" id="fGo">🎯 Reto 🏅</button></div>`,'',openEnglish);
   $$('#panel .wcard').forEach(b=>b.onclick=()=>speak(f.words[+b.dataset.i][1]));
   $('#fBack').onclick=openEnglish;
   $('#fGo').onclick=()=>tryPlay(()=>startQuiz({mode:'vocab',f}));
@@ -1246,7 +1267,7 @@ function renderQuiz(){
   if(mode==='sentence')body=`<div class="qsub">Complete the sentence ✏️</div><div class="qbig emo">${w[0]}</div><div class="sent">${esc(f.tpl).replace('___','<span class="blank">______</span>')}</div><div class="opts">${opts.map((o,i)=>`<button class="opt" data-i="${i}">${o[1]}</button>`).join('')}</div>`;
   else if(listen)body=`<div class="qsub">Escucha y elige 👂</div><div class="qbig"><button class="speak" id="enSpeak">🔊</button></div><div class="opts">${opts.map((o,i)=>`<button class="opt emoji" data-i="${i}">${o[0]}</button>`).join('')}</div>`;
   else body=`<div class="qsub">What is it? 🤔</div><div class="qbig emo">${w[0]}</div><div class="opts">${opts.map((o,i)=>`<button class="opt" data-i="${i}">${o[1]}</button>`).join('')}</div>`;
-  openPanel(head+body+`<div class="trans" id="enTr"></div>`,'game');
+  openPanel(head+body+`<div class="trans" id="enTr"></div>`,'game',()=>{game=null;if(g.opt.mode==='review')openEnglish();else openField(g.opt.f);});
   if(listen){$('#enSpeak').onclick=()=>speak(w[1]);setTimeout(()=>{if(game===g)speak(w[1]);},350);}
   const btns=$$('#panel .opt');
   btns.forEach(b=>b.onclick=()=>{
@@ -1290,7 +1311,7 @@ function renderSpell(){
     <div class="qbig emo">${w[0]}</div>${hasEnVoice()?'<div style="text-align:center"><button class="speak sm" id="spSpeak">🔊</button></div>':''}
     <div class="slots" id="slots"></div>
     <div class="tiles">${tiles.map((c,i)=>`<button class="tile" data-i="${i}">${c}</button>`).join('')}</div>
-    <div class="btns"><button class="btn" id="spDel">⌫ Borrar</button></div><div class="trans" id="enTr"></div>`,'game');
+    <div class="btns"><button class="btn" id="spDel">⌫ Borrar</button></div><div class="trans" id="enTr"></div>`,'game',()=>{game=null;openField(g.f);});
   const drawSlots=(state)=>{$('#slots').className='slots'+(state?' '+state:'');$('#slots').innerHTML=g.slots.map((c,i)=>g.fixed[i]?`<span class="slot fixed">${c===' '?'&nbsp;':esc(c)}</span>`:`<span class="slot">${c?esc(c):''}</span>`).join('');};
   drawSlots();
   if(hasEnVoice()){$('#spSpeak').onclick=()=>speak(w[1]);setTimeout(()=>{if(game===g)speak(w[1]);},350);}
@@ -1442,7 +1463,7 @@ function openSettings(){
 }
 function confirmReset(){
   openPanel(`<div class="ptitle">¿Reiniciar la mascota?</div><p style="text-align:center">Se borrará a <b>${esc(S.name)}</b> con sus monedas, distintivos, logros y muñecos. No se puede deshacer.</p>
-    <div class="btns"><button class="btn" id="rNo">Cancelar</button><button class="btn danger" id="rYes">Sí, borrar</button></div>`);
+    <div class="btns"><button class="btn" id="rNo">Cancelar</button><button class="btn danger" id="rYes">Sí, borrar</button></div>`,'',openSettings);
   $('#rNo').onclick=openSettings;
   $('#rYes').onclick=()=>{try{localStorage.removeItem(KEY);}catch(e){}S=defState();$('#bubbles').innerHTML='';applyLook();applyGrow();goRoom('cocina',true);updateUI();clearTempFace();welcome();};
 }
@@ -1455,7 +1476,7 @@ function welcome(){
   let taps=0;$('#petWrap').style.visibility='hidden';
   openPanel(`<div class="ptitle">🥚 ¡Ha llegado un huevo!</div><div class="sub" style="text-align:center" id="eggTxt">Tócalo varias veces para que nazca tu mascota</div>
     <div class="wpet egg" id="egg">${EGG_SVG}</div>
-    <div id="wForm" class="hidden"><label class="lbl">¿Cómo se llama?</label><input id="wName" maxlength="14" placeholder="Lumi"><div class="btns"><button class="btn primary" id="wGo">¡Empezar!</button></div></div>`);
+    <div id="wForm" class="hidden"><label class="lbl">¿Cómo se llama?</label><input id="wName" maxlength="14" placeholder="Lumi"><div class="btns"><button class="btn primary" id="wGo">¡Empezar!</button></div></div>`,'','block');
   $('#egg').onclick=()=>{
     ensureAudio();if(taps>=5)return;taps++;
     const e=$('#egg');e.classList.remove('shake');void e.offsetWidth;e.classList.add('shake');sfx('boing');
@@ -1520,16 +1541,24 @@ setInterval(tick,1000);setInterval(musicTick,380);
 const APP_VERSION=(document.querySelector('meta[name="app-version"]')||{}).content||'0';
 const isNewer=(a,b)=>{const x=a.split('.').map(Number),y=b.split('.').map(Number);for(let i=0;i<Math.max(x.length,y.length);i++){const p=x[i]||0,q=y[i]||0;if(p!==q)return p>q;}return false;};
 let lastCheck=0,updShown=false;
-async function checkUpdate(manual){
+async function checkUpdate(manual,onSplash){
   if(!/^https?:$/.test(location.protocol)){if(manual)toast('Las actualizaciones solo funcionan en la web publicada');return;}
-  const now=Date.now();if(!manual&&now-lastCheck<60000)return;lastCheck=now;
+  const now=Date.now();if(!manual&&!onSplash&&now-lastCheck<20000)return;lastCheck=now;
   try{
     // El parámetro nocache evita la caché del navegador, la de GitHub Pages y la del service worker
     const r=await fetch(location.pathname+'?nocache='+now,{cache:'no-store'});
     const m=(await r.text()).match(/<meta name="app-version" content="([^"]+)"/);
-    if(m&&isNewer(m[1],APP_VERSION))showUpdate(m[1]);
+    if(m&&isNewer(m[1],APP_VERSION)){if(onSplash&&$('#splash')&&!justUpdated)autoUpdate(m[1]);else showUpdate(m[1]);}
     else if(manual)toast(`✅ Tienes la última versión (${APP_VERSION})`);
   }catch(e){if(manual)toast('Sin conexión: no se puede comprobar ahora');}
+}
+// En la pantalla de inicio se actualiza sola, sin preguntar
+async function autoUpdate(v){
+  const b=$('#spBtns');if(b)b.innerHTML=`<div class="spHint">⏳ Actualizando a la versión ${esc(v)}…</div>`;
+  splashReady=false;save();
+  try{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('mascota-')).map(k=>caches.delete(k)));}catch(e){}
+  try{const reg=await navigator.serviceWorker.getRegistration();if(reg)await reg.update();}catch(e){}
+  location.replace(location.pathname+'?v='+Date.now());
 }
 function showUpdate(v){
   if(updShown)return;updShown=true;
@@ -1552,6 +1581,8 @@ if(/[?&]pwa=1/.test(location.search))ssSet('asApp');
 try{if(document.referrer&&new URL(document.referrer).origin!==location.origin)ssSet('otherApp');}catch(e){}
 // Abierta en modo app sin venir de nuestro icono y con páginas anteriores en el historial: es la ventana de otra app
 if(!ssGet('asApp')&&history.length>1&&(matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches))ssSet('otherApp');
+// Si acabamos de actualizar (?v=…), no se vuelve a actualizar sola en esta carga: así nunca entra en bucle
+const justUpdated=/[?&]v=\d+/.test(location.search);
 const launchedAsApp=ssGet('asApp')==='1',inOtherApp=ssGet('otherApp')==='1'&&!launchedAsApp;
 if(/[?&](v=\d+|pwa=1)/.test(location.search))history.replaceState(null,'',location.pathname);
 
@@ -1572,7 +1603,8 @@ function showSplash(){
   document.body.appendChild(s);
   const box=s.querySelector('.spPet');
   if(firstRun)box.innerHTML=EGG_SVG;else box.appendChild(cleanClone());
-  setTimeout(()=>{splashReady=true;renderSplashBtns();},1300);
+  checkUpdate(false,true);
+  setTimeout(()=>{if($('#spBtns')&&!/Actualizando/.test($('#spBtns').textContent)){splashReady=true;renderSplashBtns();}},1300);
 }
 const isAndroid=()=>/android/i.test(navigator.userAgent);
 function openInChrome(){
@@ -1588,15 +1620,16 @@ async function doInstall(){
 }
 function installHelp(onDone){
   let body,btns='';
-  if(displayApp()&&inOtherApp&&!isIOS()){body='<p>Ahora mismo el juego está abierto <b>dentro de otra app</b> (por ejemplo, la de siurot.net) y desde ahí no se puede instalar.</p><p>Pulsa <b>Abrir en Chrome</b> y allí podrás instalarlo.</p>';btns='<button class="btn primary" id="ihOpen">📲 Abrir en Chrome</button>';}
+  if(displayApp()&&inOtherApp&&!isIOS()){body='<p>Si no te deja instalar desde aquí:</p><ol><li>Pulsa los <b>tres puntitos ⋮</b> de arriba a la derecha.</li><li>Selecciona <b>«Instalar aplicación»</b>.</li><li>Si no aparece, elige <b>«Abrir en Chrome»</b> y allí pulsa <b>📲 Instalar</b> en Ajustes ⚙️.</li></ol>';btns='<button class="btn" id="ihCopy">📋 Copiar enlace</button>';}
   else if(inFrame()){body='<p>El juego está abierto dentro de otra página y desde ahí no se puede instalar. Ábrelo en su propia página y vuelve a pulsar <b>Instalar</b>.</p>';btns='<button class="btn primary" id="ihOpen">📲 Abrir en su página</button>';}
   else if(isIOS())body='<ol><li>Abre el juego en <b>Safari</b>.</li><li>Pulsa <b>Compartir</b> ⬆️.</li><li>Elige <b>«Añadir a pantalla de inicio»</b>.</li></ol>';
   else if(isAndroid()){body='<ol><li>Pulsa el menú <b>⋮</b> de Chrome, arriba a la derecha.</li><li>Elige <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b>.</li></ol><p class="note">Si no ves el menú ⋮ de Chrome, estás en un navegador integrado: pulsa «Abrir en Chrome».</p>';btns='<button class="btn" id="ihOpen">Abrir en Chrome</button>';}
   else body='<ol><li>Pulsa el icono de instalar que aparece a la derecha de la barra de direcciones.</li><li>Si no está, búscalo en el menú <b>⋮</b> de Chrome («Instalar…» o «Guardar y compartir»).</li></ol>';
   openPanel(`<div class="ghead"><b>📲 Instalar Mi Mascota</b><button class="x" data-x>✕</button></div><div class="help">${body}</div>
     <p class="note">Chrome solo ofrece su propio botón de instalar cuando llevas un ratito usando el juego. Cuando esté disponible, te aparecerá un aviso abajo.</p>
-    <div class="btns">${btns}<button class="btn primary" data-x>Entendido</button></div>`);
+    <div class="btns">${btns}<button class="btn primary" data-x>Entendido</button></div>`,'',onDone?()=>{closePanel();onDone();}:null);
   const o=$('#ihOpen');if(o)o.onclick=openInChrome;
+  const cp=$('#ihCopy');if(cp)cp.onclick=async()=>{const u=location.origin+location.pathname;try{await navigator.clipboard.writeText(u);toast('📋 Enlace copiado: pégalo en Chrome');}catch(e){toast(u);}};
   if(onDone)$$('#panel [data-x]').forEach(b=>b.onclick=()=>{closePanel();onDone();});
 }
 function showInstallBar(){
@@ -1609,7 +1642,7 @@ function showInstallBar(){
 }
 function renderSplashBtns(){
   const b=$('#spBtns');if(!b||!splashReady)return;
-  if(isStandalone())b.innerHTML=`<button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>`;
+  if(isStandalone()||(displayApp()&&inOtherApp))b.innerHTML=`<button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>`;
   else b.innerHTML=`<button class="spBtn primary" id="spInstall">📲 Instalar la app</button><button class="spBtn link" id="spGo">Ahora no, jugar aquí</button>`;
   $('#spGo').onclick=closeSplash;
   const ib=$('#spInstall');
@@ -1624,7 +1657,6 @@ function closeSplash(noStart){
 function startApp(){
   if(appStarted)return;appStarted=true;
   if(firstRun)welcome();else setTimeout(()=>say(S.sleeping?'Zzz…':SEASON_HELLO[season()]||(isEvening()?'¡Buenas noches! 🌙':'¡Hola de nuevo! 👋'),3500),400);
-  setTimeout(()=>checkUpdate(false),2000);
 }
 showSplash();
 })();
