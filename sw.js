@@ -1,6 +1,6 @@
 // Service worker de Mi Mascota
 // Cambia VERSION cada vez que subas cambios importantes para forzar la actualización.
-const VERSION = 'mascota-v3';
+const VERSION = 'mascota-v4';
 const CORE = [
   './mascota.html',
   './manifest.json',
@@ -30,10 +30,10 @@ self.addEventListener('fetch', e => {
   // Comprobación de versión de la app: siempre directa a la red, sin tocar la caché
   if (url.searchParams.has('nocache')) return;
 
-  // Página: primero la red (para recibir las actualizaciones) y, sin conexión, la copia guardada
+  // Página: siempre la versión más reciente de la red (URL única para saltar la caché de GitHub Pages) y, sin conexión, la copia guardada
   if (req.mode === 'navigate' || url.pathname.endsWith('.html')) {
     e.respondWith(
-      fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' })
+      fetch((() => { const u = new URL(req.url); u.searchParams.set('_sw', Date.now()); return u.href; })(), { cache: 'no-store', credentials: 'same-origin' })
         .then(res => { if (!res.ok) throw new Error(res.status); const copy = res.clone(); caches.open(VERSION).then(c => c.put('./mascota.html', copy)); return res; })
         .catch(() => caches.match('./mascota.html'))
     );
