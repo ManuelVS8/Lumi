@@ -3,7 +3,7 @@
   "short_name": "Mi Mascota",
   "description": "Cuida a tu mascota y aprende las tablas e inglés jugando",
   "lang": "es",
-  "start_url": "./mascota.html",
+  "start_url": "./mascota.html?pwa=1",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",

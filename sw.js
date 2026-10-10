@@ -1,6 +1,6 @@
 // Service worker de Mi Mascota
 // Cambia VERSION cada vez que subas cambios importantes para forzar la actualización.
-const VERSION = 'mascota-v2';
+const VERSION = 'mascota-v3';
 const CORE = [
   './mascota.html',
   './manifest.json',

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
-<meta name="app-version" content="1.0.2">
+<meta name="app-version" content="1.0.3">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas e inglés jugando">
@@ -1546,12 +1546,21 @@ function showUpdate(v){
 }
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkUpdate(false);});
 setInterval(()=>checkUpdate(false),15*60000);
-if(/[?&]v=\d+/.test(location.search))history.replaceState(null,'',location.pathname);
+// ¿Se ha abierto desde nuestro propio icono instalado (?pwa=1) o desde otra app/web (referrer externo)?
+const ssGet=k=>{try{return sessionStorage.getItem(k);}catch(e){return null;}},ssSet=k=>{try{sessionStorage.setItem(k,'1');}catch(e){}};
+if(/[?&]pwa=1/.test(location.search))ssSet('asApp');
+try{if(document.referrer&&new URL(document.referrer).origin!==location.origin)ssSet('otherApp');}catch(e){}
+// Abierta en modo app sin venir de nuestro icono y con páginas anteriores en el historial: es la ventana de otra app
+if(!ssGet('asApp')&&history.length>1&&(matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches))ssSet('otherApp');
+const launchedAsApp=ssGet('asApp')==='1',inOtherApp=ssGet('otherApp')==='1'&&!launchedAsApp;
+if(/[?&](v=\d+|pwa=1)/.test(location.search))history.replaceState(null,'',location.pathname);
 
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{}));
 }
-const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
+const displayApp=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
+// Dentro de la ventana de otra app instalada (p. ej. siurot.net) el modo también es "standalone", pero no es nuestra app
+const isStandalone=()=>displayApp()&&!inOtherApp;
 const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if($('#splash'))renderSplashBtns();else showInstallBar();});
 window.addEventListener('appinstalled',()=>{installEvt=null;const b=$('#instBar');if(b)b.remove();});
@@ -1579,7 +1588,8 @@ async function doInstall(){
 }
 function installHelp(onDone){
   let body,btns='';
-  if(inFrame()){body='<p>El juego está abierto dentro de otra página y desde ahí no se puede instalar. Ábrelo en su propia página y vuelve a pulsar <b>Instalar</b>.</p>';btns='<button class="btn primary" id="ihOpen">📲 Abrir en su página</button>';}
+  if(displayApp()&&inOtherApp&&!isIOS()){body='<p>Ahora mismo el juego está abierto <b>dentro de otra app</b> (por ejemplo, la de siurot.net) y desde ahí no se puede instalar.</p><p>Pulsa <b>Abrir en Chrome</b> y allí podrás instalarlo.</p>';btns='<button class="btn primary" id="ihOpen">📲 Abrir en Chrome</button>';}
+  else if(inFrame()){body='<p>El juego está abierto dentro de otra página y desde ahí no se puede instalar. Ábrelo en su propia página y vuelve a pulsar <b>Instalar</b>.</p>';btns='<button class="btn primary" id="ihOpen">📲 Abrir en su página</button>';}
   else if(isIOS())body='<ol><li>Abre el juego en <b>Safari</b>.</li><li>Pulsa <b>Compartir</b> ⬆️.</li><li>Elige <b>«Añadir a pantalla de inicio»</b>.</li></ol>';
   else if(isAndroid()){body='<ol><li>Pulsa el menú <b>⋮</b> de Chrome, arriba a la derecha.</li><li>Elige <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b>.</li></ol><p class="note">Si no ves el menú ⋮ de Chrome, estás en un navegador integrado: pulsa «Abrir en Chrome».</p>';btns='<button class="btn" id="ihOpen">Abrir en Chrome</button>';}
   else body='<ol><li>Pulsa el icono de instalar que aparece a la derecha de la barra de direcciones.</li><li>Si no está, búscalo en el menú <b>⋮</b> de Chrome («Instalar…» o «Guardar y compartir»).</li></ol>';
