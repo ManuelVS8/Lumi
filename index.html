@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
-<meta name="app-version" content="1.0.1">
+<meta name="app-version" content="1.0.2">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas e inglés jugando">
@@ -220,7 +220,9 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
 .spVer{position:absolute!important;bottom:10px;color:#fff;opacity:.75;font-size:13px}
 #updBar{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:65;background:var(--ink);color:#fff;border-radius:16px;padding:8px 8px 8px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.3);font-size:16px;white-space:nowrap;animation:pop .3s ease}
 #updBar button{border:none;border-radius:12px;padding:8px 14px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;font-size:15px}
-#updBar button.no{background:transparent;opacity:.75;padding:8px 10px}
+#updBar button.no,#instBar button.no{background:transparent;opacity:.75;padding:8px 10px}
+#instBar{position:fixed;bottom:112px;left:50%;transform:translateX(-50%);z-index:65;background:var(--ink);color:#fff;border-radius:16px;padding:8px 8px 8px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.3);font-size:16px;white-space:nowrap;animation:pop .3s ease}
+#instBar button{border:none;border-radius:12px;padding:8px 14px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;font-size:15px}
 
 /* Modos, frases y dictado */
 .modes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
@@ -306,6 +308,7 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
   #nav button{font-size:11px}
   .tblgrid{grid-template-columns:repeat(4,1fr)}
   .chip{padding:6px 9px;font-size:15px}
+  .xpbar{display:none}
 }
 </style>
 </head>
@@ -1425,13 +1428,13 @@ function openSettings(){
     <label class="lbl">Nombre de la mascota</label><input id="sName" maxlength="14">
     <label class="lbl">Sonido</label><div class="seg" id="sSound"><button data-s="1" class="${S.sound?'on':''}">🔊 Sí</button><button data-s="0" class="${!S.sound?'on':''}">🔇 No</button></div>
     <label class="lbl">Música de fondo</label><div class="seg" id="sMusic"><button data-s="1" class="${S.music?'on':''}">🎵 Sí</button><button data-s="0" class="${!S.music?'on':''}">🔕 No</button></div>
-    ${installEvt?'<label class="lbl">Aplicación</label><button class="btn" id="sInstall" style="width:100%">📲 Instalar en este dispositivo</button>':''}
+    ${isStandalone()?'':'<label class="lbl">Aplicación</label><button class="btn" id="sInstall" style="width:100%">📲 Instalar en este dispositivo</button>'}
     <label class="lbl">Versión ${APP_VERSION}</label><button class="btn" id="sUpd" style="width:100%">🔄 Buscar actualizaciones</button>
     <p class="note">La partida se guarda solo en este navegador.</p>
     <div class="btns"><button class="btn danger" id="sReset">Reiniciar mascota</button><button class="btn primary" id="sSave">Guardar</button></div>`);
   $('#sName').value=S.name;
   $('#sUpd').onclick=()=>{closePanel();checkUpdate(true);};
-  if(installEvt)$('#sInstall').onclick=async()=>{const e=installEvt;installEvt=null;e.prompt();try{const r=await e.userChoice;if(r.outcome==='accepted')toast('¡Instalada! 📲');}catch(_){}closePanel();};
+  const si=$('#sInstall');if(si)si.onclick=()=>{const native=!!installEvt;closePanel();if(native)doInstall();else installHelp();};
   $$('#sSound button').forEach(b=>b.onclick=()=>{$$('#sSound button').forEach(x=>x.classList.remove('on'));b.classList.add('on');sound=b.dataset.s==='1';});
   $$('#sMusic button').forEach(b=>b.onclick=()=>{$$('#sMusic button').forEach(x=>x.classList.remove('on'));b.classList.add('on');music=b.dataset.s==='1';});
   $('#sSave').onclick=()=>{S.name=($('#sName').value.trim()||S.name||'Lumi').slice(0,14);S.sound=sound;S.music=music;save();updateUI();closePanel();toast('Ajustes guardados ✅');};
@@ -1550,8 +1553,8 @@ if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
 }
 const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
 const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;renderSplashBtns();});
-window.addEventListener('appinstalled',()=>{installEvt=null;});
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if($('#splash'))renderSplashBtns();else showInstallBar();});
+window.addEventListener('appinstalled',()=>{installEvt=null;const b=$('#instBar');if(b)b.remove();});
 
 let splashReady=false;
 function showSplash(){
@@ -1568,24 +1571,47 @@ function openInChrome(){
   if(isAndroid()&&!inFrame()){location.href=`intent://${location.host}${location.pathname}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(location.href)};end`;return;}
   window.open(location.href,'_blank','noopener');
 }
+async function doInstall(){
+  const e=installEvt;
+  if(!e){installHelp();return;}
+  installEvt=null;const bar=$('#instBar');if(bar)bar.remove();
+  try{e.prompt();const r=await e.userChoice;if(r.outcome==='accepted')toast('¡Instalada! Ya la tienes en tu pantalla de inicio 📲');}catch(_){}
+}
+function installHelp(onDone){
+  let body,btns='';
+  if(inFrame()){body='<p>El juego está abierto dentro de otra página y desde ahí no se puede instalar. Ábrelo en su propia página y vuelve a pulsar <b>Instalar</b>.</p>';btns='<button class="btn primary" id="ihOpen">📲 Abrir en su página</button>';}
+  else if(isIOS())body='<ol><li>Abre el juego en <b>Safari</b>.</li><li>Pulsa <b>Compartir</b> ⬆️.</li><li>Elige <b>«Añadir a pantalla de inicio»</b>.</li></ol>';
+  else if(isAndroid()){body='<ol><li>Pulsa el menú <b>⋮</b> de Chrome, arriba a la derecha.</li><li>Elige <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b>.</li></ol><p class="note">Si no ves el menú ⋮ de Chrome, estás en un navegador integrado: pulsa «Abrir en Chrome».</p>';btns='<button class="btn" id="ihOpen">Abrir en Chrome</button>';}
+  else body='<ol><li>Pulsa el icono de instalar que aparece a la derecha de la barra de direcciones.</li><li>Si no está, búscalo en el menú <b>⋮</b> de Chrome («Instalar…» o «Guardar y compartir»).</li></ol>';
+  openPanel(`<div class="ghead"><b>📲 Instalar Mi Mascota</b><button class="x" data-x>✕</button></div><div class="help">${body}</div>
+    <p class="note">Chrome solo ofrece su propio botón de instalar cuando llevas un ratito usando el juego. Cuando esté disponible, te aparecerá un aviso abajo.</p>
+    <div class="btns">${btns}<button class="btn primary" data-x>Entendido</button></div>`);
+  const o=$('#ihOpen');if(o)o.onclick=openInChrome;
+  if(onDone)$$('#panel [data-x]').forEach(b=>b.onclick=()=>{closePanel();onDone();});
+}
+function showInstallBar(){
+  if(isStandalone()||$('#instBar')||sessionStorage.getItem('noInstallBar'))return;
+  const b=document.createElement('div');b.id='instBar';
+  b.innerHTML=`📲 ¿Instalar Mi Mascota?<button id="ibGo">Instalar</button><button class="no" id="ibNo">✕</button>`;
+  document.body.appendChild(b);
+  $('#ibGo').onclick=doInstall;
+  $('#ibNo').onclick=()=>{b.remove();try{sessionStorage.setItem('noInstallBar','1');}catch(_){}};
+}
 function renderSplashBtns(){
   const b=$('#spBtns');if(!b||!splashReady)return;
-  const go=`<button class="spBtn ${isStandalone()?'primary':'link'}" id="spGo">${isStandalone()?'▶ ¡A jugar!':'Ahora no, jugar aquí'}</button>`;
-  if(isStandalone())b.innerHTML=go;
-  else if(installEvt)b.innerHTML=`<button class="spBtn primary" id="spInstall">📲 Instalar la app</button>`+go;
-  else if(inFrame())b.innerHTML=`<div class="spHint">Para instalar la app hay que abrirla en su propia página</div><button class="spBtn primary" id="spOpen">📲 Abrir para instalar</button>`+go;
-  else if(isIOS())b.innerHTML=`<div class="spHint">Para instalarla, ábrela en <b>Safari</b>, pulsa <b>Compartir</b> ⬆️ y después <b>«Añadir a pantalla de inicio»</b></div><button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>`;
-  else if(isAndroid())b.innerHTML=`<div class="spHint">¿No sale el botón de instalar? Ábrela en Chrome para poder instalarla</div><button class="spBtn primary" id="spOpen">📲 Abrir en Chrome</button>`+go;
-  else b.innerHTML=`<button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>`;
+  if(isStandalone())b.innerHTML=`<button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>`;
+  else b.innerHTML=`<button class="spBtn primary" id="spInstall">📲 Instalar la app</button><button class="spBtn link" id="spGo">Ahora no, jugar aquí</button>`;
   $('#spGo').onclick=closeSplash;
-  const ob=$('#spOpen');if(ob)ob.onclick=openInChrome;
   const ib=$('#spInstall');
-  if(ib)ib.onclick=async()=>{const e=installEvt;installEvt=null;try{e.prompt();const r=await e.userChoice;if(r.outcome==='accepted')toast('¡Instalada! Ya la tienes en tu pantalla de inicio 📲');}catch(_){}closeSplash();};
+  if(ib)ib.onclick=async()=>{const native=!!installEvt;closeSplash(true);if(native){await doInstall();startApp();}else setTimeout(()=>installHelp(startApp),450);};
 }
 let appStarted=false;
-function closeSplash(){
+function closeSplash(noStart){
   ensureAudio();sfx('pop');
   const s=$('#splash');if(s){s.classList.add('out');setTimeout(()=>s.remove(),500);}
+  if(noStart!==true)startApp();
+}
+function startApp(){
   if(appStarted)return;appStarted=true;
   if(firstRun)welcome();else setTimeout(()=>say(S.sleeping?'Zzz…':SEASON_HELLO[season()]||(isEvening()?'¡Buenas noches! 🌙':'¡Hola de nuevo! 👋'),3500),400);
   setTimeout(()=>checkUpdate(false),2000);
