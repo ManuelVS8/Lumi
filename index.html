@@ -3,7 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Mi Mascota · Prototipo</title>
+<title>Mi Mascota</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2b2340">
+<meta name="description" content="Cuida a tu mascota y aprende las tablas e inglés jugando">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mi Mascota">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -505,6 +512,7 @@ let S=load();
 const firstRun=!S;
 if(!S)S=defState();
 
+let installEvt=null;
 let room='cocina',busy=false,soapOn=false,game=null,tempFace=null,tempTimer=null;
 let touchBudget=15,tickCount=0,nagCount=0,walkCount=0,lastTick=Date.now();
 const isSick=()=>S.sickUntil&&Date.now()<S.sickUntil;
@@ -1392,9 +1400,11 @@ function openSettings(){
     <label class="lbl">Nombre de la mascota</label><input id="sName" maxlength="14">
     <label class="lbl">Sonido</label><div class="seg" id="sSound"><button data-s="1" class="${S.sound?'on':''}">🔊 Sí</button><button data-s="0" class="${!S.sound?'on':''}">🔇 No</button></div>
     <label class="lbl">Música de fondo</label><div class="seg" id="sMusic"><button data-s="1" class="${S.music?'on':''}">🎵 Sí</button><button data-s="0" class="${!S.music?'on':''}">🔕 No</button></div>
-    <p class="note">Prototipo: la partida se guarda solo en este navegador.</p>
+    ${installEvt?'<label class="lbl">Aplicación</label><button class="btn" id="sInstall" style="width:100%">📲 Instalar en este dispositivo</button>':''}
+    <p class="note">La partida se guarda solo en este navegador.</p>
     <div class="btns"><button class="btn danger" id="sReset">Reiniciar mascota</button><button class="btn primary" id="sSave">Guardar</button></div>`);
   $('#sName').value=S.name;
+  if(installEvt)$('#sInstall').onclick=async()=>{const e=installEvt;installEvt=null;e.prompt();try{const r=await e.userChoice;if(r.outcome==='accepted')toast('¡Instalada! 📲');}catch(_){}closePanel();};
   $$('#sSound button').forEach(b=>b.onclick=()=>{$$('#sSound button').forEach(x=>x.classList.remove('on'));b.classList.add('on');sound=b.dataset.s==='1';});
   $$('#sMusic button').forEach(b=>b.onclick=()=>{$$('#sMusic button').forEach(x=>x.classList.remove('on'));b.classList.add('on');music=b.dataset.s==='1';});
   $('#sSave').onclick=()=>{S.name=($('#sName').value.trim()||S.name||'Lumi').slice(0,14);S.sound=sound;S.music=music;save();updateUI();closePanel();toast('Ajustes guardados ✅');};
@@ -1476,6 +1486,12 @@ applyLook();applyGrow();
 goRoom(S.sleeping?'dormitorio':'cocina',true);
 updateUI();refreshFace();blinkLoop();
 setInterval(tick,1000);setInterval(musicTick,380);
+/* PWA: service worker e instalación */
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;});
+window.addEventListener('appinstalled',()=>{installEvt=null;});
 if(firstRun)welcome();else setTimeout(()=>say(S.sleeping?'Zzz…':SEASON_HELLO[season()]||(isEvening()?'¡Buenas noches! 🌙':'¡Hola de nuevo! 👋'),3500),600);
 })();
 </script>
