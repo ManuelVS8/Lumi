@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
+<meta name="app-version" content="1.0.0">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas e inglés jugando">
@@ -19,7 +20,7 @@
   --ink:#2b2340;--bg:#f4efe6;--accent:#ff8a3d;--ok:#2fbf71;--bad:#ef5350;--gold:#ffc93c;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%}
+html,body{margin:0;height:100%;overscroll-behavior:none}
 body{font-family:'Fredoka','Segoe UI',system-ui,sans-serif;color:var(--ink);background:#2b2340;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
 input{user-select:text;-webkit-user-select:text}
 button{font-family:inherit;color:inherit}
@@ -196,6 +197,30 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
 #nWrap{position:relative;height:min(60vh,470px);border-radius:16px;overflow:hidden;background:radial-gradient(circle at 50% 40%,#6b4632,#3b2417);touch-action:none}
 #nCv{display:block;touch-action:none;cursor:crosshair}
 .nflash{position:absolute;left:50%;top:14px;transform:translateX(-50%);color:#fff;font-size:20px;font-weight:600;background:rgba(0,0,0,.35);padding:4px 14px;border-radius:12px;pointer-events:none;transition:opacity .3s}
+
+/* Splash y actualización */
+#splash{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:radial-gradient(circle at 50% 42%,#ffd166,#ff8a5c 55%,#ff5f8f);overflow:hidden;transition:opacity .45s;padding:16px}
+#splash::before{content:'';position:absolute;inset:-60%;background:repeating-conic-gradient(rgba(255,255,255,.14) 0 15deg,transparent 15deg 30deg);animation:spin 50s linear infinite}
+#splash>*{position:relative}
+#splash.out{opacity:0;pointer-events:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spPet{width:min(46vw,40vh,250px);aspect-ratio:1;animation:bob 1.6s ease-in-out infinite}
+.spPet svg{width:100%;height:100%;overflow:visible}
+.spTitle{font-size:clamp(38px,9vw,64px);font-weight:700;color:#fff;text-shadow:0 4px 0 rgba(0,0,0,.15);line-height:1}
+.spSub{color:#fff;font-size:19px;font-weight:500}
+.spBtns{display:flex;flex-direction:column;gap:8px;align-items:center;min-height:130px;justify-content:center}
+.spBar{width:200px;height:10px;background:rgba(255,255,255,.4);border-radius:9px;overflow:hidden}
+.spBar i{display:block;height:100%;background:#fff;width:0;animation:spload 1.2s ease forwards}
+@keyframes spload{to{width:100%}}
+.spBtn{font-size:22px;font-weight:600;padding:14px 30px;border-radius:18px;border:none;cursor:pointer;background:#fff;color:var(--ink);box-shadow:0 5px 0 rgba(0,0,0,.15)}
+.spBtn.primary{background:var(--ink);color:#fff}
+.spBtn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.15)}
+.spBtn.link{background:transparent;box-shadow:none;color:#fff;font-size:17px;text-decoration:underline;padding:6px 10px}
+.spHint{color:#fff;max-width:340px;text-align:center;font-size:16px;background:rgba(0,0,0,.15);padding:8px 14px;border-radius:12px}
+.spVer{position:absolute!important;bottom:10px;color:#fff;opacity:.75;font-size:13px}
+#updBar{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:65;background:var(--ink);color:#fff;border-radius:16px;padding:8px 8px 8px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.3);font-size:16px;white-space:nowrap;animation:pop .3s ease}
+#updBar button{border:none;border-radius:12px;padding:8px 14px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;font-size:15px}
+#updBar button.no{background:transparent;opacity:.75;padding:8px 10px}
 
 /* Modos, frases y dictado */
 .modes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
@@ -1401,9 +1426,11 @@ function openSettings(){
     <label class="lbl">Sonido</label><div class="seg" id="sSound"><button data-s="1" class="${S.sound?'on':''}">🔊 Sí</button><button data-s="0" class="${!S.sound?'on':''}">🔇 No</button></div>
     <label class="lbl">Música de fondo</label><div class="seg" id="sMusic"><button data-s="1" class="${S.music?'on':''}">🎵 Sí</button><button data-s="0" class="${!S.music?'on':''}">🔕 No</button></div>
     ${installEvt?'<label class="lbl">Aplicación</label><button class="btn" id="sInstall" style="width:100%">📲 Instalar en este dispositivo</button>':''}
+    <label class="lbl">Versión ${APP_VERSION}</label><button class="btn" id="sUpd" style="width:100%">🔄 Buscar actualizaciones</button>
     <p class="note">La partida se guarda solo en este navegador.</p>
     <div class="btns"><button class="btn danger" id="sReset">Reiniciar mascota</button><button class="btn primary" id="sSave">Guardar</button></div>`);
   $('#sName').value=S.name;
+  $('#sUpd').onclick=()=>{closePanel();checkUpdate(true);};
   if(installEvt)$('#sInstall').onclick=async()=>{const e=installEvt;installEvt=null;e.prompt();try{const r=await e.userChoice;if(r.outcome==='accepted')toast('¡Instalada! 📲');}catch(_){}closePanel();};
   $$('#sSound button').forEach(b=>b.onclick=()=>{$$('#sSound button').forEach(x=>x.classList.remove('on'));b.classList.add('on');sound=b.dataset.s==='1';});
   $$('#sMusic button').forEach(b=>b.onclick=()=>{$$('#sMusic button').forEach(x=>x.classList.remove('on'));b.classList.add('on');music=b.dataset.s==='1';});
@@ -1486,13 +1513,73 @@ applyLook();applyGrow();
 goRoom(S.sleeping?'dormitorio':'cocina',true);
 updateUI();refreshFace();blinkLoop();
 setInterval(tick,1000);setInterval(musicTick,380);
-/* PWA: service worker e instalación */
-if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+/* ---------- PWA: actualizaciones, splash e instalación ---------- */
+const APP_VERSION=(document.querySelector('meta[name="app-version"]')||{}).content||'0';
+const isNewer=(a,b)=>{const x=a.split('.').map(Number),y=b.split('.').map(Number);for(let i=0;i<Math.max(x.length,y.length);i++){const p=x[i]||0,q=y[i]||0;if(p!==q)return p>q;}return false;};
+let lastCheck=0,updShown=false;
+async function checkUpdate(manual){
+  if(!/^https?:$/.test(location.protocol)){if(manual)toast('Las actualizaciones solo funcionan en la web publicada');return;}
+  const now=Date.now();if(!manual&&now-lastCheck<60000)return;lastCheck=now;
+  try{
+    // El parámetro nocache evita la caché del navegador, la de GitHub Pages y la del service worker
+    const r=await fetch(location.pathname+'?nocache='+now,{cache:'no-store'});
+    const m=(await r.text()).match(/<meta name="app-version" content="([^"]+)"/);
+    if(m&&isNewer(m[1],APP_VERSION))showUpdate(m[1]);
+    else if(manual)toast(`✅ Tienes la última versión (${APP_VERSION})`);
+  }catch(e){if(manual)toast('Sin conexión: no se puede comprobar ahora');}
 }
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;});
+function showUpdate(v){
+  if(updShown)return;updShown=true;
+  const b=document.createElement('div');b.id='updBar';
+  b.innerHTML=`🎉 Versión nueva ${esc(v)}<button id="updGo">Actualizar</button><button class="no" id="updNo">Luego</button>`;
+  document.body.appendChild(b);
+  $('#updNo').onclick=()=>{b.remove();updShown=false;lastCheck=Date.now()+30*60000;};
+  $('#updGo').onclick=async()=>{
+    save();b.innerHTML='⏳ Actualizando…';
+    try{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('mascota-')).map(k=>caches.delete(k)));}catch(e){}
+    try{const reg=await navigator.serviceWorker.getRegistration();if(reg)await reg.update();}catch(e){}
+    location.replace(location.pathname+'?v='+Date.now());
+  };
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkUpdate(false);});
+setInterval(()=>checkUpdate(false),15*60000);
+if(/[?&]v=\d+/.test(location.search))history.replaceState(null,'',location.pathname);
+
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{}));
+}
+const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
+const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;renderSplashBtns();});
 window.addEventListener('appinstalled',()=>{installEvt=null;});
-if(firstRun)welcome();else setTimeout(()=>say(S.sleeping?'Zzz…':SEASON_HELLO[season()]||(isEvening()?'¡Buenas noches! 🌙':'¡Hola de nuevo! 👋'),3500),600);
+
+let splashReady=false;
+function showSplash(){
+  const s=document.createElement('div');s.id='splash';
+  s.innerHTML=`<div class="spPet"></div><div class="spTitle">Mi Mascota</div><div class="spSub">Cuida, juega y aprende</div><div class="spBtns" id="spBtns"><div class="spBar"><i></i></div></div><div class="spVer">v${APP_VERSION}</div>`;
+  document.body.appendChild(s);
+  const box=s.querySelector('.spPet');
+  if(firstRun)box.innerHTML=EGG_SVG;else box.appendChild(cleanClone());
+  setTimeout(()=>{splashReady=true;renderSplashBtns();},1300);
+}
+function renderSplashBtns(){
+  const b=$('#spBtns');if(!b||!splashReady)return;
+  if(!isStandalone()&&installEvt)b.innerHTML=`<button class="spBtn primary" id="spInstall">📲 Instalar la app</button><button class="spBtn link" id="spGo">Ahora no, jugar aquí</button>`;
+  else if(!isStandalone()&&isIOS())b.innerHTML=`<div class="spHint">Para instalarla pulsa <b>Compartir</b> ⬆️ y después <b>«Añadir a pantalla de inicio»</b></div><button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>`;
+  else b.innerHTML=`<button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>`;
+  $('#spGo').onclick=closeSplash;
+  const ib=$('#spInstall');
+  if(ib)ib.onclick=async()=>{const e=installEvt;installEvt=null;try{e.prompt();const r=await e.userChoice;if(r.outcome==='accepted')toast('¡Instalada! Ya la tienes en tu pantalla de inicio 📲');}catch(_){}closeSplash();};
+}
+let appStarted=false;
+function closeSplash(){
+  ensureAudio();sfx('pop');
+  const s=$('#splash');if(s){s.classList.add('out');setTimeout(()=>s.remove(),500);}
+  if(appStarted)return;appStarted=true;
+  if(firstRun)welcome();else setTimeout(()=>say(S.sleeping?'Zzz…':SEASON_HELLO[season()]||(isEvening()?'¡Buenas noches! 🌙':'¡Hola de nuevo! 👋'),3500),400);
+  setTimeout(()=>checkUpdate(false),2000);
+}
+showSplash();
 })();
 </script>
 </body>
