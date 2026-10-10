@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
-<meta name="app-version" content="1.0.0">
+<meta name="app-version" content="1.0.1">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas e inglés jugando">
@@ -1562,12 +1562,23 @@ function showSplash(){
   if(firstRun)box.innerHTML=EGG_SVG;else box.appendChild(cleanClone());
   setTimeout(()=>{splashReady=true;renderSplashBtns();},1300);
 }
+const isAndroid=()=>/android/i.test(navigator.userAgent);
+function openInChrome(){
+  // En Android, la dirección intent:// abre la página en la app de Chrome aunque estemos en un navegador integrado
+  if(isAndroid()&&!inFrame()){location.href=`intent://${location.host}${location.pathname}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(location.href)};end`;return;}
+  window.open(location.href,'_blank','noopener');
+}
 function renderSplashBtns(){
   const b=$('#spBtns');if(!b||!splashReady)return;
-  if(!isStandalone()&&installEvt)b.innerHTML=`<button class="spBtn primary" id="spInstall">📲 Instalar la app</button><button class="spBtn link" id="spGo">Ahora no, jugar aquí</button>`;
-  else if(!isStandalone()&&isIOS())b.innerHTML=`<div class="spHint">Para instalarla pulsa <b>Compartir</b> ⬆️ y después <b>«Añadir a pantalla de inicio»</b></div><button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>`;
+  const go=`<button class="spBtn ${isStandalone()?'primary':'link'}" id="spGo">${isStandalone()?'▶ ¡A jugar!':'Ahora no, jugar aquí'}</button>`;
+  if(isStandalone())b.innerHTML=go;
+  else if(installEvt)b.innerHTML=`<button class="spBtn primary" id="spInstall">📲 Instalar la app</button>`+go;
+  else if(inFrame())b.innerHTML=`<div class="spHint">Para instalar la app hay que abrirla en su propia página</div><button class="spBtn primary" id="spOpen">📲 Abrir para instalar</button>`+go;
+  else if(isIOS())b.innerHTML=`<div class="spHint">Para instalarla, ábrela en <b>Safari</b>, pulsa <b>Compartir</b> ⬆️ y después <b>«Añadir a pantalla de inicio»</b></div><button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>`;
+  else if(isAndroid())b.innerHTML=`<div class="spHint">¿No sale el botón de instalar? Ábrela en Chrome para poder instalarla</div><button class="spBtn primary" id="spOpen">📲 Abrir en Chrome</button>`+go;
   else b.innerHTML=`<button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>`;
   $('#spGo').onclick=closeSplash;
+  const ob=$('#spOpen');if(ob)ob.onclick=openInChrome;
   const ib=$('#spInstall');
   if(ib)ib.onclick=async()=>{const e=installEvt;installEvt=null;try{e.prompt();const r=await e.userChoice;if(r.outcome==='accepted')toast('¡Instalada! Ya la tienes en tu pantalla de inicio 📲');}catch(_){}closeSplash();};
 }
