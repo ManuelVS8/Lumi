@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
-<meta name="app-version" content="1.0.7">
+<meta name="app-version" content="1.1.0">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
-<meta name="description" content="Cuida a tu mascota y aprende las tablas e inglés jugando">
+<meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -247,24 +247,40 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
 @keyframes eggshake{25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
 .crack{fill:none;stroke:#8a6d3b;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;transition:opacity .2s}
 
-/* English */
-.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:12px}
-.fcard{border:3px solid #e6def7;background:#faf7ff;border-radius:16px;padding:10px;cursor:pointer;text-align:center}
-.fcard .fe{font-size:36px;line-height:1.2}
-.fcard b{display:block;font-size:17px}
-.fcard small{font-size:14px;opacity:.75}
-.fcard.gold{border-color:var(--gold);background:#fff8dc}
-.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px}
-.wcard{border:2px solid #eee;background:#fff;border-radius:14px;padding:8px 4px;cursor:pointer;text-align:center}
-.wcard .we{font-size:34px;line-height:1.2}
-.wcard b{display:block;font-size:16px}
-.wcard small{font-size:13px;opacity:.7}
+/* Selector de tablas */
+.tpick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+.tp{border:3px solid #e6def7;background:#faf7ff;border-radius:16px;padding:10px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative}
+.tp b{font-size:26px}.tp small{font-size:13px;font-weight:600;opacity:.8}
+.tp.gold{border-color:var(--gold);background:#fff8dc}
+.tp.on{border-color:var(--accent);background:#fff1e6;box-shadow:inset 0 0 0 2px var(--accent)}
+.tp.lock{opacity:.45;filter:grayscale(1)}
+.tp .ck{position:absolute;top:3px;right:7px;font-size:15px;color:var(--accent)}
+.pickbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.pickbar .btn{padding:8px 14px;font-size:16px}
+.pickbar .btn:disabled{opacity:.5;cursor:default}
+.pickinfo{text-align:center;font-weight:600;margin-top:12px;min-height:24px}
+/* Escribe el resultado */
+.wq{text-align:center;font-size:clamp(36px,9vw,58px);font-weight:700;margin:4px 0}
+.wq span{color:var(--accent)}
+.tbar{height:10px;background:#eee;border-radius:9px;overflow:hidden;margin:4px 0 8px}
+.tbar i{display:block;height:100%;width:100%;background:var(--ok)}
+.wans{width:fit-content;min-width:130px;height:68px;padding:0 18px;margin:0 auto 4px;border-radius:16px;border:3px solid #e3dbf5;background:#faf7ff;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:700}
+.wans.ok{border-color:var(--ok);background:#d6f7e3}.wans.bad{border-color:var(--bad);background:#ffe0df}
+.wmsg{text-align:center;font-size:20px;font-weight:600;min-height:30px}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:330px;margin:6px auto 0}
+.key{height:56px;border-radius:14px;border:none;background:var(--ink);color:#fff;font-size:28px;font-weight:600;cursor:pointer;box-shadow:0 4px 0 #120d1f}
+.key:active{transform:translateY(3px);box-shadow:0 1px 0 #120d1f}
+.key.del{background:#eee8fb;color:var(--ink);box-shadow:0 4px 0 #cfc5ea}
+.key.ok{background:var(--ok);box-shadow:0 4px 0 #1e8a50}
 
 /* Atrapa */
 #cArea{position:relative;height:min(58vh,460px);background:linear-gradient(#cfeeff,#e9f9ff 78%,#9fdc8f 78%);border-radius:16px;overflow:hidden;touch-action:none;margin-top:10px}
 #catcher{position:absolute;bottom:4px;left:0;width:78px;height:78px}
 #catcher svg{width:100%;height:100%;overflow:visible}
-.fall{position:absolute;top:0;left:0;font-size:38px;line-height:1;will-change:transform}
+.fnum{position:absolute;top:0;left:0;width:54px;height:54px;border-radius:50%;background:#fff;border:4px solid #ffb547;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.15);will-change:transform}
+#cLives{position:absolute;top:8px;right:12px;font-size:24px;z-index:2}
+#cIntro{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,.7);text-align:center;padding:12px;transition:opacity .4s}
+#cIntro b{font-size:clamp(34px,8vw,52px)}#cIntro span{font-size:20px;font-weight:600}
 #cScore{position:absolute;top:8px;left:12px;font-size:30px;font-weight:700;z-index:2}
 .cfx{position:absolute;font-size:24px;font-weight:700;animation:up .8s ease-out forwards;transform:translate(-50%,-50%)}
 
@@ -411,29 +427,29 @@ const ARMS=`<ellipse cx="34" cy="134" rx="12" ry="19" class="c-dark" transform="
 const FEET=`<ellipse cx="72" cy="181" rx="21" ry="10" class="c-dark"/><ellipse cx="128" cy="181" rx="21" ry="10" class="c-dark"/>`;
 const BODY=`<ellipse cx="100" cy="117" rx="70" ry="64" class="c-main"/><ellipse cx="100" cy="156" rx="40" ry="21" class="c-light"/>`;
 
-/* ---------- Muñecos (se desbloquean con distintivos) ---------- */
+/* ---------- Muñecos (se desbloquean dominando tablas) ---------- */
 const CHARS=[
   {id:'bolita',name:'Bolita',cond:null,
    back:`<g id="ears"><circle cx="52" cy="64" r="21" class="c-main"/><circle cx="52" cy="64" r="11" class="c-light"/><circle cx="148" cy="64" r="21" class="c-main"/><circle cx="148" cy="64" r="11" class="c-light"/></g><path id="tuft" d="M100 56 C 95 40, 104 30, 113 35" class="tuft"/>`+ARMS+FEET+BODY},
   {id:'gatito',name:'Gatito',cond:{t:'tables',n:2},
    back:`<path d="M160 168 Q205 150 186 104" class="tail"/><g id="ears"><path d="M42 84 L50 22 L94 56 Z" class="c-main"/><path d="M54 70 L57 40 L80 58 Z" class="c-light"/><path d="M158 84 L150 22 L106 56 Z" class="c-main"/><path d="M146 70 L143 40 L120 58 Z" class="c-light"/></g>`+ARMS+FEET+BODY,
    front:`<g class="whisk"><path d="M58 119 L26 112"/><path d="M58 127 L26 130"/><path d="M142 119 L174 112"/><path d="M142 127 L174 130"/></g>`},
-  {id:'conejito',name:'Conejito',cond:{t:'fields',n:2},
+  {id:'conejito',name:'Conejito',cond:{t:'tables',n:3},
    back:`<g id="ears"><ellipse cx="70" cy="38" rx="14" ry="36" transform="rotate(-12 70 38)" class="c-main"/><ellipse cx="70" cy="40" rx="7" ry="26" transform="rotate(-12 70 40)" class="c-light"/><ellipse cx="130" cy="38" rx="14" ry="36" transform="rotate(12 130 38)" class="c-main"/><ellipse cx="130" cy="40" rx="7" ry="26" transform="rotate(12 130 40)" class="c-light"/></g>`+ARMS+FEET+BODY},
-  {id:'dino',name:'Dino',cond:{t:'tables',n:5},
+  {id:'dino',name:'Dino',cond:{t:'tables',n:4},
    back:`<path d="M150 160 Q200 170 196 118 Q186 146 158 140 Z" class="c-main"/><g id="ears"><path d="M62 68 L68 38 L88 58 Z" class="c-dark"/><path d="M86 56 L100 26 L114 56 Z" class="c-dark"/><path d="M112 58 L132 38 L138 68 Z" class="c-dark"/></g>`+ARMS+FEET+BODY},
-  {id:'gotita',name:'Gotita',cond:{t:'fields',n:5},
+  {id:'gotita',name:'Gotita',cond:{t:'tables',n:6},
    back:`<ellipse cx="38" cy="140" rx="10" ry="15" class="c-dark" transform="rotate(20 38 140)"/><ellipse cx="162" cy="140" rx="10" ry="15" class="c-dark" transform="rotate(-20 162 140)"/>`+FEET+`<path d="M100 22 C 122 58, 174 92, 174 130 C 174 168, 140 188, 100 188 C 60 188, 26 168, 26 130 C 26 92, 78 58, 100 22 Z" class="c-main"/><ellipse cx="66" cy="88" rx="7" ry="14" transform="rotate(25 66 88)" fill="#fff" opacity=".45"/><ellipse cx="100" cy="158" rx="38" ry="20" class="c-light"/>`},
-  {id:'robotin',name:'Robotín',cond:{t:'tables',n:10},
+  {id:'robotin',name:'Robotín',cond:{t:'tables',n:8},
    back:`<g id="ears"><path d="M100 52 L100 28" stroke="var(--pet-dark)" stroke-width="5"/><circle cx="100" cy="24" r="8" fill="#ff6b6b"/></g><rect x="12" y="100" width="20" height="34" rx="6" class="c-dark"/><rect x="168" y="100" width="20" height="34" rx="6" class="c-dark"/><rect x="56" y="170" width="36" height="18" rx="7" class="c-dark"/><rect x="108" y="170" width="36" height="18" rx="7" class="c-dark"/><rect x="28" y="50" width="144" height="130" rx="34" class="c-main"/><rect x="66" y="142" width="68" height="30" rx="10" class="c-light"/><circle cx="84" cy="157" r="5" fill="#ff6b6b"/><circle cx="100" cy="157" r="5" fill="#ffd447"/><circle cx="116" cy="157" r="5" fill="#5fd38c"/>`},
-  {id:'estrella',name:'Estrellita',cond:{t:'fields',n:12},
+  {id:'estrella',name:'Estrellita',cond:{t:'mix'},
    back:`<path d="${starPath(100,116,86,50)}" class="starb"/><ellipse cx="100" cy="148" rx="24" ry="13" class="c-light"/>`}
 ];
 
 /* ---------- Ojos y bocas (se compran) ---------- */
 const EYES={
-  normal:{name:'Normales',price:0},puntos:{name:'Puntitos',price:15},brillo:{name:'Brillantes',price:25},
-  pestanas:{name:'Pestañas',price:25},robot:{name:'Robot',price:30},estrella:{name:'Estrellas',price:35},corazon:{name:'Corazones',price:35}
+  normal:{name:'Normales',price:0},puntos:{name:'Puntitos',price:60},brillo:{name:'Brillantes',price:100},
+  pestanas:{name:'Pestañas',price:100},robot:{name:'Robot',price:120},estrella:{name:'Estrellas',price:140},corazon:{name:'Corazones',price:140}
 };
 function eyesMarkup(st,ids){
   const P=s=>ids?` id="pupil${s}"`:'',W=cx=>`<ellipse cx="${cx}" cy="100" rx="15" ry="18" fill="#fff"/>`;
@@ -451,39 +467,39 @@ function eyesMarkup(st,ids){
 const MOUTH_BASE={happy:'M86 128 Q100 141 114 128',neutral:'M89 131 L111 131',sad:'M87 136 Q100 125 113 136',wavy:'M85 132 Q92.5 126 100 132 Q107.5 138 115 132',small:'M95 131 Q100 134 105 131'};
 const MOUTHS={
   normal:{name:'Sonrisa',price:0},
-  gatuna:{name:'Gatuna',price:20,paths:{happy:'M86 128 Q93 137 100 129 Q107 137 114 128',neutral:'M88 130 Q94 134 100 130 Q106 134 112 130'}},
-  dientes:{name:'Dientón',price:20,deco:`<rect x="96" y="131" width="8" height="7" rx="1.5" fill="#fff" stroke="#2b2340" stroke-width="1.5"/>`},
-  colmillos:{name:'Colmillos',price:25,deco:`<path d="M91 132 L94 139 L97 133.5 Z M103 133.5 L106 139 L109 132 Z" fill="#fff" stroke="#2b2340" stroke-width="1.3" stroke-linejoin="round"/>`},
-  lengua:{name:'Lengua',price:25,deco:`<path d="M98 134 Q98 145 104 145 Q110 145 110 133 Z" fill="#ff6f91" stroke="#2b2340" stroke-width="1.8"/>`},
-  bigote:{name:'Bigote',price:30,always:true,deco:`<path d="M100 121 C 92 116, 82 117, 77 125 C 86 123, 93 125, 100 123 C 107 125, 114 123, 123 125 C 118 117, 108 116, 100 121 Z" fill="#3a2a20"/>`}
+  gatuna:{name:'Gatuna',price:80,paths:{happy:'M86 128 Q93 137 100 129 Q107 137 114 128',neutral:'M88 130 Q94 134 100 130 Q106 134 112 130'}},
+  dientes:{name:'Dientón',price:80,deco:`<rect x="96" y="131" width="8" height="7" rx="1.5" fill="#fff" stroke="#2b2340" stroke-width="1.5"/>`},
+  colmillos:{name:'Colmillos',price:100,deco:`<path d="M91 132 L94 139 L97 133.5 Z M103 133.5 L106 139 L109 132 Z" fill="#fff" stroke="#2b2340" stroke-width="1.3" stroke-linejoin="round"/>`},
+  lengua:{name:'Lengua',price:100,deco:`<path d="M98 134 Q98 145 104 145 Q110 145 110 133 Z" fill="#ff6f91" stroke="#2b2340" stroke-width="1.8"/>`},
+  bigote:{name:'Bigote',price:120,always:true,deco:`<path d="M100 121 C 92 116, 82 117, 77 125 C 86 123, 93 125, 100 123 C 107 125, 114 123, 123 125 C 118 117, 108 116, 100 121 Z" fill="#3a2a20"/>`}
 };
 const mouthPath=(st,mood)=>((MOUTHS[st]||{}).paths||{})[mood]||MOUTH_BASE[mood];
 
 const COLORS=[
   {id:'lila',name:'Lila',main:'#9b8cf2',dark:'#7a69d6',light:'#d9d2ff',price:0},
-  {id:'azul',name:'Azul',main:'#5fb3f5',dark:'#3d8fd1',light:'#cbe8ff',price:15},
-  {id:'verde',name:'Verde',main:'#6fd08c',dark:'#48ad68',light:'#d3f5dd',price:15},
-  {id:'naranja',name:'Naranja',main:'#ffa95e',dark:'#e5853a',light:'#ffe2c6',price:15},
-  {id:'rosa',name:'Rosa',main:'#ff8fc0',dark:'#e26a9f',light:'#ffd8ea',price:20},
-  {id:'turquesa',name:'Turquesa',main:'#3fd0c9',dark:'#24a8a2',light:'#c8f4f1',price:20},
-  {id:'amarillo',name:'Amarillo',main:'#ffd447',dark:'#e3b521',light:'#fff1bf',price:25},
-  {id:'gris',name:'Gris',main:'#a5adbd',dark:'#7f8798',light:'#e3e7ee',price:25}
+  {id:'azul',name:'Azul',main:'#5fb3f5',dark:'#3d8fd1',light:'#cbe8ff',price:60},
+  {id:'verde',name:'Verde',main:'#6fd08c',dark:'#48ad68',light:'#d3f5dd',price:60},
+  {id:'naranja',name:'Naranja',main:'#ffa95e',dark:'#e5853a',light:'#ffe2c6',price:60},
+  {id:'rosa',name:'Rosa',main:'#ff8fc0',dark:'#e26a9f',light:'#ffd8ea',price:80},
+  {id:'turquesa',name:'Turquesa',main:'#3fd0c9',dark:'#24a8a2',light:'#c8f4f1',price:80},
+  {id:'amarillo',name:'Amarillo',main:'#ffd447',dark:'#e3b521',light:'#fff1bf',price:100},
+  {id:'gris',name:'Gris',main:'#a5adbd',dark:'#7f8798',light:'#e3e7ee',price:100}
 ];
 const ACCS=[
-  {id:'lazo',name:'Lazo',e:'🎀',slot:'hat',price:15,x:142,y:68,fs:34},
-  {id:'gorra',name:'Gorra',e:'🧢',slot:'hat',price:20,x:100,y:62,fs:54},
-  {id:'chistera',name:'Chistera',e:'🎩',slot:'hat',price:30,x:100,y:60,fs:56},
-  {id:'birrete',name:'Birrete',e:'🎓',slot:'hat',price:40,x:100,y:62,fs:56},
-  {id:'corona',name:'Corona',e:'👑',slot:'hat',price:60,x:100,y:58,fs:48},
-  {id:'gafas',name:'Gafas',e:'👓',slot:'glasses',price:20,y:127,fs:74},
-  {id:'gafassol',name:'Gafas de sol',e:'🕶️',slot:'glasses',price:25,y:127,fs:74},
+  {id:'lazo',name:'Lazo',e:'🎀',slot:'hat',price:60,x:142,y:68,fs:34},
+  {id:'gorra',name:'Gorra',e:'🧢',slot:'hat',price:80,x:100,y:62,fs:54},
+  {id:'chistera',name:'Chistera',e:'🎩',slot:'hat',price:120,x:100,y:60,fs:56},
+  {id:'birrete',name:'Birrete',e:'🎓',slot:'hat',price:160,x:100,y:62,fs:56},
+  {id:'corona',name:'Corona',e:'👑',slot:'hat',price:240,x:100,y:58,fs:48},
+  {id:'gafas',name:'Gafas',e:'👓',slot:'glasses',price:80,y:127,fs:74},
+  {id:'gafassol',name:'Gafas de sol',e:'🕶️',slot:'glasses',price:100,y:127,fs:74},
   {id:'calabaza',name:'🎃 Calabaza (Halloween)',e:'🎃',slot:'hat',price:0,x:100,y:60,fs:50,season:'halloween'},
   {id:'arbolito',name:'🎄 Arbolito (Navidad)',e:'🎄',slot:'hat',price:0,x:100,y:58,fs:50,season:'navidad'}
 ];
 const FOODS=[
-  {e:'🍎',name:'Manzana',price:2,food:22},{e:'🍌',name:'Plátano',price:2,food:22},{e:'🥕',name:'Zanahoria',price:2,food:20},
-  {e:'🥦',name:'Brócoli',price:3,food:28},{e:'🥛',name:'Leche',price:2,food:15},{e:'🥪',name:'Bocadillo',price:4,food:35},
-  {e:'🍩',name:'Donut',price:3,food:8,fun:12,sweet:true},{e:'🍭',name:'Piruleta',price:2,food:5,fun:12,sweet:true}
+  {e:'🍎',name:'Manzana',price:8,food:22},{e:'🍌',name:'Plátano',price:8,food:22},{e:'🥕',name:'Zanahoria',price:8,food:20},
+  {e:'🥦',name:'Brócoli',price:12,food:28},{e:'🥛',name:'Leche',price:8,food:15},{e:'🥪',name:'Bocadillo',price:16,food:35},
+  {e:'🍩',name:'Donut',price:12,food:8,fun:12,sweet:true},{e:'🍭',name:'Piruleta',price:8,food:5,fun:12,sweet:true}
 ];
 const ROOMS={
   cocina:{name:'Cocina',icon:'🍳',decor:[['🪟',8,8,62],['🕰️',78,8,42],['🪴',3,58,56],['🧺',86,64,38]]},
@@ -510,30 +526,17 @@ const SEASON_HELLO={halloween:'¡Feliz Halloween! 🎃 Tienes una calabaza grati
 const isEvening=()=>{const h=new Date().getHours();return h>=20||h<7;};
 const HAPPY_LINES=['¡Hola! Soy {n} 👋','¿Jugamos a algo? 🎮','¿Practicamos las tablas? ⚔️','Hazme cosquillas en la barriga 😆','Pulsa el micro y habla conmigo 🎤'];
 
-/* ---------- Vocabulario por campos semánticos ---------- */
-const FIELDS=[
-  {id:'animals',tpl:'I can see the ___.',e:'🐾',en:'Animals',es:'Animales',words:[['🐱','cat','gato'],['🐶','dog','perro'],['🐴','horse','caballo'],['🐰','rabbit','conejo'],['🐮','cow','vaca'],['🐷','pig','cerdo'],['🐑','sheep','oveja'],['🦆','duck','pato'],['🦁','lion','león'],['🐘','elephant','elefante'],['🐵','monkey','mono'],['🐍','snake','serpiente']]},
-  {id:'food',e:'🍎',en:'Food',es:'Comida',words:[['🍎','apple','manzana'],['🍌','banana','plátano'],['🍞','bread','pan'],['🧀','cheese','queso'],['🥚','egg','huevo'],['🥛','milk','leche'],['🥕','carrot','zanahoria'],['🍅','tomato','tomate'],['🍗','chicken','pollo'],['🐟','fish','pescado'],['🍚','rice','arroz'],['💧','water','agua']]},
-  {id:'body',tpl:'This is my ___.',e:'🖐️',en:'The body',es:'El cuerpo',words:[['👁️','eye','ojo'],['👂','ear','oreja'],['👃','nose','nariz'],['👄','mouth','boca'],['🦷','tooth','diente'],['👅','tongue','lengua'],['✋','hand','mano'],['🦶','foot','pie'],['🦵','leg','pierna'],['💪','arm','brazo'],['🧠','brain','cerebro'],['🦴','bone','hueso']]},
-  {id:'clothes',tpl:"I'm wearing my ___.",e:'👕',en:'Clothes',es:'La ropa',words:[['👕','T-shirt','camiseta'],['👔','shirt','camisa'],['👖','trousers','pantalones'],['🩳','shorts','pantalón corto'],['👗','dress','vestido'],['🧥','coat','abrigo'],['🧣','scarf','bufanda'],['🧤','gloves','guantes'],['🧦','socks','calcetines'],['👟','trainers','zapatillas'],['🥾','boots','botas'],['🧢','cap','gorra']]},
-  {id:'school',tpl:'This is my ___.',e:'🎒',en:'School',es:'El colegio',words:[['📕','book','libro'],['✏️','pencil','lápiz'],['🖊️','pen','bolígrafo'],['✂️','scissors','tijeras'],['📏','ruler','regla'],['🎒','schoolbag','mochila'],['📓','notebook','cuaderno'],['🖍️','crayon','cera'],['🖌️','paintbrush','pincel'],['💻','computer','ordenador'],['🕰️','clock','reloj'],['📎','paper clip','clip']]},
-  {id:'house',tpl:'This is the ___.',e:'🏠',en:'The house',es:'La casa',words:[['🛏️','bed','cama'],['🪑','chair','silla'],['🛋️','sofa','sofá'],['🚪','door','puerta'],['🪟','window','ventana'],['💡','lamp','lámpara'],['🛁','bath','bañera'],['🚿','shower','ducha'],['🚽','toilet','váter'],['🪞','mirror','espejo'],['🔑','key','llave'],['📺','television','televisión']]},
-  {id:'weather',e:'⛅',en:'Weather',es:'El tiempo',words:[['☀️','sunny','soleado'],['☁️','cloudy','nublado'],['🌧️','rainy','lluvioso'],['🌨️','snowy','nevado'],['🌬️','windy','ventoso'],['⛈️','stormy','tormentoso'],['🌫️','foggy','con niebla'],['🥵','hot','calor'],['🥶','cold','frío'],['🌈','rainbow','arcoíris'],['☂️','umbrella','paraguas'],['⛄','snowman','muñeco de nieve']]},
-  {id:'transport',tpl:'I go by ___.',e:'🚗',en:'Transport',es:'Transportes',words:[['🚗','car','coche'],['🚌','bus','autobús'],['🚆','train','tren'],['✈️','plane','avión'],['⛵','boat','barca'],['🚢','ship','barco'],['🚲','bicycle','bicicleta'],['🏍️','motorbike','moto'],['🚁','helicopter','helicóptero'],['🚚','lorry','camión'],['🚕','taxi','taxi'],['🚀','rocket','cohete']]},
-  {id:'sports',tpl:'I like ___.',e:'⚽',en:'Sports',es:'Deportes',words:[['⚽','football','fútbol'],['🏀','basketball','baloncesto'],['🎾','tennis','tenis'],['🏊','swimming','natación'],['🚴','cycling','ciclismo'],['⛷️','skiing','esquí'],['🏐','volleyball','voleibol'],['⚾','baseball','béisbol'],['🏃','running','correr'],['⛳','golf','golf'],['🥊','boxing','boxeo'],['⛸️','ice skating','patinaje']]},
-  {id:'colours',tpl:'My favourite colour is ___.',e:'🎨',en:'Colours',es:'Colores',words:[['🟥','red','rojo'],['🟦','blue','azul'],['🟩','green','verde'],['🟨','yellow','amarillo'],['🟧','orange','naranja'],['🟪','purple','morado'],['🟫','brown','marrón'],['⬛','black','negro'],['⬜','white','blanco']]},
-  {id:'verbs',tpl:'I can ___.',e:'🏃',en:'Action verbs',es:'Verbos de acción',words:[['🏃','run','correr'],['🚶','walk','caminar'],['🏊','swim','nadar'],['🧗','climb','trepar'],['💃','dance','bailar'],['🎤','sing','cantar'],['📖','read','leer'],['✍️','write','escribir'],['🎨','draw','dibujar'],['🍳','cook','cocinar'],['😴','sleep','dormir'],['😢','cry','llorar']]},
-  {id:'routine',tpl:'Every day I ___.',e:'⏰',en:'Daily routine',es:'Rutina diaria',words:[['⏰','wake up','despertarse'],['🪥','brush my teeth','lavarme los dientes'],['🚿','have a shower','ducharme'],['👕','get dressed','vestirme'],['🥣','have breakfast','desayunar'],['🏫','go to school','ir al cole'],['🍽️','have lunch','almorzar'],['📝','do homework','hacer los deberes'],['⚽','play with friends','jugar con amigos'],['📺','watch TV','ver la tele'],['🍝','have dinner','cenar'],['🛏️','go to bed','acostarme']]}
-];
 const FRUITS=[['🍉','#ff4d6d'],['🍎','#e53935'],['🍊','#ff9800'],['🍋','#fdd835'],['🍐','#9ccc65'],['🍑','#ffab91'],['🍍','#ffca28'],['🥝','#8bc34a'],['🍇','#8e24aa'],['🍓','#e91e63'],['🥥','#d7ccc8'],['🍌','#ffe082']];
-const GOOD=['🍎','🍌','🥕','🥦','🍇','🍓','🍐','🥒','🍊','🍉'],BAD=['🍩','🍭','🍬','🍫','🧁','🍟'];
-const tableRate=n=>n<=2?1:n<=5?2:n<=8?3:4;
+/* Tablas del 2 al 9: se desbloquean en orden y cada acierto da tantas monedas como el número de la tabla */
+const TMIN=2,TMAX=9,ALLT=[2,3,4,5,6,7,8,9];
+const tableRate=n=>n;
+const SOAP_PRICE=8;
 
 /* ---------- Estado ---------- */
 function defState(){return{v:2,name:'',coins:30,xp:0,level:1,needs:{hambre:80,higiene:80,energia:80,diversion:80},sleeping:false,last:Date.now(),
   owned:['col:lila','eye:normal','mou:normal'],char:'bolita',unlocked:['bolita'],color:'lila',eyes:'normal',mouth:'normal',hat:null,glasses:null,
-  sweets:0,sickUntil:0,voice:'ardilla',sound:true,music:true,tables:{},fields:{},classTh:55,
-  mistakes:{},mixPerfect:false,streak:{n:0,last:''},achievements:[],stats:{healthy:0,showers:0,talks:0,silentBest:0,earned:0,bestCombo:0,spellPerfect:0}};}
+  sweets:0,sickUntil:0,voice:'ardilla',sound:true,music:true,tables:{},fields:{},classTh:55,pickT:[2],wSpeed:'normal',catchT:2,
+  mistakes:{},mixPerfect:false,streak:{n:0,last:''},achievements:[],stats:{healthy:0,showers:0,talks:0,silentBest:0,earned:0,bestCombo:0,spellPerfect:0,proPerfect:0}};}
 function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r),d=defState();return Object.assign(d,o,{needs:Object.assign(d.needs,o.needs||{}),stats:Object.assign(d.stats,o.stats||{}),streak:Object.assign(d.streak,o.streak||{})});}}catch(e){}return null;}
 function save(){S.last=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 let S=load();
@@ -546,10 +549,13 @@ let touchBudget=15,tickCount=0,nagCount=0,walkCount=0,lastTick=Date.now();
 const isSick=()=>S.sickUntil&&Date.now()<S.sickUntil;
 const xpNeed=l=>40+l*20;
 const overlayOpen=()=>!$('#overlay').classList.contains('hidden');
-const nTables=()=>Object.values(S.tables).filter(t=>t.perfect).length;
-const nFields=()=>Object.values(S.fields).filter(t=>t.perfect).length;
-const condMet=c=>!c||(c.t==='tables'?nTables():nFields())>=c.n;
-const condText=c=>!c?'':c.t==='tables'?(c.n>=10?'Domina todas las tablas':`Domina ${c.n} tablas`):(c.n>=FIELDS.length?'Domina todo el vocabulario':`Domina ${c.n} temas de inglés`);
+const tDone=n=>!!(S.tables[n]&&S.tables[n].perfect);
+const nTables=()=>ALLT.filter(tDone).length;
+// una tabla se abre cuando se domina la anterior (la del 2 está siempre abierta)
+const tOpen=n=>n===TMIN||tDone(n)||tDone(n-1);
+const openTs=()=>ALLT.filter(tOpen);
+const condMet=c=>!c||(c.t==='mix'?!!S.mixPerfect:nTables()>=c.n);
+const condText=c=>!c?'':c.t==='mix'?'Haz todas las tablas (2–9) juntas sin fallos':c.n>=ALLT.length?'Domina todas las tablas (2–9)':`Domina ${c.n} tablas`;
 
 /* ---------- Audio ---------- */
 let actx=null,noiseBuf=null;
@@ -592,17 +598,6 @@ const SFX={
 };
 function sfx(n){try{ensureAudio();SFX[n]&&SFX[n]();}catch(e){}}
 
-/* TTS inglés */
-let voices=[];
-function loadVoices(){try{voices=speechSynthesis.getVoices();}catch(e){}}
-if('speechSynthesis' in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
-const enVoice=()=>voices.find(v=>/^en[-_]GB/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
-const hasEnVoice=()=>!!enVoice();
-function speak(text){
-  if(!('speechSynthesis' in window))return;
-  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';const v=enVoice();if(v)u.voice=v;u.rate=.9;speechSynthesis.speak(u);}catch(e){}
-}
-
 /* ---------- UI general ---------- */
 const toastQ=[];let toastBusy=false;
 function toast(m){toastQ.push(m);if(!toastBusy)nextToast();}
@@ -616,11 +611,14 @@ let sayT=null;
 function say(t,ms=2800){const b=$('#bubble');b.textContent=t.replace('{n}',S.name||'tu mascota');b.classList.remove('hidden','popin');void b.offsetWidth;b.classList.add('popin');clearTimeout(sayT);sayT=setTimeout(()=>b.classList.add('hidden'),ms);}
 function openPanel(html,cls='',back=null){panelBack=back;ensureGuard();$('#panel').className='panel '+cls;$('#panel').innerHTML=html;$('#overlay').classList.remove('hidden');$('#panel').scrollTop=0;$$('#panel [data-x]').forEach(b=>b.onclick=closePanel);}
 function closePanel(){game=null;panelBack=null;setTimeout(syncHome,60);$('#overlay').classList.add('hidden');$('#panel').innerHTML='';if('speechSynthesis' in window)speechSynthesis.cancel();}
-/* Botón Atrás del móvil: retrocede paso a paso (juego → menú → habitación → cocina) sin salir de la app */
-let guardOn=false,ignorePop=false,panelBack=null;
+/* Botón Atrás del móvil: retrocede paso a paso (juego → menú → habitación → cocina) sin salir de la app.
+   Chrome se salta las entradas del historial creadas justo después de pulsar «atrás» si no se ha tocado la pantalla
+   (y entonces cierra la app). Por eso se deja una reserva de entradas creadas siempre tras un toque, nunca tras un «atrás». */
+let ignorePop=0,panelBack=null,bkAct=true;const BK_R=6;
 const atHome=()=>$('#overlay').classList.contains('hidden')&&room==='cocina'&&!classMode;
-function ensureGuard(){if(!guardOn){try{history.pushState({mascota:1},'');guardOn=true;}catch(e){}}}
-function syncHome(){if(guardOn&&atHome()){ignorePop=true;guardOn=false;history.back();}}
+const bkDepth=()=>{const s=history.state;return s&&s.mascota?(s.d||1):0;};
+function ensureGuard(){if(!bkAct)return;try{for(let i=bkDepth()+1;i<=BK_R;i++)history.pushState({mascota:1,d:i},'');}catch(e){}}
+function syncHome(){const d=bkDepth();if(d>0&&atHome()){ignorePop++;history.go(-d);}}
 function goBack(){
   if(!$('#overlay').classList.contains('hidden')){
     if(panelBack==='block')return;
@@ -630,11 +628,12 @@ function goBack(){
   if(classMode){exitClass();return;}
   if(room!=='cocina')goRoom('cocina');
 }
+['click','pointerup','touchend','keydown'].forEach(t=>window.addEventListener(t,()=>{bkAct=true;setTimeout(()=>{if(!atHome())ensureGuard();},0);},true));
 window.addEventListener('popstate',()=>{
-  if(ignorePop){ignorePop=false;return;}
-  guardOn=false;
+  bkAct=false;   // hasta el próximo toque no se crean entradas nuevas
+  if(ignorePop>0){ignorePop--;return;}
   goBack();
-  if(!atHome())ensureGuard();
+  if(atHome())setTimeout(syncHome,60);
 });
 function cleanClone(){const c=$('#petSvg').cloneNode(true);c.removeAttribute('id');c.querySelectorAll('.bub').forEach(x=>x.remove());c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));return c;}
 
@@ -643,7 +642,7 @@ function updateUI(){
   $('#lvl').textContent=S.level;
   $('#xpFill').style.width=Math.min(100,S.xp/xpNeed(S.level)*100)+'%';
   $('#coins').textContent=S.coins;
-  $('#badges').textContent=nTables()+nFields()+(S.mixPerfect?1:0);
+  $('#badges').textContent=nTables()+(S.mixPerfect?1:0);
   $('#streak').textContent=streakNow();
   NEEDS.forEach(k=>{const el=document.querySelector(`.need[data-need="${k}"]`),v=S.needs[k],i=el.querySelector('i');
     i.style.width=v+'%';i.style.background=v<25?'var(--bad)':v<50?'#ffb547':'var(--ok)';el.classList.toggle('low',v<25);});
@@ -744,9 +743,9 @@ function goRoom(r,init){
   if(!init)sfx('pop');
 }
 const GAMES=[
-  {id:'ninja',e:'⚔️',name:'Tablas ninja',bg:'#e0603a',open:()=>openTables()},
-  {id:'en',e:'🔤',name:'English',bg:'#5b8def',open:()=>openEnglish()},
-  {id:'catch',e:'🍎',name:'Atrapa',bg:'#33b574',open:()=>tryPlay(startCatch)}
+  {id:'ninja',e:'⚔️',name:'Tablas ninja',bg:'#e0603a',open:()=>openPicker('ninja')},
+  {id:'write',e:'✍️',name:'Escribe',bg:'#5b8def',open:()=>openPicker('write')},
+  {id:'catch',e:'🔢',name:'Atrapa números',bg:'#33b574',open:()=>openCatch()}
 ];
 function renderActions(){
   const a=$('#actions');a.innerHTML='';
@@ -763,7 +762,7 @@ function renderActions(){
     FOODS.forEach(f=>{const b=document.createElement('button');b.className='food'+(f.sweet?' sweet':'');b.title=f.name;
       b.innerHTML=`<span class="fe">${f.e}</span><span class="price">🪙 ${f.price}</span>`;b.onclick=()=>feed(f,b);a.appendChild(b);});
   }else if(room==='bano'){
-    a.innerHTML=`<button class="act ${soapOn?'on':''}" id="soapBtn">🧼<span>Jabón</span></button><button class="act" id="showerBtn">🚿<span>Ducha</span></button><div class="hint">${soapOn?'Frota con el dedo o el ratón':'Usa el jabón y luego la ducha'}</div>`;
+    a.innerHTML=`<button class="act ${soapOn?'on':''}" id="soapBtn">🧼<span>Jabón${soapPaid?'':' · 🪙'+SOAP_PRICE}</span></button><button class="act" id="showerBtn">🚿<span>Ducha</span></button><div class="hint">${soapOn?'Frota con el dedo o el ratón':'Usa el jabón y luego la ducha'}</div>`;
     $('#soapBtn').onclick=toggleSoap;$('#showerBtn').onclick=shower;
   }else if(room==='dormitorio'){
     a.innerHTML=`<button class="act ${S.sleeping?'on':''}" id="lampBtn">${S.sleeping?'💡<span>Encender luz</span>':'🌙<span>Apagar luz</span>'}</button><button class="act" id="classBtn">🤫<span>Modo silencio</span></button><button class="act" id="wardBtn">👕<span>Armario</span></button>`;
@@ -827,10 +826,14 @@ function afterEat(f){
 }
 
 /* Baño */
-let lastBub=0,lastBubP=null,bubN=0;
+let lastBub=0,lastBubP=null,bubN=0,soapPaid=false;
 function toggleSoap(){
   if(busy)return;
   if(!soapOn&&S.needs.higiene>=99){say('¡Ya estoy limpio! ✨');return;}
+  if(!soapOn&&!soapPaid){
+    if(S.coins<SOAP_PRICE){toast(`El jabón cuesta ${SOAP_PRICE} 🪙. ¡Gana más en Juegos! 🎮`);sfx('bad');return;}
+    S.coins-=SOAP_PRICE;soapPaid=true;sfx('coin');updateUI();save();
+  }
   soapOn=!soapOn;sfx('click');renderActions();
 }
 function addBubble(p){
@@ -850,7 +853,7 @@ function shower(){
   if(!$('#bubbles').childElementCount){say('¡Primero el jabón! 🧼');return;}
   busy=true;soapOn=false;renderActions();$('#water').classList.add('on');sfx('shower');setTempFace('happy');
   setTimeout(()=>$('#bubbles').innerHTML='',700);
-  setTimeout(()=>{$('#water').classList.remove('on');busy=false;S.needs.higiene=clamp(S.needs.higiene+12,0,100);S.stats.showers++;addXP(3);
+  setTimeout(()=>{$('#water').classList.remove('on');busy=false;soapPaid=false;S.needs.higiene=clamp(S.needs.higiene+12,0,100);S.stats.showers++;addXP(3);
     setTempFace('love',1300);say('¡Qué limpito! ✨');for(let i=0;i<4;i++)setTimeout(()=>fxPet('✨',100,90),i*120);save();updateUI();},1500);
 }
 
@@ -1029,16 +1032,14 @@ function markDaily(){
 }
 function miss(key){S.mistakes[key]=Math.min(6,(S.mistakes[key]||0)+2);}
 function hit(key){if(S.mistakes[key]){S.mistakes[key]--;if(S.mistakes[key]<=0)delete S.mistakes[key];}}
-const factKey=(n,k)=>`t:${n}x${k}`, wordKey=(f,w)=>`w:${f.id}:${w[1]}`;
-const weakFacts=()=>Object.entries(S.mistakes).filter(([k])=>k.startsWith('t:')).sort((a,b)=>b[1]-a[1]).map(([k])=>k.slice(2).split('x').map(Number));
-const weakWords=()=>Object.entries(S.mistakes).filter(([k])=>k.startsWith('w:')).sort((a,b)=>b[1]-a[1]).map(([k])=>{
-  const p=k.split(':'),f=FIELDS.find(x=>x.id===p[1]),w=f&&f.words.find(x=>x[1]===p.slice(2).join(':'));return w?{w,f}:null;}).filter(Boolean);
+const factKey=(n,k)=>`t:${n}x${k}`;
+const weakFacts=()=>Object.entries(S.mistakes).filter(([k])=>k.startsWith('t:')).sort((a,b)=>b[1]-a[1]).map(([k])=>k.slice(2).split('x').map(Number)).filter(([n])=>n>=TMIN&&n<=TMAX);
 const ACHS=[
-  {id:'first',e:'🌟',name:'Primer distintivo',desc:'Consigue tu primer 🏅',test:()=>nTables()+nFields()>=1},
+  {id:'first',e:'🌟',name:'Primer distintivo',desc:'Domina tu primera tabla 🏅',test:()=>nTables()>=1},
   {id:'combo10',e:'⚔️',name:'Ninja veloz',desc:'10 cortes seguidos sin fallar',test:()=>S.stats.bestCombo>=10},
   {id:'combo25',e:'🥷',name:'Maestro ninja',desc:'25 cortes seguidos sin fallar',test:()=>S.stats.bestCombo>=25},
-  {id:'mezcla',e:'🥇',name:'Rey de las tablas',desc:'Mezcla 2–10 sin fallos',test:()=>S.mixPerfect},
-  {id:'speller',e:'✍️',name:'Buena ortografía',desc:'Un dictado sin fallos',test:()=>S.stats.spellPerfect>=1},
+  {id:'mezcla',e:'🥇',name:'Rey de las tablas',desc:'Todas las tablas (2–9) juntas sin fallos',test:()=>S.mixPerfect},
+  {id:'pro',e:'⚡',name:'Rayo de las tablas',desc:'Una tabla perfecta en «Escribe» modo pro',test:()=>(S.stats.proPerfect||0)>=1},
   {id:'chef',e:'🥦',name:'Comida sana',desc:'Da 20 comidas sanas',test:()=>S.stats.healthy>=20},
   {id:'limpio',e:'🛁',name:'Siempre limpio',desc:'Dale 10 duchas',test:()=>S.stats.showers>=10},
   {id:'charla',e:'🎤',name:'Charlatán',desc:'Habla 20 veces con tu mascota',test:()=>S.stats.talks>=20},
@@ -1081,40 +1082,74 @@ function checkUnlocks(){
   save();updateUI();
 }
 
-/* ---------- Tablas ninja ---------- */
-function openTables(){
-  const weak=weakFacts();
-  openPanel(`<div class="ghead"><b>⚔️ Tablas ninja</b><button class="x" data-x>✕</button></div>
-    <div class="sub">Corta la fruta con el resultado correcto. Cuanto más alta la tabla, más monedas. Hazla sin fallos y ganarás su distintivo 🏅. Lo que falles volverá a salir.</div>
-    <div class="modes">
-      <button class="mode ${S.mixPerfect?'done':''}" id="tMix"><b>🎲 Mezcla 2–10</b><small>15 operaciones · ${S.mixPerfect?'🥇 conseguida':'gana la medalla 🥇'}</small></button>
-      <button class="mode" id="tRev" ${weak.length?'':'disabled'}><b>🔁 Repaso</b><small>${weak.length?`${weak.length} ${weak.length===1?'operación que fallaste':'operaciones que fallaste'}`:'Nada que repasar 🎉'}</small></button>
-    </div>
-    <div class="tblgrid">${Array.from({length:10},(_,i)=>{const n=i+1,m=S.tables[n]&&S.tables[n].perfect;
-      return`<button class="tbl ${m?'gold':''}" data-n="${n}"><b>×${n}</b><small>${m?'🏅 ':''}🪙×${tableRate(n)}</small></button>`;}).join('')}</div>`);
-  $$('#panel .tbl').forEach(b=>b.onclick=()=>{sfx('pop');tryPlay(()=>startNinja({mode:'table',n:+b.dataset.n}));});
-  $('#tMix').onclick=()=>{sfx('pop');tryPlay(()=>startNinja({mode:'mix'}));};
-  $('#tRev').onclick=()=>{if(!weak.length)return;sfx('pop');tryPlay(()=>startNinja({mode:'review'}));};
+/* ---------- Selector de tablas (Tablas ninja y Escribe): una, varias o todas ---------- */
+const GINFO={ninja:{t:'⚔️ Tablas ninja',d:'Corta la fruta con el resultado correcto.'},write:{t:'✍️ Escribe el resultado',d:'Escribe el resultado con el teclado antes de que se acabe el tiempo.'}};
+const allMix=opt=>opt.mode==='multi'&&ALLT.every(n=>opt.ts.includes(n));
+const titleFor=opt=>opt.mode==='table'?`Tabla del ${opt.n}`:opt.mode==='review'?'Repaso':allMix(opt)?'Todas las tablas':'Tablas del '+opt.ts.join(', ');
+function openPicker(kind){
+  const info=GINFO[kind],open=openTs(),weak=weakFacts();
+  let sel=new Set((S.pickT||[]).filter(tOpen));if(!sel.size)sel.add(open[open.length-1]);
+  const infoTxt=()=>{const a=[...sel].sort((x,y)=>x-y);
+    if(!a.length)return'Elige al menos una tabla';
+    if(a.length===1){const n=a[0];return tDone(n)?`Tabla del ${n} · ya dominada 🏅`:`Tabla del ${n} · hazla sin fallos para dominarla${n<TMAX?` y desbloquear la del ${n+1} 🔓`:' 🏅'}`;}
+    if(open.length===ALLT.length&&a.length===ALLT.length)return'Todas las tablas (2–9) · sin fallos ganas la medalla 🥇';
+    return`${a.length} tablas mezcladas: ${a.map(n=>'×'+n).join(' ')}`;};
+  const draw=()=>{
+    openPanel(`<div class="ghead"><b>${info.t}</b><button class="x" data-x>✕</button></div>
+      <div class="sub">${info.d} Elige <b>una tabla</b> para dominarla y desbloquear la siguiente, o junta <b>varias</b> o <b>todas</b>. Cuanto más alta la tabla, más monedas.</div>
+      ${kind==='write'?`<div class="seg" id="pSpeed"><button data-s="normal" class="${S.wSpeed!=='pro'?'on':''}">🐢 Normal<br><small>5 segundos</small></button><button data-s="pro" class="${S.wSpeed==='pro'?'on':''}">⚡ Pro<br><small>3 segundos · 🪙×2</small></button></div>`:''}
+      <div class="tpick">${ALLT.map(n=>{const o=tOpen(n),on=sel.has(n);return`<button class="tp ${on?'on':''} ${o?'':'lock'} ${tDone(n)?'gold':''}" data-n="${n}">${on?'<span class="ck">✔</span>':''}<b>×${n}</b><small>${o?(tDone(n)?'🏅 ':'')+'🪙'+tableRate(n):'🔒'}</small></button>`;}).join('')}</div>
+      <div class="pickbar"><button class="btn" id="pAll">✅ Todas</button><button class="btn" id="pNone">Ninguna</button><button class="btn" id="pRev" ${weak.length?'':'disabled'}>🔁 Repaso${weak.length?` (${weak.length})`:''}</button></div>
+      <div class="pickinfo">${infoTxt()}</div>
+      <div class="btns"><button class="btn primary" id="pGo" ${sel.size?'':'disabled'}>▶ Empezar</button></div>`);
+    $$('#panel .tp').forEach(b=>b.onclick=()=>{const n=+b.dataset.n;
+      if(!tOpen(n)){sfx('bad');toast(`🔒 Domina la tabla del ${n-1} para desbloquearla`);return;}
+      sfx('click');if(sel.has(n))sel.delete(n);else sel.add(n);draw();});
+    $$('#pSpeed button').forEach(b=>b.onclick=()=>{S.wSpeed=b.dataset.s;sfx('click');save();draw();});
+    $('#pAll').onclick=()=>{sfx('click');sel=new Set(openTs());draw();};
+    $('#pNone').onclick=()=>{sfx('click');sel.clear();draw();};
+    $('#pRev').onclick=()=>{if(!weak.length)return;sfx('pop');const opt={mode:'review',pro:S.wSpeed==='pro'};tryPlay(()=>kind==='ninja'?startNinja(opt):startWrite(opt));};
+    $('#pGo').onclick=()=>{if(!sel.size)return;sfx('pop');const ts=[...sel].sort((x,y)=>x-y);S.pickT=ts;save();
+      const opt=ts.length===1?{mode:'table',n:ts[0],ts}:{mode:'multi',ts};opt.pro=S.wSpeed==='pro';
+      tryPlay(()=>kind==='ninja'?startNinja(opt):startWrite(opt));};
+  };
+  draw();
 }
-function distract(n,k){
-  const a=n*k,c=shuffle([n*(k+1),n*(k-1),(n+1)*k,(n-1)*k,a+1,a-1,a+10,a-10,a+n,a-n]).filter(v=>v>0&&v!==a),out=[];
-  for(const v of c){if(!out.includes(v))out.push(v);if(out.length===3)break;}
-  while(out.length<3){const v=rnd(1,100);if(v!==a&&!out.includes(v))out.push(v);}
-  return out;
-}
-function ninjaFacts(opt){
+function factsFor(opt,count){
   if(opt.mode==='table')return shuffle([1,2,3,4,5,6,7,8,9,10]).map(k=>[opt.n,k]);
-  if(opt.mode==='mix'){const all=[];for(let n=2;n<=10;n++)for(let k=1;k<=10;k++)all.push([n,k]);return shuffle(all).slice(0,15);}
+  if(opt.mode==='multi'){const all=[];opt.ts.forEach(n=>{for(let k=1;k<=10;k++)all.push([n,k]);});return shuffle(all).slice(0,count||15);}
   return shuffle(weakFacts().slice(0,10));
 }
+// al acabar: una tabla sin fallos queda dominada y abre la siguiente; todas juntas sin fallos dan la medalla 🥇
+function tableResult(opt,perfect){
+  let bonus=0,badge=null;
+  if(opt.mode==='table'){
+    const n=opt.n,t=S.tables[n]||{perfect:false,plays:0};t.plays++;
+    const isNew=perfect&&!t.perfect;if(perfect)t.perfect=true;S.tables[n]=t;
+    bonus=perfect?tableRate(n)*5:0;
+    badge=isNew?`🏅 ¡Ya te sabes la tabla del ${n}!<br>${n<TMAX?`🔓 Has desbloqueado la tabla del ${n+1}`:'🎓 ¡Has desbloqueado todas las tablas!'}`:perfect?`🏅 Tabla del ${n} perfecta otra vez`:null;
+  }else if(allMix(opt)&&perfect){
+    bonus=40;badge=S.mixPerfect?'🥇 Todas las tablas perfectas otra vez':'🥇 ¡Eres el rey de las tablas!';S.mixPerfect=true;
+  }
+  return{bonus,badge};
+}
+
+/* ---------- Tablas ninja ---------- */
+function distract(n,k){
+  // los números trampa nunca pasan del máximo de la tabla (tabla del 4 → hasta 40)
+  const a=n*k,max=n*10,c=shuffle([n*(k+1),n*(k-1),(n+1)*k,(n-1)*k,a+1,a-1,a+2,a-2,a+10,a-10,a+n,a-n]).filter(v=>v>0&&v<=max&&v!==a),out=[];
+  for(const v of c){if(!out.includes(v))out.push(v);if(out.length===3)break;}
+  let guard=0;while(out.length<3&&guard++<300){const v=rnd(1,max);if(v!==a&&!out.includes(v))out.push(v);}
+  return out;
+}
 function startNinja(opt){
-  const facts=ninjaFacts(opt);
-  if(!facts.length){toast('¡No hay nada que repasar! 🎉');openTables();return;}
-  const title=opt.mode==='table'?`Tabla del ${opt.n}`:opt.mode==='mix'?'Mezcla 2–10':'Repaso';
+  const facts=factsFor(opt,15);
+  if(!facts.length){toast('¡No hay nada que repasar! 🎉');openPicker('ninja');return;}
+  const title=titleFor(opt);
   const g={id:'ninja',opt,facts,base:facts.length,retried:new Set(),qi:0,hits:0,errors:0,coins:0,combo:0,fruits:[],halves:[],parts:[],texts:[],trail:[],pending:[],wave:0,answered:false,running:true,time:0,last:0};
   game=g;
   openPanel(`<div class="ghead"><b>⚔️ ${title}</b><span id="nInfo"></span><button class="x" data-x>✕</button></div>
-    <div class="nq" id="nQ"></div><div id="nWrap"><canvas id="nCv"></canvas><div class="nflash" id="nFlash" style="opacity:0"></div></div>`,'game',()=>{game=null;openTables();});
+    <div class="nq" id="nQ"></div><div id="nWrap"><canvas id="nCv"></canvas><div class="nflash" id="nFlash" style="opacity:0"></div></div>`,'game',()=>{game=null;openPicker('ninja');});
   const cv=$('#nCv'),wrap=$('#nWrap'),ctx=cv.getContext('2d');
   let W=0,H=0;
   function size(){const dpr=Math.min(2,window.devicePixelRatio||1);W=wrap.clientWidth;H=wrap.clientHeight;cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0);}
@@ -1170,20 +1205,11 @@ function startNinja(opt){
   function drawEmoji(e,r){ctx.font=`${Math.round(r*1.9)}px "Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(e,0,r*.08);}
   function end(){
     g.running=false;window.removeEventListener('resize',size);
-    const perfect=g.errors===0;let bonus=0,badge=null;
-    if(opt.mode==='table'){
-      const n=opt.n,t=S.tables[n]||{perfect:false,plays:0};t.plays++;
-      const isNew=perfect&&!t.perfect;if(perfect)t.perfect=true;S.tables[n]=t;
-      bonus=perfect?tableRate(n)*5:0;
-      badge=isNew?`🏅 ¡Ya te sabes la tabla del ${n}!`:perfect?`🏅 Tabla del ${n} perfecta otra vez`:null;
-    }else if(opt.mode==='mix'){
-      bonus=perfect?30:0;
-      if(perfect){badge=S.mixPerfect?'🥇 Mezcla perfecta otra vez':'🥇 ¡Eres el rey de las tablas!';S.mixPerfect=true;}
-    }
+    const perfect=g.errors===0,{bonus,badge}=tableResult(opt,perfect);
     finishGame({title:`⚔️ ${title}`,ratio:g.base/(g.base+g.errors),
       detail:`Aciertos: ${g.hits} · Errores: ${g.errors}${bonus?` · Bonus sin fallos: +${bonus} 🪙`:''}`,
       note:g.errors?'🔁 Las operaciones falladas se guardan en Repaso.':'',
-      coins:g.coins+bonus,fun:12,xp:10+(perfect?10:0),badge,again:()=>startNinja(opt),menu:openTables});
+      coins:g.coins+bonus,fun:12,xp:10+(perfect?10:0),badge,again:()=>startNinja(opt),menu:()=>openPicker('ninja')});
   }
   function loop(t){
     if(game!==g||!g.running){window.removeEventListener('resize',size);return;}
@@ -1227,150 +1253,134 @@ function startNinja(opt){
   requestAnimationFrame(t=>{g.last=t;requestAnimationFrame(loop);});
 }
 
-/* ---------- English: temas, repaso, dictado y frases ---------- */
-function openEnglish(){
-  const weak=weakWords();
-  openPanel(`<div class="ghead"><b>🔤 English</b><button class="x" data-x>✕</button></div>
-    <div class="sub">Elige un tema. Acierta todo el vocabulario sin fallos y ganarás su distintivo 🏅. Las palabras que falles irán a Repaso.</div>
-    <div class="modes"><button class="mode" id="eRev" ${weak.length?'':'disabled'}><b>🔁 Repaso</b><small>${weak.length?`${weak.length} ${weak.length===1?'palabra que fallaste':'palabras que fallaste'}`:'Nada que repasar 🎉'}</small></button></div>
-    <div class="fgrid">${FIELDS.map((f,i)=>{const m=S.fields[f.id]&&S.fields[f.id].perfect;
-      return`<button class="fcard ${m?'gold':''}" data-i="${i}"><div class="fe">${f.e}</div><b>${f.en}</b><small>${f.es}${m?' · 🏅':''}</small></button>`;}).join('')}</div>`);
-  $$('#panel .fcard').forEach(b=>b.onclick=()=>{sfx('pop');openField(FIELDS[+b.dataset.i]);});
-  $('#eRev').onclick=()=>{if(!weak.length)return;sfx('pop');tryPlay(()=>startQuiz({mode:'review'}));};
-}
-function openField(f){
-  openPanel(`<div class="ghead"><b>${f.e} ${f.en} · ${f.es}</b><button class="x" data-x>✕</button></div>
-    <div class="sub">Toca cada tarjeta para escucharla.${hasEnVoice()?'':' (Este dispositivo no tiene voz en inglés.)'}</div>
-    <div class="wgrid">${f.words.map((w,i)=>`<button class="wcard" data-i="${i}"><div class="we">${w[0]}</div><b>${w[1]}</b><small>${w[2]}</small></button>`).join('')}</div>
-    <div class="btns"><button class="btn" id="fBack">⬅ Temas</button><button class="btn" id="fSpell">✍️ Dictado</button>${f.tpl?'<button class="btn" id="fSent">💬 Frases</button>':''}<button class="btn primary" id="fGo">🎯 Reto 🏅</button></div>`,'',openEnglish);
-  $$('#panel .wcard').forEach(b=>b.onclick=()=>speak(f.words[+b.dataset.i][1]));
-  $('#fBack').onclick=openEnglish;
-  $('#fGo').onclick=()=>tryPlay(()=>startQuiz({mode:'vocab',f}));
-  $('#fSpell').onclick=()=>tryPlay(()=>startSpell(f));
-  if(f.tpl)$('#fSent').onclick=()=>tryPlay(()=>startQuiz({mode:'sentence',f}));
-}
-function startQuiz(opt){
-  const items=opt.mode==='review'?shuffle(weakWords().slice(0,10))
-    :opt.mode==='sentence'?shuffle(opt.f.words.slice()).slice(0,8).map(w=>({w,f:opt.f}))
-    :shuffle(opt.f.words.slice()).map(w=>({w,f:opt.f}));
-  if(!items.length){toast('¡No hay nada que repasar! 🎉');openEnglish();return;}
-  game={id:'quiz',opt,items,base:items.length,retried:new Set(),i:0,ok:0,errors:0,lock:false};renderQuiz();
-}
-const sentence=(f,w)=>f.tpl.replace('___',w[1]);
-function renderQuiz(){
-  const g=game,{w,f}=g.items[g.i],total=g.items.length,mode=g.opt.mode;
-  const listen=mode!=='sentence'&&hasEnVoice()&&Math.random()<.5;
-  const opts=shuffle([w,...shuffle(f.words.filter(x=>x!==w)).slice(0,3)]);
-  const title=mode==='review'?'🔁 Repaso':mode==='sentence'?`💬 ${f.en}`:`${f.e} ${f.en}`;
-  const head=`<div class="ghead"><b>${title}</b><span>${g.i+1}/${total}</span><button class="x" data-x>✕</button></div><div class="prog"><i style="width:${g.i/total*100}%"></i></div>`;
-  let body;
-  if(mode==='sentence')body=`<div class="qsub">Complete the sentence ✏️</div><div class="qbig emo">${w[0]}</div><div class="sent">${esc(f.tpl).replace('___','<span class="blank">______</span>')}</div><div class="opts">${opts.map((o,i)=>`<button class="opt" data-i="${i}">${o[1]}</button>`).join('')}</div>`;
-  else if(listen)body=`<div class="qsub">Escucha y elige 👂</div><div class="qbig"><button class="speak" id="enSpeak">🔊</button></div><div class="opts">${opts.map((o,i)=>`<button class="opt emoji" data-i="${i}">${o[0]}</button>`).join('')}</div>`;
-  else body=`<div class="qsub">What is it? 🤔</div><div class="qbig emo">${w[0]}</div><div class="opts">${opts.map((o,i)=>`<button class="opt" data-i="${i}">${o[1]}</button>`).join('')}</div>`;
-  openPanel(head+body+`<div class="trans" id="enTr"></div>`,'game',()=>{game=null;if(g.opt.mode==='review')openEnglish();else openField(g.opt.f);});
-  if(listen){$('#enSpeak').onclick=()=>speak(w[1]);setTimeout(()=>{if(game===g)speak(w[1]);},350);}
-  const btns=$$('#panel .opt');
-  btns.forEach(b=>b.onclick=()=>{
-    if(g.lock||game!==g)return;g.lock=true;
-    const ok=opts[+b.dataset.i]===w,key=wordKey(f,w);
-    b.classList.add(ok?'ok':'bad');if(!ok)btns[opts.indexOf(w)].classList.add('ok');
-    sfx(ok?'ok':'bad');
-    if(ok){g.ok++;hit(key);}else{g.errors++;miss(key);if(!g.retried.has(key)){g.retried.add(key);g.items.push({w,f});}}
-    const said=mode==='sentence'?sentence(f,w):w[1];
-    $('#enTr').textContent=mode==='sentence'?`${w[0]} ${said}`:`${w[0]} ${w[1]} = ${w[2]}`;
-    setTimeout(()=>speak(said),250);
-    setTimeout(()=>{if(game!==g)return;g.lock=false;g.i++;
-      if(g.i>=g.items.length)endQuiz(g);else renderQuiz();},ok?1300:2100);
-  });
-}
-function endQuiz(g){
-  const mode=g.opt.mode,perfect=g.errors===0,first=Math.max(0,g.base-g.errors);
-  let badge=null,bonus=0,title='🔁 Repaso';
-  if(mode==='vocab'){
-    const f=g.opt.f,t=S.fields[f.id]||{perfect:false,plays:0};t.plays++;
-    const isNew=perfect&&!t.perfect;if(perfect)t.perfect=true;S.fields[f.id]=t;
-    bonus=perfect?10:0;title=`${f.e} ${f.en}`;
-    badge=isNew?`🏅 ¡Ya sabes el vocabulario de ${f.en}!`:perfect?`🏅 ${f.en} perfecto otra vez`:null;
-  }else if(mode==='sentence'){bonus=perfect?6:0;title=`💬 ${g.opt.f.en}`;}
-  finishGame({title,ratio:first/g.base,detail:`Aciertos a la primera: ${first} de ${g.base}${bonus?` · Bonus sin fallos: +${bonus} 🪙`:''}`,
-    note:g.errors?'🔁 Las palabras falladas se guardan en Repaso.':'',
-    coins:g.ok*2+bonus,fun:10+g.ok,xp:g.ok*2+(perfect?10:0),badge,
-    again:()=>startQuiz(g.opt),menu:mode==='review'?openEnglish:()=>openField(g.opt.f)});
-}
-
-/* Dictado con letras */
-function startSpell(f){game={id:'spell',f,items:shuffle(f.words.slice()).slice(0,8),i:0,ok:0,errors:0,lock:false};renderSpell();}
-function renderSpell(){
-  const g=game,w=g.items[g.i],target=w[1].toLowerCase(),total=g.items.length;
-  const letters=[...target].filter(c=>/[a-z]/.test(c)),extra=[];
-  while(extra.length<2)extra.push(pick([...'abcdefghilmnoprstuy']));
-  const tiles=shuffle([...letters,...extra]);
-  g.slots=[...target].map(c=>/[a-z]/.test(c)?null:c);g.fixed=g.slots.map(c=>c!==null);g.used=[];g.lock=false;
-  openPanel(`<div class="ghead"><b>✍️ Dictado · ${g.f.en}</b><span>${g.i+1}/${total}</span><button class="x" data-x>✕</button></div><div class="prog"><i style="width:${g.i/total*100}%"></i></div>
-    <div class="qsub">${hasEnVoice()?'Escucha y escribe la palabra en inglés':'Escribe en inglés lo que ves'} ✍️</div>
-    <div class="qbig emo">${w[0]}</div>${hasEnVoice()?'<div style="text-align:center"><button class="speak sm" id="spSpeak">🔊</button></div>':''}
-    <div class="slots" id="slots"></div>
-    <div class="tiles">${tiles.map((c,i)=>`<button class="tile" data-i="${i}">${c}</button>`).join('')}</div>
-    <div class="btns"><button class="btn" id="spDel">⌫ Borrar</button></div><div class="trans" id="enTr"></div>`,'game',()=>{game=null;openField(g.f);});
-  const drawSlots=(state)=>{$('#slots').className='slots'+(state?' '+state:'');$('#slots').innerHTML=g.slots.map((c,i)=>g.fixed[i]?`<span class="slot fixed">${c===' '?'&nbsp;':esc(c)}</span>`:`<span class="slot">${c?esc(c):''}</span>`).join('');};
-  drawSlots();
-  if(hasEnVoice()){$('#spSpeak').onclick=()=>speak(w[1]);setTimeout(()=>{if(game===g)speak(w[1]);},350);}
-  const tileBtns=$$('#panel .tile');
-  tileBtns.forEach(b=>b.onclick=()=>{
-    if(g.lock||game!==g||b.disabled)return;
-    const idx=g.slots.findIndex((c,i)=>!g.fixed[i]&&c===null);if(idx<0)return;
-    g.slots[idx]=tiles[+b.dataset.i];b.disabled=true;g.used.push({idx,b});sfx('click');drawSlots();
-    if(!g.slots.some((c,i)=>!g.fixed[i]&&c===null))check();
-  });
-  $('#spDel').onclick=()=>{if(g.lock)return;const u=g.used.pop();if(!u)return;g.slots[u.idx]=null;u.b.disabled=false;drawSlots();};
-  function check(){
-    g.lock=true;const ok=g.slots.join('')===target,key=wordKey(g.f,w);
-    drawSlots(ok?'ok':'bad');sfx(ok?'ok':'bad');
-    if(ok){g.ok++;hit(key);}else{g.errors++;miss(key);}
-    $('#enTr').innerHTML=ok?`${w[0]} ${esc(w[1])} = ${esc(w[2])}`:`Se escribe: <b>${esc(w[1])}</b> (${esc(w[2])})`;
-    setTimeout(()=>speak(w[1]),200);
-    setTimeout(()=>{if(game!==g)return;g.i++;if(g.i>=total)endSpell(g);else renderSpell();},ok?1500:2600);
+/* ---------- Escribe el resultado: teclado de números, normal 5 s o pro 3 s ---------- */
+function startWrite(opt){
+  const facts=factsFor(opt,15);
+  if(!facts.length){toast('¡No hay nada que repasar! 🎉');openPicker('write');return;}
+  const pro=!!opt.pro,lim=pro?3:5,title=titleFor(opt);
+  const g={id:'write',opt,facts,base:facts.length,retried:new Set(),i:0,hits:0,errors:0,coins:0,ans:'',lock:true,t0:0,raf:0};game=g;
+  const keyHTML=d=>`<button class="key" data-k="${d}">${d}</button>`;
+  openPanel(`<div class="ghead"><b>✍️ ${title}${pro?' · ⚡ Pro':''}</b><span id="wInfo"></span><button class="x" data-x>✕</button></div>
+    <div class="prog"><i id="wProg"></i></div>
+    <div class="wq" id="wQ"></div><div class="tbar"><i id="wBar"></i></div>
+    <div class="wans" id="wAns">&nbsp;</div><div class="wmsg" id="wMsg"></div>
+    <div class="keys">${[1,2,3,4,5,6,7,8,9].map(keyHTML).join('')}<button class="key del" data-k="del" aria-label="Borrar">⌫</button>${keyHTML(0)}<button class="key ok" data-k="ok" aria-label="Comprobar">✔</button></div>`,'game',()=>{stop();game=null;openPicker('write');});
+  const stop=()=>{cancelAnimationFrame(g.raf);window.removeEventListener('keydown',onKey);};
+  const info=()=>{const el=$('#wInfo');if(el)el.textContent=`${Math.min(g.i+1,g.facts.length)}/${g.facts.length} · ❌ ${g.errors}`;const p=$('#wProg');if(p)p.style.width=(g.i/g.facts.length*100)+'%';};
+  const paint=()=>{const a=$('#wAns');if(a)a.innerHTML=g.ans||'&nbsp;';};
+  function show(){
+    const[n,k]=g.facts[g.i];$('#wQ').innerHTML=`${n} × ${k} = <span>?</span>`;
+    g.ans='';paint();$('#wAns').className='wans';$('#wMsg').textContent='';info();
+    g.lock=false;g.t0=performance.now();g.raf=requestAnimationFrame(bar);
   }
-}
-function endSpell(g){
-  const perfect=g.errors===0;if(perfect)S.stats.spellPerfect++;
-  const bonus=perfect?10:0;
-  finishGame({title:`✍️ Dictado · ${g.f.en}`,ratio:g.ok/g.items.length,detail:`Bien escritas: ${g.ok} de ${g.items.length}${bonus?` · Bonus sin fallos: +${bonus} 🪙`:''}`,
-    note:g.errors?'🔁 Las palabras falladas se guardan en Repaso.':'',
-    coins:g.ok*3+bonus,fun:10+g.ok,xp:g.ok*3,badge:perfect?'✍️ ¡Dictado perfecto!':null,again:()=>startSpell(g.f),menu:()=>openField(g.f)});
+  function bar(){
+    if(game!==g){stop();return;}if(g.lock)return;
+    const left=1-(performance.now()-g.t0)/(lim*1000),b=$('#wBar');if(!b)return;
+    b.style.width=Math.max(0,left*100)+'%';b.style.background=left<.34?'var(--bad)':left<.67?'#ffb547':'var(--ok)';
+    if(left<=0){answer(true);return;}
+    g.raf=requestAnimationFrame(bar);
+  }
+  function press(k){
+    if(g.lock||game!==g)return;ensureAudio();
+    if(k==='del'){g.ans=g.ans.slice(0,-1);sfx('click');paint();return;}
+    if(k==='ok'){if(g.ans)answer(false);return;}
+    if(g.ans.length>=2)return;g.ans+=k;sfx('click');paint();
+  }
+  function answer(timeout){
+    g.lock=true;cancelAnimationFrame(g.raf);
+    const[n,k]=g.facts[g.i],a=n*k,key=factKey(n,k),ok=!timeout&&+g.ans===a;
+    if(ok){const c=tableRate(n)*(pro?2:1);g.hits++;g.coins+=c;hit(key);sfx('ok');$('#wAns').className='wans ok';$('#wMsg').innerHTML=`✅ ¡Bien! +${c} 🪙`;}
+    else{
+      g.errors++;miss(key);if(!g.retried.has(key)){g.retried.add(key);g.facts.push([n,k]);}
+      sfx('bad');$('#wAns').className='wans bad';if(timeout&&!g.ans)$('#wAns').innerHTML='⏰';
+      $('#wMsg').innerHTML=`${timeout?'¡Se acabó el tiempo! ':''}${n} × ${k} = <b>${a}</b>`;
+    }
+    info();
+    setTimeout(()=>{if(game!==g)return;g.i++;if(g.i>=g.facts.length)end();else show();},ok?650:1900);
+  }
+  const onKey=e=>{if(game!==g){window.removeEventListener('keydown',onKey);return;}
+    if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace'){e.preventDefault();press('del');}else if(e.key==='Enter'){e.preventDefault();press('ok');}};
+  window.addEventListener('keydown',onKey);
+  $$('#panel .key').forEach(b=>b.onclick=()=>press(b.dataset.k));
+  function end(){
+    stop();const perfect=g.errors===0,r=tableResult(opt,perfect),bonus=r.bonus*(pro?2:1);
+    if(perfect&&pro&&opt.mode==='table')S.stats.proPerfect=(S.stats.proPerfect||0)+1;
+    finishGame({title:`✍️ ${title}${pro?' · ⚡ Pro':''}`,ratio:g.base/(g.base+g.errors),
+      detail:`Aciertos: ${g.hits} · Errores: ${g.errors}${bonus?` · Bonus sin fallos: +${bonus} 🪙`:''}`,
+      note:g.errors?'🔁 Las operaciones falladas se guardan en Repaso.':'',
+      coins:g.coins+bonus,fun:12,xp:10+(perfect?10:0),badge:r.badge,again:()=>startWrite(opt),menu:()=>openPicker('write')});
+  }
+  show();
 }
 
-/* ---------- Atrapa la comida sana ---------- */
-function startCatch(){
-  const g={id:'catch',score:0,good:0,bad:0,items:[],running:true,x:.5,spawn:.6,elapsed:0,last:0,dur:30};game=g;
-  openPanel(`<div class="ghead"><b>🍎 Atrapa la comida sana</b><span id="cTime">30 s</span><button class="x" data-x>✕</button></div><div class="qsub">Comida sana <b>+1</b> · Chuches <b>−1</b></div><div id="cArea"><div id="cScore">0</div><div id="catcher"></div></div>`,'game');
+/* ---------- Atrapa números: una tabla; caen números y solo hay que coger los de esa tabla ---------- */
+function openCatch(){
+  let n=tOpen(S.catchT)?S.catchT:openTs().slice(-1)[0];
+  const draw=()=>{
+    openPanel(`<div class="ghead"><b>🔢 Atrapa números</b><button class="x" data-x>✕</button></div>
+      <div class="sub">Elige una tabla. Caerán números: atrapa solo los de esa tabla y deja caer los demás. Tienes 3 vidas ❤️. Atrapa los 10 sin fallar para dominar la tabla.</div>
+      <div class="tpick">${ALLT.map(t=>{const o=tOpen(t),on=t===n;return`<button class="tp ${on?'on':''} ${o?'':'lock'} ${tDone(t)?'gold':''}" data-n="${t}">${on?'<span class="ck">✔</span>':''}<b>×${t}</b><small>${o?(tDone(t)?'🏅 ':'')+'🪙'+tableRate(t):'🔒'}</small></button>`;}).join('')}</div>
+      <div class="pickinfo">Tabla del ${n}: ${[1,2,3].map(k=>n*k).join(', ')}… hasta ${n*10}</div>
+      <div class="btns"><button class="btn primary" id="cGo">▶ Empezar</button></div>`);
+    $$('#panel .tp').forEach(b=>b.onclick=()=>{const t=+b.dataset.n;
+      if(!tOpen(t)){sfx('bad');toast(`🔒 Domina la tabla del ${t-1} para desbloquearla`);return;}
+      sfx('click');n=t;draw();});
+    $('#cGo').onclick=()=>{sfx('pop');S.catchT=n;save();tryPlay(()=>startCatch(n));};
+  };
+  draw();
+}
+function startCatch(n){
+  const max=n*10,mult=[1,2,3,4,5,6,7,8,9,10].map(k=>n*k),others=[];for(let v=1;v<=max;v++)if(v%n)others.push(v);
+  const g={id:'catch',n,queue:shuffle(mult.slice()),caught:0,errors:0,lives:3,coins:0,items:[],running:true,x:.5,spawn:0,elapsed:0,intro:2.2,last:0};game=g;
+  openPanel(`<div class="ghead"><b>🔢 Tabla del ${n}</b><button class="x" data-x>✕</button></div>
+    <div class="qsub">Atrapa los números de la <b>tabla del ${n}</b> · evita los demás</div>
+    <div id="cArea"><div id="cScore">0/10</div><div id="cLives">❤️❤️❤️</div><div id="catcher"></div>
+    <div id="cIntro"><b>Tabla del ${n}</b><span>Atrapa: ${mult.slice(0,4).join(', ')}… ${max}</span></div></div>`,'game',()=>{g.running=false;game=null;openCatch();});
   const area=$('#cArea'),catcher=$('#catcher');catcher.appendChild(cleanClone());
   const move=e=>{const r=area.getBoundingClientRect();g.x=clamp((e.clientX-r.left)/r.width,0,1);};
   area.addEventListener('pointermove',move);area.addEventListener('pointerdown',move);
   g.key=e=>{if(game!==g)return;if(e.key==='ArrowLeft'){g.x=clamp(g.x-.07,0,1);e.preventDefault();}if(e.key==='ArrowRight'){g.x=clamp(g.x+.07,0,1);e.preventDefault();}};
   window.addEventListener('keydown',g.key);
   const pop=(txt,x,y,col)=>{const s=document.createElement('span');s.className='cfx';s.textContent=txt;s.style.left=x+'px';s.style.top=y+'px';s.style.color=col;area.appendChild(s);setTimeout(()=>s.remove(),800);};
+  const hud=()=>{$('#cScore').textContent=`${g.caught}/10`;$('#cLives').textContent='❤️'.repeat(g.lives)+'🤍'.repeat(3-g.lives);};
+  const lose=()=>{g.errors++;g.lives=Math.max(0,g.lives-1);hud();if(g.lives<=0)end(false);};
+  function end(win){
+    if(!g.running)return;g.running=false;window.removeEventListener('keydown',g.key);
+    g.items.forEach(it=>it.el.remove());g.items=[];
+    const perfect=win&&g.errors===0,r=tableResult({mode:'table',n},perfect);
+    setTimeout(()=>{if(game!==g)return;finishGame({title:`🔢 Atrapa · Tabla del ${n}`,ratio:perfect?1:Math.max(0,Math.min(.98,g.caught/10-g.errors*.1)),
+      detail:`Atrapados: ${g.caught} de 10 · Fallos: ${g.errors}${win?'':' · 💔 Te quedaste sin vidas'}${r.bonus?` · Bonus sin fallos: +${r.bonus} 🪙`:''}`,
+      coins:g.coins+r.bonus,fun:15,xp:10+(perfect?10:0),badge:r.badge,again:()=>startCatch(n),menu:openCatch});},win?300:900);
+  }
   function loop(t){
     if(game!==g||!g.running){window.removeEventListener('keydown',g.key);return;}
-    const dt=Math.min(.05,(t-g.last)/1000);g.last=t;g.elapsed+=dt;
-    const W=area.clientWidth,H=area.clientHeight,left=Math.max(0,g.dur-g.elapsed),cw=78,cx=clamp(g.x*W,cw/2,W-cw/2);
-    $('#cTime').textContent=Math.ceil(left)+' s';catcher.style.transform=`translateX(${cx-cw/2}px)`;
-    g.spawn-=dt;
-    if(g.spawn<=0&&left>1){g.spawn=Math.max(.38,.85-g.elapsed*.014);const good=Math.random()<.68,el=document.createElement('div');el.className='fall';el.textContent=good?pick(GOOD):pick(BAD);area.appendChild(el);g.items.push({el,good,x:rnd(24,W-24),y:-44,v:150+g.elapsed*6+rnd(0,60)});}
-    const top=H-70;
-    for(let i=g.items.length-1;i>=0;i--){
-      const it=g.items[i];it.y+=it.v*dt;it.el.style.transform=`translate(${it.x-20}px,${it.y}px)`;
-      if(it.y+40>=top&&it.y<H-30&&Math.abs(it.x-cx)<44){
-        if(it.good){g.score++;g.good++;sfx('coin');pop('+1',it.x,top-10,'#2fbf71');}
-        else{g.score=Math.max(0,g.score-1);g.bad++;sfx('bad');pop('−1',it.x,top-10,'#ef5350');}
-        $('#cScore').textContent=g.score;it.el.remove();g.items.splice(i,1);
-      }else if(it.y>H){it.el.remove();g.items.splice(i,1);}
+    const dt=Math.min(.05,(t-g.last)/1000);g.last=t;
+    const W=area.clientWidth,H=area.clientHeight,cw=78,cx=clamp(g.x*W,cw/2,W-cw/2);
+    catcher.style.transform=`translateX(${cx-cw/2}px)`;
+    if(g.intro>0){g.intro-=dt;if(g.intro<=0){const ci=$('#cIntro');if(ci){ci.style.opacity=0;setTimeout(()=>ci.remove(),400);}}requestAnimationFrame(loop);return;}
+    g.elapsed+=dt;g.spawn-=dt;
+    const goodFalling=g.items.some(it=>it.good);
+    if(g.spawn<=0&&(g.queue.length||goodFalling)){
+      g.spawn=Math.max(.55,1.15-g.elapsed*.01);
+      const good=g.queue.length>0&&(Math.random()<.5||!goodFalling&&Math.random()<.7);
+      const v=good?g.queue.shift():pick(others),el=document.createElement('div');el.className='fnum';el.textContent=v;area.appendChild(el);
+      g.items.push({el,good,v,x:rnd(30,W-30),y:-56,sp:115+g.elapsed*3+rnd(0,45)});
     }
-    if(g.elapsed>=g.dur){g.running=false;window.removeEventListener('keydown',g.key);
-      finishGame({title:'🍎 Atrapa la comida sana',ratio:Math.min(1,g.score/20),detail:`Comida sana: ${g.good} · Chuches: ${g.bad}`,coins:Math.min(30,g.score),fun:15,xp:Math.min(30,g.score),again:startCatch});return;}
+    const top=H-74;
+    for(let i=g.items.length-1;i>=0;i--){
+      const it=g.items[i];it.y+=it.sp*dt;it.el.style.transform=`translate(${it.x-27}px,${it.y}px)`;
+      if(it.y+50>=top&&it.y<H-30&&Math.abs(it.x-cx)<46){
+        it.el.remove();g.items.splice(i,1);
+        if(it.good){const c=tableRate(n);g.caught++;g.coins+=c;sfx('coin');pop(`+${c} 🪙`,it.x,top-10,'#2fbf71');hud();if(g.caught>=10){end(true);return;}}
+        else{sfx('bad');pop(`✗ ${it.v}`,it.x,top-10,'#ef5350');lose();if(!g.running)return;}
+      }else if(it.y>H){
+        it.el.remove();g.items.splice(i,1);
+        if(it.good){g.queue.push(it.v);sfx('bad');pop(`¡Se escapó el ${it.v}!`,clamp(it.x,80,W-80),H-40,'#ef5350');lose();if(!g.running)return;}
+      }
+    }
     requestAnimationFrame(loop);
   }
-  requestAnimationFrame(t=>{g.last=t;requestAnimationFrame(loop);});
+  hud();requestAnimationFrame(t=>{g.last=t;requestAnimationFrame(loop);});
 }
 
 /* ---------- Nivel y crecimiento ---------- */
@@ -1394,11 +1404,9 @@ function openBadges(){
   const st=streakNow();
   openPanel(`<div class="ghead"><b>🏅 Distintivos y logros</b><button class="x" data-x>✕</button></div>
     <div class="streakbox">🔥 Racha: <b>${st} ${st===1?'día':'días'}</b>${S.streak.last===dayKey()?' · ✅ Reto de hoy hecho':' · Juega a cualquier juego para el reto de hoy'}</div>
-    <div class="sec">⚔️ Tablas (${nTables()}/10) ${S.mixPerfect?'· 🥇 Mezcla 2–10':''}</div>
-    <div class="tblgrid">${Array.from({length:10},(_,i)=>{const n=i+1,m=S.tables[n]&&S.tables[n].perfect;return`<div class="tbl ${m?'gold':''}" style="cursor:default"><b>×${n}</b><small>${m?'🏅 Dominada':'—'}</small></div>`;}).join('')}</div>
-    <div class="sec">🔤 Inglés (${nFields()}/${FIELDS.length})</div>
-    <div class="fgrid">${FIELDS.map(f=>{const m=S.fields[f.id]&&S.fields[f.id].perfect;return`<div class="fcard ${m?'gold':''}" style="cursor:default"><div class="fe">${f.e}</div><b>${f.en}</b><small>${m?'🏅 Dominado':'—'}</small></div>`;}).join('')}</div>
-    <div class="sec">🏆 Logros (${S.achievements.length}/${ACHS.length})</div>
+    <div class="sec">✖️ Tablas (${nTables()}/${ALLT.length}) ${S.mixPerfect?'· 🥇 Todas juntas':''}</div>
+    <div class="tpick">${ALLT.map(n=>`<div class="tp ${tDone(n)?'gold':''} ${tOpen(n)?'':'lock'}" style="cursor:default"><b>×${n}</b><small>${tDone(n)?'🏅 Dominada':tOpen(n)?'Por dominar':'🔒'}</small></div>`).join('')}</div>
+    <div class="sec">🏆 Logros (${ACHS.filter(a=>S.achievements.includes(a.id)).length}/${ACHS.length})</div>
     <div class="grid">${ACHS.map(a=>{const u=S.achievements.includes(a.id);return`<div class="item ${u?'eq':'locked'}" style="cursor:default"><div class="thumb"><span class="ie">${u?a.e:'❔'}</span></div><div class="iname">${a.name}</div><div class="tag">${a.desc}</div></div>`;}).join('')}</div>
     <div class="sec">🧸 Muñecos</div>
     <div class="grid">${CHARS.map(c=>{const u=S.unlocked.includes(c.id);return`<div class="item ${u?'':'locked'}" style="cursor:default"><div class="thumb">${charThumb(c)}</div><div class="iname">${c.name}</div><div class="tag">${u?'✅ Desbloqueado':'🔒 '+condText(c.cond)}</div></div>`;}).join('')}</div>`);
@@ -1423,7 +1431,7 @@ function renderShop(){
   openPanel(`<div class="ghead"><b>👕 Armario</b><span>🪙 ${S.coins}</span><button class="x" data-x>✕</button></div>
     <div class="tabs">${SHOP_TABS.map(([id,l])=>`<button class="tab ${shopTab===id?'on':''}" data-t="${id}">${l}</button>`).join('')}</div>
     <div class="shopPrev"></div>
-    ${shopTab==='munecos'?'<div class="sub" style="text-align:center">Domina tablas y temas de inglés para desbloquear muñecos 🏅</div>':''}
+    ${shopTab==='munecos'?'<div class="sub" style="text-align:center">Domina tablas para desbloquear muñecos 🏅</div>':''}
     <div class="grid">${items.map((it,i)=>{const owned=!it.price||S.owned.includes(it.key);
       const tag=it.locked?'🔒 '+it.lockText:it.eq?(it.toggle?'Puesto ✓ (quitar)':'Puesto ✓'):owned?'Elegir':'🪙 '+it.price;
       return`<button class="item ${it.eq?'eq':''} ${it.locked?'locked':''}" data-i="${i}"><div class="thumb">${it.thumb}</div><div class="iname">${it.name}</div><div class="tag">${tag}</div></button>`;}).join('')}</div>`);
@@ -1449,13 +1457,13 @@ function openSettings(){
     <label class="lbl">Nombre de la mascota</label><input id="sName" maxlength="14">
     <label class="lbl">Sonido</label><div class="seg" id="sSound"><button data-s="1" class="${S.sound?'on':''}">🔊 Sí</button><button data-s="0" class="${!S.sound?'on':''}">🔇 No</button></div>
     <label class="lbl">Música de fondo</label><div class="seg" id="sMusic"><button data-s="1" class="${S.music?'on':''}">🎵 Sí</button><button data-s="0" class="${!S.music?'on':''}">🔕 No</button></div>
-    ${isStandalone()?'':'<label class="lbl">Aplicación</label><button class="btn" id="sInstall" style="width:100%">📲 Instalar en este dispositivo</button>'}
+    ${installEvt&&!isStandalone()?'<label class="lbl">Aplicación</label><button class="btn" id="sInstall" style="width:100%">📲 Instalar en este dispositivo</button>':''}
     <label class="lbl">Versión ${APP_VERSION}</label><button class="btn" id="sUpd" style="width:100%">🔄 Buscar actualizaciones</button>
     <p class="note">La partida se guarda solo en este navegador.</p>
     <div class="btns"><button class="btn danger" id="sReset">Reiniciar mascota</button><button class="btn primary" id="sSave">Guardar</button></div>`);
   $('#sName').value=S.name;
   $('#sUpd').onclick=()=>{closePanel();checkUpdate(true);};
-  const si=$('#sInstall');if(si)si.onclick=()=>{const native=!!installEvt;closePanel();if(native)doInstall();else installHelp();};
+  const si=$('#sInstall');if(si)si.onclick=()=>{closePanel();doInstall();};
   $$('#sSound button').forEach(b=>b.onclick=()=>{$$('#sSound button').forEach(x=>x.classList.remove('on'));b.classList.add('on');sound=b.dataset.s==='1';});
   $$('#sMusic button').forEach(b=>b.onclick=()=>{$$('#sMusic button').forEach(x=>x.classList.remove('on'));b.classList.add('on');music=b.dataset.s==='1';});
   $('#sSave').onclick=()=>{S.name=($('#sName').value.trim()||S.name||'Lumi').slice(0,14);S.sound=sound;S.music=music;save();updateUI();closePanel();toast('Ajustes guardados ✅');};
@@ -1575,24 +1583,15 @@ function showUpdate(v){
 }
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkUpdate(false);});
 setInterval(()=>checkUpdate(false),15*60000);
-// ¿Se ha abierto desde nuestro propio icono instalado (?pwa=1) o desde otra app/web (referrer externo)?
-const ssGet=k=>{try{return sessionStorage.getItem(k);}catch(e){return null;}},ssSet=k=>{try{sessionStorage.setItem(k,'1');}catch(e){}};
-if(/[?&]pwa=1/.test(location.search))ssSet('asApp');
-try{if(document.referrer&&new URL(document.referrer).origin!==location.origin)ssSet('otherApp');}catch(e){}
-// Abierta en modo app sin venir de nuestro icono y con páginas anteriores en el historial: es la ventana de otra app
-if(!ssGet('asApp')&&history.length>1&&(matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches))ssSet('otherApp');
 // Si acabamos de actualizar (?v=…), no se vuelve a actualizar sola en esta carga: así nunca entra en bucle
 const justUpdated=/[?&]v=\d+/.test(location.search);
-const launchedAsApp=ssGet('asApp')==='1',inOtherApp=ssGet('otherApp')==='1'&&!launchedAsApp;
 if(/[?&](v=\d+|pwa=1)/.test(location.search))history.replaceState(null,'',location.pathname);
 
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{}));
 }
-const displayApp=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
-// Dentro de la ventana de otra app instalada (p. ej. siurot.net) el modo también es "standalone", pero no es nuestra app
-const isStandalone=()=>displayApp()&&!inOtherApp;
-const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+// Instalable desde el menú del navegador (Chrome: ⋮ → Instalar). Si el navegador ofrece su botón, se muestra.
+const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if($('#splash'))renderSplashBtns();else showInstallBar();});
 window.addEventListener('appinstalled',()=>{installEvt=null;const b=$('#instBar');if(b)b.remove();});
 
@@ -1606,31 +1605,10 @@ function showSplash(){
   checkUpdate(false,true);
   setTimeout(()=>{if($('#spBtns')&&!/Actualizando/.test($('#spBtns').textContent)){splashReady=true;renderSplashBtns();}},1300);
 }
-const isAndroid=()=>/android/i.test(navigator.userAgent);
-function openInChrome(){
-  // En Android, la dirección intent:// abre la página en la app de Chrome aunque estemos en un navegador integrado
-  if(isAndroid()&&!inFrame()){location.href=`intent://${location.host}${location.pathname}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(location.href)};end`;return;}
-  window.open(location.href,'_blank','noopener');
-}
 async function doInstall(){
-  const e=installEvt;
-  if(!e){installHelp();return;}
+  const e=installEvt;if(!e)return;
   installEvt=null;const bar=$('#instBar');if(bar)bar.remove();
   try{e.prompt();const r=await e.userChoice;if(r.outcome==='accepted')toast('¡Instalada! Ya la tienes en tu pantalla de inicio 📲');}catch(_){}
-}
-function installHelp(onDone){
-  let body,btns='';
-  if(displayApp()&&inOtherApp&&!isIOS()){body='<p>Si no te deja instalar desde aquí:</p><ol><li>Pulsa los <b>tres puntitos ⋮</b> de arriba a la derecha.</li><li>Selecciona <b>«Instalar aplicación»</b>.</li><li>Si no aparece, elige <b>«Abrir en Chrome»</b> y allí pulsa <b>📲 Instalar</b> en Ajustes ⚙️.</li></ol>';btns='<button class="btn" id="ihCopy">📋 Copiar enlace</button>';}
-  else if(inFrame()){body='<p>El juego está abierto dentro de otra página y desde ahí no se puede instalar. Ábrelo en su propia página y vuelve a pulsar <b>Instalar</b>.</p>';btns='<button class="btn primary" id="ihOpen">📲 Abrir en su página</button>';}
-  else if(isIOS())body='<ol><li>Abre el juego en <b>Safari</b>.</li><li>Pulsa <b>Compartir</b> ⬆️.</li><li>Elige <b>«Añadir a pantalla de inicio»</b>.</li></ol>';
-  else if(isAndroid()){body='<ol><li>Pulsa el menú <b>⋮</b> de Chrome, arriba a la derecha.</li><li>Elige <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b>.</li></ol><p class="note">Si no ves el menú ⋮ de Chrome, estás en un navegador integrado: pulsa «Abrir en Chrome».</p>';btns='<button class="btn" id="ihOpen">Abrir en Chrome</button>';}
-  else body='<ol><li>Pulsa el icono de instalar que aparece a la derecha de la barra de direcciones.</li><li>Si no está, búscalo en el menú <b>⋮</b> de Chrome («Instalar…» o «Guardar y compartir»).</li></ol>';
-  openPanel(`<div class="ghead"><b>📲 Instalar Mi Mascota</b><button class="x" data-x>✕</button></div><div class="help">${body}</div>
-    <p class="note">Chrome solo ofrece su propio botón de instalar cuando llevas un ratito usando el juego. Cuando esté disponible, te aparecerá un aviso abajo.</p>
-    <div class="btns">${btns}<button class="btn primary" data-x>Entendido</button></div>`,'',onDone?()=>{closePanel();onDone();}:null);
-  const o=$('#ihOpen');if(o)o.onclick=openInChrome;
-  const cp=$('#ihCopy');if(cp)cp.onclick=async()=>{const u=location.origin+location.pathname;try{await navigator.clipboard.writeText(u);toast('📋 Enlace copiado: pégalo en Chrome');}catch(e){toast(u);}};
-  if(onDone)$$('#panel [data-x]').forEach(b=>b.onclick=()=>{closePanel();onDone();});
 }
 function showInstallBar(){
   if(isStandalone()||$('#instBar')||sessionStorage.getItem('noInstallBar'))return;
@@ -1642,11 +1620,9 @@ function showInstallBar(){
 }
 function renderSplashBtns(){
   const b=$('#spBtns');if(!b||!splashReady)return;
-  if(isStandalone()||(displayApp()&&inOtherApp))b.innerHTML=`<button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>`;
-  else b.innerHTML=`<button class="spBtn primary" id="spInstall">📲 Instalar la app</button><button class="spBtn link" id="spGo">Ahora no, jugar aquí</button>`;
+  b.innerHTML=`<button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>${installEvt&&!isStandalone()?'<button class="spBtn link" id="spInstall">📲 Instalar la app</button>':''}`;
   $('#spGo').onclick=closeSplash;
-  const ib=$('#spInstall');
-  if(ib)ib.onclick=async()=>{const native=!!installEvt;closeSplash(true);if(native){await doInstall();startApp();}else setTimeout(()=>installHelp(startApp),450);};
+  const ib=$('#spInstall');if(ib)ib.onclick=async()=>{closeSplash(true);await doInstall();startApp();};
 }
 let appStarted=false;
 function closeSplash(noStart){
