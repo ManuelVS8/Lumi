@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
-<meta name="app-version" content="1.4.0">
+<meta name="app-version" content="1.4.1">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -197,6 +197,9 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
 .dip img{width:100%;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.2);margin-top:12px}
 .dip .btn{text-decoration:none;display:inline-block}
 .swatch.gold{background:linear-gradient(135deg,#fff3b0,#ffc400 45%,#e0a400 55%,#fff3b0)!important}
+.ibox{background:#f6f2fd;border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.35}
+.ilink{display:block;word-break:break-all;background:#fff;border-radius:10px;padding:6px 8px;font-size:14px}
+.inote{font-size:13px;opacity:.8}
 #actions.games{gap:8px;overflow-x:hidden}
 #actions.games .gcard{min-width:0;flex:1 1 0;padding:0 4px;text-align:center;line-height:1.15;font-size:clamp(12px,3.5vw,16px)}
 #actions.games .gcard b{font-size:clamp(22px,7vw,28px)}
@@ -2017,12 +2020,22 @@ function openSettings(){
     <label class="lbl">Sonido</label><div class="seg" id="sSound"><button data-s="1" class="${S.sound?'on':''}">🔊 Sí</button><button data-s="0" class="${!S.sound?'on':''}">🔇 No</button></div>
     <label class="lbl">Música de fondo</label><div class="seg" id="sMusic"><button data-s="1" class="${S.music?'on':''}">🎵 Sí</button><button data-s="0" class="${!S.music?'on':''}">🔕 No</button></div>
     ${installEvt&&!isStandalone()?'<label class="lbl">Aplicación</label><button class="btn" id="sInstall" style="width:100%">📲 Instalar en este dispositivo</button>':''}
+    ${!DEDIC&&!isStandalone()?`<label class="lbl">📲 Instalar en casa</label><div class="ibox">
+      <div>Abre el enlace en tu navegador (Chrome, Opera u otro que tengas):</div>
+      <code class="ilink">https://manuelvs8.github.io/Lumi/</code>
+      <button class="btn" id="sCopy" style="width:100%">📋 Copiar enlace</button>
+      <div>Si no aparece el botón de instalar, pulsa ⋮ y luego <b>«Instalar aplicación»</b> o <b>«Añadir a la pantalla de inicio»</b>.</div>
+      <div class="inote">Si ya la tenías instalada y da error, desinstálala antes (mantén pulsado su icono → Desinstalar).</div>
+      <div class="inote">En iPhone o iPad: abre el enlace en Safari, pulsa Compartir y luego «Añadir a pantalla de inicio».</div></div>`:''}
     <label class="lbl">Versión ${APP_VERSION}</label><button class="btn" id="sUpd" style="width:100%">🔄 Buscar actualizaciones</button>
     <p class="note">La partida se guarda solo en este navegador.</p>
     <div class="btns"><button class="btn danger" id="sReset">Reiniciar mascota</button><button class="btn primary" id="sSave">Guardar</button></div>`);
   $('#sName').value=S.name;
   $('#sUpd').onclick=()=>{closePanel();checkUpdate(true);};
   const si=$('#sInstall');if(si)si.onclick=()=>{closePanel();doInstall();};
+  const sc=$('#sCopy');if(sc)sc.onclick=async()=>{const url='https://manuelvs8.github.io/Lumi/';
+    try{await navigator.clipboard.writeText(url);sfx('ok');toast('Enlace copiado ✅ Pégalo en el navegador');}
+    catch(e){toast('No se pudo copiar. Mantén pulsado el enlace y elige «Copiar»');}};
   $$('#sSound button').forEach(b=>b.onclick=()=>{$$('#sSound button').forEach(x=>x.classList.remove('on'));b.classList.add('on');sound=b.dataset.s==='1';});
   $$('#sMusic button').forEach(b=>b.onclick=()=>{$$('#sMusic button').forEach(x=>x.classList.remove('on'));b.classList.add('on');music=b.dataset.s==='1';});
   $('#sSave').onclick=()=>{S.name=($('#sName').value.trim()||S.name||'Lumi').slice(0,14);S.sound=sound;S.music=music;save();updateUI();closePanel();toast('Ajustes guardados ✅');};
