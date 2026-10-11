@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota de Isabel</title>
-<meta name="app-version" content="1.7.0">
+<meta name="app-version" content="1.8.0">
 <link rel="manifest" href="manifest-isabel.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -640,7 +640,7 @@ function defState(){return{v:2,name:'',coins:30,xp:0,level:1,needs:{hambre:80,hi
 function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r),d=defState();return Object.assign(d,o,{needs:Object.assign(d.needs,o.needs||{}),stats:Object.assign(d.stats,o.stats||{}),streak:Object.assign(d.streak,o.streak||{})});}}catch(e){}return null;}
 function save(){S.last=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 let S=load();
-const firstRun=!S;
+let firstRun=!S;
 if(!S)S=defState();
 // cada juego tiene su propio progreso de tablas; lo que se hubiera dominado antes pasa a Tablas ninja
 S.tg=Object.assign({ninja:{},write:{},catch:{},army:{}},S.tg||{});
@@ -2347,10 +2347,11 @@ function openSettings(){
       <div>Si no aparece el botón de instalar, pulsa ⋮ y luego <b>«Instalar aplicación»</b> o <b>«Añadir a la pantalla de inicio»</b>.</div>
       <div class="inote">Si ya la tenías instalada y da error, desinstálala antes (mantén pulsado su icono → Desinstalar).</div>
       <div class="inote">En iPhone o iPad: abre el enlace en Safari, pulsa Compartir y luego «Añadir a pantalla de inicio».</div></div>`:''}
+    ${cloudOn?(cloudLinked()?`<label class="lbl">☁️ Mi cuenta</label><div class="ibox"><div>Conectado como <b>${esc(CC.name||CC.u)}</b></div><div class="inote" id="cSt">${cloudStatus()}</div><button class="btn" id="cSync" style="width:100%">🔄 Sincronizar ahora</button><button class="btn" id="cOut" style="width:100%">🚪 Salir de esta cuenta</button></div>`:`<label class="lbl">☁️ Mi cuenta</label><button class="btn" id="cIn" style="width:100%">☁️ Entrar con mi usuario</button><div class="inote">Para seguir en casa lo que juegas en clase.</div>`):''}
     <label class="lbl">👩‍🏫 Para el profe</label><button class="btn" id="sRep" style="width:100%">📊 Informe de progreso</button>
     ${allMaster()?'<label class="lbl">🏆 Maestro/a de las tablas</label><button class="btn" id="sDip" style="width:100%">📜 Mi diploma</button>':''}
     <label class="lbl">Versión ${APP_VERSION}</label><button class="btn" id="sUpd" style="width:100%">🔄 Buscar actualizaciones</button>
-    <p class="note">La partida se guarda solo en este navegador.</p>
+    <p class="note">${cloudLinked()?'Tu partida se guarda en tu cuenta ☁️ y en este dispositivo.':'La partida se guarda solo en este navegador.'}</p>
     <div class="btns"><button class="btn danger" id="sReset">Reiniciar mascota</button><button class="btn primary" id="sSave">Guardar</button></div>`);
   $('#sName').value=S.name;
   $('#sUpd').onclick=()=>{closePanel();checkUpdate(true);};
@@ -2362,14 +2363,17 @@ function openSettings(){
   $$('#sMusic button').forEach(b=>b.onclick=()=>{$$('#sMusic button').forEach(x=>x.classList.remove('on'));b.classList.add('on');music=b.dataset.s==='1';});
   $('#sSave').onclick=()=>{S.name=($('#sName').value.trim()||S.name||'Lumi').slice(0,14);S.sound=sound;S.music=music;save();updateUI();closePanel();toast('Ajustes guardados ✅');};
   $('#sReset').onclick=confirmReset;
+  const ci=$('#cIn');if(ci)ci.onclick=()=>openCloudLogin();
+  const co=$('#cOut');if(co)co.onclick=confirmCloudOut;
+  const cs=$('#cSync');if(cs)cs.onclick=async()=>{cs.disabled=true;$('#cSt').textContent='⏳ Sincronizando…';cloudSig=null;const r=await cloudSync({login:true,ms:12000});if(r&&r.ok&&r.adopted){closePanel();toast('☁️ Progreso cargado desde tu cuenta');}else{$('#cSt').textContent=cloudStatus();cs.disabled=false;}};
   if($('#sDip'))$('#sDip').onclick=()=>{sfx('pop');openDiploma();};
   $('#sRep').onclick=()=>{sfx('pop');openReport();};
 }
 function confirmReset(){
-  openPanel(`<div class="ptitle">¿Reiniciar la mascota?</div><p style="text-align:center">Se borrará a <b>${esc(S.name)}</b> con sus monedas, distintivos, logros y muñecos. No se puede deshacer.</p>
+  openPanel(`<div class="ptitle">¿Reiniciar la mascota?</div><p style="text-align:center">Se borrará a <b>${esc(S.name)}</b> con sus monedas, distintivos, logros y muñecos${cloudLinked()?' (también de tu cuenta ☁️)':''}. No se puede deshacer.</p>
     <div class="btns"><button class="btn" id="rNo">Cancelar</button><button class="btn danger" id="rYes">Sí, borrar</button></div>`,'',openSettings);
   $('#rNo').onclick=openSettings;
-  $('#rYes').onclick=()=>{try{localStorage.removeItem(KEY);}catch(e){}S=defState();$('#bubbles').innerHTML='';applyLook();applyGrow();goRoom('cocina',true);updateUI();clearTempFace();welcome();};
+  $('#rYes').onclick=()=>{wipeLocal();if(cloudLinked()){save();cloudSync({force:true,login:true});}};
 }
 const EGG_SVG=`<svg viewBox="0 0 200 200"><ellipse cx="100" cy="188" rx="52" ry="6" fill="rgba(0,0,0,.12)"/>
   <path d="M100 18 C 148 18, 168 100, 166 128 C 164 168, 136 186, 100 186 C 64 186, 36 168, 34 128 C 32 100, 52 18, 100 18 Z" fill="#fff7e6" stroke="#e8d7b5" stroke-width="4"/>
@@ -2441,12 +2445,133 @@ if(window.visualViewport)window.visualViewport.addEventListener('resize',fitApp)
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(fitApp,200);});
 fitApp();
 
+/* ---------- Nube (Hojas de cálculo de Google) ---------- */
+const CLOUD_URL='';   // URL de la aplicación web de Apps Script. Vacío = sin nube
+const CK='mascota-cloud-v1';
+const cloudOn=!!CLOUD_URL;
+let CC=null;try{CC=JSON.parse(localStorage.getItem(CK)||'null');}catch(e){}
+let cloudSig=null,cloudBusy=false,cloudErr=false,cloudLast=0,cloudPending=false,cloudWarned=false;
+const cloudLinked=()=>!!(cloudOn&&CC&&CC.u&&CC.k);
+function cloudStore(){try{localStorage.setItem(CK,JSON.stringify(CC));}catch(e){}}
+function progOf(s){let p=(s.level||1)*1000+(s.xp||0);const tg=s.tg||{};for(const g in tg)for(const t in tg[g]){const o=tg[g][t]||{};p+=(o.plays||0)*3+(o.perfect?5:0);}
+  return Math.round(p+((s.owned||[]).length+(s.unlocked||[]).length+(s.achievements||[]).length)*20);}
+function cloudSigOf(){const c=Object.assign({},S);delete c.needs;delete c.last;delete c.sleeping;delete c.sickUntil;return JSON.stringify(c);}
+async function cloudCall(body,keep,ms){
+  const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),ms||15000);
+  try{const r=await fetch(CLOUD_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),signal:ctl.signal,keepalive:!!keep});return await r.json();}
+  finally{clearTimeout(t);}
+}
+const cloudAllowed=()=>!overlayOpen()&&!classMode&&!game&&!busy;
+function cloudAdopt(ro){
+  const d=defState();
+  S=Object.assign(d,ro,{needs:Object.assign(d.needs,ro.needs||{}),stats:Object.assign(d.stats,ro.stats||{}),streak:Object.assign(d.streak,ro.streak||{})});
+  S.tg=Object.assign({ninja:{},write:{},catch:{},army:{}},S.tg||{});
+  const mins=Math.min((Date.now()-S.last)/60000,60*24*7);
+  if(mins>.1){const e0=S.needs.energia;decay(mins,true);S.needs.energia=clamp(e0+mins*RECOV_H/60,0,100);}
+  firstRun=false;save();cloudSig=cloudSigOf();
+  $('#bubbles').innerHTML='';applyLook();applyGrow();goRoom(S.sleeping?'dormitorio':'cocina',true);updateUI();refreshFace();
+}
+async function cloudSync(o={}){
+  if(!cloudLinked()||cloudBusy)return null;
+  cloudBusy=true;let r=null;
+  try{
+    const sig=cloudSigOf(),dirty=!!o.force||cloudSig===null||sig!==cloudSig;
+    const body={a:'sync',u:CC.u,k:CC.k};
+    if(dirty){
+      const c=Object.assign({},S);let js=JSON.stringify(c);
+      if(js.length>45000){delete c.mistakes;js=JSON.stringify(c);}
+      body.data=js;body.prog=progOf(S);body.force=!!o.force;
+      body.sum={coins:S.coins,level:S.level,tx:ALLT.filter(isMaster).length,td:ALLT.filter(isMasterD).length};
+    }
+    r=await cloudCall(body,o.keep,o.ms);
+    cloudErr=false;
+    if(!r||!r.ok){
+      if(r&&(r.err==='login'||r.err==='locked')){cloudErr=r.err;if(!o.login&&!cloudWarned){cloudWarned=true;toast('☁️ No se pudo entrar en tu cuenta. Revisa Ajustes');}}
+      return r;
+    }
+    if(r.name&&CC.name!==r.name){CC.name=r.name;cloudStore();}
+    if(r.saved){cloudSig=sig;cloudLast=Date.now();cloudPending=false;}
+    else if(r.data){
+      const ro=JSON.parse(r.data),rp=progOf(ro),lp=progOf(S);
+      if(rp>lp){
+        if(o.login||cloudAllowed()){cloudAdopt(ro);cloudPending=false;r.adopted=true;cloudLast=Date.now();if(!o.login)toast('☁️ Progreso cargado desde tu cuenta');}
+        else cloudPending=true;
+      }else if(rp<lp)cloudSig=null;   // lo de la nube es más antiguo: se sube en la próxima vuelta
+      else{cloudSig=sig;cloudLast=Date.now();}
+    }else{cloudSig=sig;}
+    return r;
+  }catch(e){cloudErr=true;return r;}
+  finally{cloudBusy=false;}
+}
+async function cloudLogin(u,k){
+  CC={u:u.trim().toLowerCase(),k:k.trim().toLowerCase()};cloudSig=null;cloudWarned=false;
+  const r=await cloudSync({login:true,ms:12000});
+  if(!r||!r.ok){CC=null;return r||{ok:false,err:'net'};}
+  cloudStore();return r;
+}
+function cloudStatus(){
+  if(cloudErr==='login')return '⚠️ Usuario o clave no válidos. Sal y vuelve a entrar.';
+  if(cloudErr==='locked')return '🔒 Demasiados intentos. Espera unos minutos.';
+  if(cloudErr)return '📡 Sin conexión. Se guardará cuando vuelva.';
+  if(cloudLast){const d=new Date(cloudLast);return `✅ Guardado a las ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
+  return 'Se guarda solo mientras juegas.';
+}
+function openCloudLogin(done){
+  const fin=()=>{closePanel();if(done)done();else openSettings();};
+  openPanel(`<div class="ghead"><b>☁️ Entrar con mi usuario</b><button class="x" id="cX">✕</button></div>
+    <p class="note" style="text-align:center">Usa el mismo usuario y clave de Ajedrez Siurot. Así tu mascota te sigue en casa.</p>
+    <label class="lbl">Usuario</label><input id="cU" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="30">
+    <label class="lbl">Clave</label><input id="cK" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="30">
+    <div id="cMsg" class="note" style="text-align:center;min-height:1.5em"></div>
+    <div class="btns"><button class="btn primary" id="cGo">Entrar</button></div>`,'',fin);
+  $('#cX').onclick=fin;
+  const go=async()=>{
+    const u=$('#cU').value,k=$('#cK').value;
+    if(!u.trim()||!k.trim()){$('#cMsg').textContent='Escribe tu usuario y tu clave';return;}
+    $('#cGo').disabled=true;$('#cMsg').textContent='⏳ Conectando…';
+    const r=await cloudLogin(u,k);
+    if(r&&r.ok){
+      sfx('ok');closePanel();
+      const nm=((r.name||CC.name||'').split(' ')[0]);
+      toast(r.adopted?`☁️ ¡Hola${nm?', '+nm:''}! Tu progreso está cargado`:'☁️ Cuenta conectada ✅ Se guardará tu progreso');
+      if(done)done();else openSettings();
+    }else{
+      $('#cGo').disabled=false;
+      $('#cMsg').textContent=r&&r.err==='locked'?'🔒 Demasiados intentos. Espera 10 minutos':r&&r.err==='login'?'❌ Usuario o clave incorrectos':'📡 No hay conexión. Inténtalo de nuevo';
+    }
+  };
+  $('#cGo').onclick=go;$('#cK').onkeydown=e=>{if(e.key==='Enter')go();};$('#cU').onkeydown=e=>{if(e.key==='Enter')$('#cK').focus();};
+}
+function confirmCloudOut(){
+  openPanel(`<div class="ptitle">¿Salir de tu cuenta?</div><p style="text-align:center">Se guardará tu progreso en la nube y la mascota se quitará de <b>este dispositivo</b>. Al entrar de nuevo, la recuperas.</p>
+    <div class="btns"><button class="btn" id="oNo">Cancelar</button><button class="btn danger" id="oYes">Sí, salir</button></div>`,'',openSettings);
+  $('#oNo').onclick=openSettings;
+  $('#oYes').onclick=async()=>{
+    $('#oYes').disabled=true;cloudSig=null;
+    const r=await cloudSync({login:true,ms:12000});
+    if(!r||!r.ok){toast('📡 Sin conexión: no se puede salir sin guardar');openSettings();return;}
+    CC=null;try{localStorage.removeItem(CK);}catch(e){}
+    wipeLocal();toast('Has salido de tu cuenta');
+  };
+}
+function wipeLocal(){try{localStorage.removeItem(KEY);}catch(e){}S=defState();cloudSig=null;$('#bubbles').innerHTML='';applyLook();applyGrow();goRoom('cocina',true);updateUI();clearTempFace();welcome();}
+if(cloudOn){
+  setInterval(()=>{if(!cloudLinked()||document.hidden)return;if(cloudPending||cloudSig===null||cloudSigOf()!==cloudSig)cloudSync();},20000);
+  document.addEventListener('visibilitychange',()=>{
+    if(!cloudLinked())return;
+    if(document.hidden){if(cloudSig===null||cloudSigOf()!==cloudSig)cloudSync({keep:true});}
+    else setTimeout(()=>cloudSync(),400+Math.random()*1800);
+  });
+  window.addEventListener('online',()=>cloudSync());
+}
+
 /* ---------- Inicio ---------- */
 if(!firstRun){const mins=Math.min((Date.now()-S.last)/60000,60*24*7);if(mins>.1){const e0=S.needs.energia;decay(mins,true);S.needs.energia=clamp(e0+mins*RECOV_H/60,0,100);}}
 lastTick=Date.now();
 applyLook();applyGrow();
 goRoom(S.sleeping?'dormitorio':'cocina',true);
 updateUI();refreshFace();blinkLoop();
+if(cloudLinked()&&!firstRun)setTimeout(()=>cloudSync(),1200+Math.random()*2800);
 setInterval(tick,1000);setInterval(musicTick,380);
 /* ---------- PWA: actualizaciones, splash e instalación ---------- */
 const APP_VERSION=(document.querySelector('meta[name="app-version"]')||{}).content||'0';
@@ -2523,7 +2648,8 @@ function showInstallBar(){
 }
 function renderSplashBtns(){
   const b=$('#spBtns');if(!b||!splashReady)return;
-  b.innerHTML=`<button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>${installEvt&&!isStandalone()?'<button class="spBtn link" id="spInstall">📲 Instalar la app</button>':''}`;
+  b.innerHTML=`<button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>${cloudOn&&!cloudLinked()?'<button class="spBtn link" id="spCloud">☁️ Entrar con mi usuario</button>':''}${installEvt&&!isStandalone()?'<button class="spBtn link" id="spInstall">📲 Instalar la app</button>':''}`;
+  const cb=$('#spCloud');if(cb)cb.onclick=()=>{closeSplash(true);openCloudLogin(()=>startApp());};
   $('#spGo').onclick=closeSplash;
   const ib=$('#spInstall');if(ib)ib.onclick=async()=>{closeSplash(true);await doInstall();startApp();};
 }
@@ -2533,8 +2659,9 @@ function closeSplash(noStart){
   const s=$('#splash');if(s){s.classList.add('out');setTimeout(()=>s.remove(),500);}
   if(noStart!==true)startApp();
 }
-function startApp(){
+async function startApp(){
   if(appStarted)return;appStarted=true;
+  if(firstRun&&cloudLinked()){await new Promise(r=>setTimeout(r,Math.random()*1500));await cloudSync({login:true,ms:7000});}
   if(firstRun)welcome();else setTimeout(()=>say(S.sleeping?'Zzz…':SEASON_HELLO[season()]||(isEvening()?'¡Buenas noches! 🌙':'¡Hola de nuevo! 👋'),3500),400);
 }
 showSplash();
