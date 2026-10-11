@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
-<meta name="app-version" content="1.8.0">
+<meta name="app-version" content="1.8.2">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -2349,6 +2349,7 @@ function openSettings(){
       <div>Abre el enlace en tu navegador (Chrome, Opera u otro que tengas):</div>
       <code class="ilink">https://manuelvs8.github.io/Lumi/</code>
       <button class="btn" id="sCopy" style="width:100%">📋 Copiar enlace</button>
+      ${/Android/i.test(navigator.userAgent)?'<a class="btn" id="sOpenChrome" href="intent://manuelvs8.github.io/Lumi/#Intent;scheme=https;package=com.android.chrome;end" style="display:block;width:100%;text-align:center;text-decoration:none;box-sizing:border-box">🌐 Abrir en Chrome</a>':''}
       <div>Si no aparece el botón de instalar, pulsa ⋮ y luego <b>«Instalar aplicación»</b> o <b>«Añadir a la pantalla de inicio»</b>.</div>
       <div class="inote">Si ya la tenías instalada y da error, desinstálala antes (mantén pulsado su icono → Desinstalar).</div>
       <div class="inote">En iPhone o iPad: abre el enlace en Safari, pulsa Compartir y luego «Añadir a pantalla de inicio».</div></div>`:''}
@@ -2621,6 +2622,8 @@ function showUpdate(v){
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkUpdate(false);});
 setInterval(()=>checkUpdate(false),15*60000);
 // Si acabamos de actualizar (?v=…), no se vuelve a actualizar sola en esta carga: así nunca entra en bucle
+// Se calcula ANTES de limpiar la URL (si no, ?pwa=1 ya no existe y nunca se detecta la app instalada)
+const LANZADA_COMO_APP=(()=>{const f=/[?&]pwa=1/.test(location.search);try{if(f)sessionStorage.setItem('lumiApp','1');return sessionStorage.getItem('lumiApp')==='1';}catch(e){return f;}})();
 const justUpdated=/[?&]v=\d+/.test(location.search);
 if(/[?&](v=\d+|pwa=1)/.test(location.search))history.replaceState(null,'',location.pathname);
 
@@ -2628,7 +2631,9 @@ if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{}));
 }
 // Instalable desde el menú del navegador (Chrome: ⋮ → Instalar). Si el navegador ofrece su botón, se muestra.
-const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
+// Solo cuenta como "app instalada" si se lanzó desde su propio icono (start_url con ?pwa=1).
+// Si se abre desde un enlace dentro de otra PWA (p. ej. siurot.net), el navegador también dice "standalone", pero esta app NO está instalada.
+const isStandalone=()=>LANZADA_COMO_APP&&(matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true);
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if($('#splash'))renderSplashBtns();else showInstallBar();});
 window.addEventListener('appinstalled',()=>{installEvt=null;const b=$('#instBar');if(b)b.remove();});
 
