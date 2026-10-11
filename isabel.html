@@ -379,6 +379,7 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
 .lbl{display:block;font-weight:600;margin:14px 0 6px}
 .panel input{width:100%;font:inherit;font-size:20px;padding:10px 14px;border-radius:12px;border:2px solid #e3dbf5;outline:none}
 .panel input:focus{border-color:var(--accent)}
+.pw{position:relative}.pw input{padding-right:56px}.pwEye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:#eee8fb;border-radius:10px;font-size:22px;width:44px;height:40px;cursor:pointer}
 .seg{display:flex;gap:8px}
 .seg button{flex:1;padding:10px;border-radius:12px;border:2px solid #e3dbf5;background:#fff;font-size:18px;cursor:pointer;font-weight:600}
 .seg button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -2519,12 +2520,13 @@ function cloudStatus(){
 function openCloudLogin(done){
   const fin=()=>{closePanel();if(done)done();else openSettings();};
   openPanel(`<div class="ghead"><b>☁️ Entrar con mi usuario</b><button class="x" id="cX">✕</button></div>
-    <p class="note" style="text-align:center">Usa el mismo usuario y clave de Ajedrez Siurot. Así tu mascota te sigue en casa.</p>
+    <p class="note" style="text-align:center">Escribe el usuario y la clave que te ha dado tu profe. Así tu mascota te sigue en casa.</p>
     <label class="lbl">Usuario</label><input id="cU" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="30">
-    <label class="lbl">Clave</label><input id="cK" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="30">
+    <label class="lbl">Clave</label><div class="pw"><input id="cK" type="password" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="30"><button type="button" class="pwEye" id="cEye" aria-label="Mostrar clave">👁️</button></div>
     <div id="cMsg" class="note" style="text-align:center;min-height:1.5em"></div>
     <div class="btns"><button class="btn primary" id="cGo">Entrar</button></div>`,'',fin);
   $('#cX').onclick=fin;
+  $('#cEye').onclick=()=>{const i=$('#cK'),show=i.type==='password';i.type=show?'text':'password';$('#cEye').textContent=show?'🙈':'👁️';$('#cEye').setAttribute('aria-label',show?'Ocultar clave':'Mostrar clave');};
   const go=async()=>{
     const u=$('#cU').value,k=$('#cK').value;
     if(!u.trim()||!k.trim()){$('#cMsg').textContent='Escribe tu usuario y tu clave';return;}
