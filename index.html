@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
-<meta name="app-version" content="1.4.1">
+<meta name="app-version" content="1.5.0">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -576,6 +576,7 @@ const VOICES=[
 ];
 const NEEDS=['hambre','higiene','energia','diversion'];
 const DECAY={hambre:.6,higiene:.4,energia:.35,diversion:.7};
+const RECOV_H=10,PILA_PRICE=20;   // energía que recupera cada hora con la app cerrada; precio de la pila 🔋
 const NEED_MSG={hambre:'¡Tengo hambre! 🍽️',higiene:'Necesito un baño… 🛁',energia:'Tengo mucho sueño… 🥱',diversion:'Me aburro… ¿jugamos? 🎮'};
 const NEED_ROOM={hambre:'cocina',higiene:'bano',energia:'dormitorio',diversion:'juegos'};
 function season(){const d=new Date(),m=d.getMonth(),day=d.getDate();
@@ -858,7 +859,8 @@ function renderActions(){
     a.innerHTML=`<button class="act ${soapOn?'on':''}" id="soapBtn">🧼<span>Jabón${soapPaid?'':' · 🪙'+SOAP_PRICE}</span></button><button class="act" id="showerBtn">🚿<span>Ducha</span></button><div class="hint">${soapOn?'Frota con el dedo o el ratón':'Usa el jabón y luego la ducha'}</div>`;
     $('#soapBtn').onclick=toggleSoap;$('#showerBtn').onclick=shower;
   }else if(room==='dormitorio'){
-    a.innerHTML=`<button class="act ${S.sleeping?'on':''}" id="lampBtn">${S.sleeping?'💡<span>Encender luz</span>':'🌙<span>Apagar luz</span>'}</button><button class="act" id="classBtn">🤫<span>Modo silencio</span></button><button class="act" id="wardBtn">👕<span>Armario</span></button>`;
+    a.innerHTML=`<button class="act ${S.sleeping?'on':''}" id="lampBtn">${S.sleeping?'💡<span>Encender luz</span>':'🌙<span>Apagar luz</span>'}</button><button class="act" id="pilaBtn">🔋<span>Pila · 🪙${PILA_PRICE}</span></button><button class="act" id="classBtn">🤫<span>Modo silencio</span></button><button class="act" id="wardBtn">👕<span>Armario</span></button>`;
+    $('#pilaBtn').onclick=usePila;
     $('#classBtn').onclick=enterClass;
     $('#lampBtn').onclick=toggleLamp;$('#wardBtn').onclick=()=>openShop('munecos');
   }else{
@@ -895,6 +897,13 @@ function touchPet(p){
 }
 
 /* Cocina */
+function usePila(){
+  if(busy)return;
+  if(S.needs.energia>=95){say('¡Ya tengo mucha energía! 😄');sfx('bad');return;}
+  if(S.coins<PILA_PRICE){toast(`Te faltan ${PILA_PRICE-S.coins} monedas 🪙 · ¡Gana más en Juegos!`);sfx('bad');return;}
+  S.coins-=PILA_PRICE;S.needs.energia=100;S.tiredSaid=0;sfx('level');fxPet('⚡',100,40);
+  say('¡Energía al máximo! 🔋',2400);toast('🔋 Pila puesta: energía al máximo');updateUI();save();renderActions();
+}
 function feed(f,btn){
   ensureAudio();if(busy)return;
   if(S.needs.hambre>=97){say('¡Estoy lleno! 😮‍💨');sfx('bad');return;}
@@ -1150,7 +1159,8 @@ function checkAchievements(){
 
 /* ---------- Juegos: comunes ---------- */
 function tryPlay(start){
-  if(S.needs.energia<15){closePanel();say('Estoy muy cansado… necesito dormir 😴');toast('Llévale al dormitorio a dormir 🛏️');return false;}
+  if(S.needs.energia<15&&!S.tiredSaid){S.tiredSaid=1;say('Estoy un poco cansado… ¡pero vamos! 🥱',2600);}
+  if(S.needs.energia>=15)S.tiredSaid=0;
   if(S.needs.hambre<10){closePanel();say('Tengo demasiada hambre para jugar… 🍽️');return false;}
   start();return true;
 }
@@ -2111,7 +2121,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
 window.addEventListener('pagehide',save);
 
 /* ---------- Inicio ---------- */
-if(!firstRun){const mins=Math.min((Date.now()-S.last)/60000,60*24*7);if(mins>.1)decay(mins,true);}
+if(!firstRun){const mins=Math.min((Date.now()-S.last)/60000,60*24*7);if(mins>.1){const e0=S.needs.energia;decay(mins,true);S.needs.energia=clamp(e0+mins*RECOV_H/60,0,100);}}
 lastTick=Date.now();
 applyLook();applyGrow();
 goRoom(S.sleeping?'dormitorio':'cocina',true);
