@@ -434,13 +434,13 @@ const CHARS=[
   {id:'gatito',name:'Gatito',cond:{t:'tables',n:2},
    back:`<path d="M160 168 Q205 150 186 104" class="tail"/><g id="ears"><path d="M42 84 L50 22 L94 56 Z" class="c-main"/><path d="M54 70 L57 40 L80 58 Z" class="c-light"/><path d="M158 84 L150 22 L106 56 Z" class="c-main"/><path d="M146 70 L143 40 L120 58 Z" class="c-light"/></g>`+ARMS+FEET+BODY,
    front:`<g class="whisk"><path d="M58 119 L26 112"/><path d="M58 127 L26 130"/><path d="M142 119 L174 112"/><path d="M142 127 L174 130"/></g>`},
-  {id:'conejito',name:'Conejito',cond:{t:'tables',n:3},
+  {id:'conejito',name:'Conejito',cond:{t:'tables',n:4},
    back:`<g id="ears"><ellipse cx="70" cy="38" rx="14" ry="36" transform="rotate(-12 70 38)" class="c-main"/><ellipse cx="70" cy="40" rx="7" ry="26" transform="rotate(-12 70 40)" class="c-light"/><ellipse cx="130" cy="38" rx="14" ry="36" transform="rotate(12 130 38)" class="c-main"/><ellipse cx="130" cy="40" rx="7" ry="26" transform="rotate(12 130 40)" class="c-light"/></g>`+ARMS+FEET+BODY},
-  {id:'dino',name:'Dino',cond:{t:'tables',n:4},
+  {id:'dino',name:'Dino',cond:{t:'tables',n:8},
    back:`<path d="M150 160 Q200 170 196 118 Q186 146 158 140 Z" class="c-main"/><g id="ears"><path d="M62 68 L68 38 L88 58 Z" class="c-dark"/><path d="M86 56 L100 26 L114 56 Z" class="c-dark"/><path d="M112 58 L132 38 L138 68 Z" class="c-dark"/></g>`+ARMS+FEET+BODY},
-  {id:'gotita',name:'Gotita',cond:{t:'tables',n:6},
+  {id:'gotita',name:'Gotita',cond:{t:'tables',n:12},
    back:`<ellipse cx="38" cy="140" rx="10" ry="15" class="c-dark" transform="rotate(20 38 140)"/><ellipse cx="162" cy="140" rx="10" ry="15" class="c-dark" transform="rotate(-20 162 140)"/>`+FEET+`<path d="M100 22 C 122 58, 174 92, 174 130 C 174 168, 140 188, 100 188 C 60 188, 26 168, 26 130 C 26 92, 78 58, 100 22 Z" class="c-main"/><ellipse cx="66" cy="88" rx="7" ry="14" transform="rotate(25 66 88)" fill="#fff" opacity=".45"/><ellipse cx="100" cy="158" rx="38" ry="20" class="c-light"/>`},
-  {id:'robotin',name:'Robotín',cond:{t:'tables',n:8},
+  {id:'robotin',name:'Robotín',cond:{t:'tables',n:18},
    back:`<g id="ears"><path d="M100 52 L100 28" stroke="var(--pet-dark)" stroke-width="5"/><circle cx="100" cy="24" r="8" fill="#ff6b6b"/></g><rect x="12" y="100" width="20" height="34" rx="6" class="c-dark"/><rect x="168" y="100" width="20" height="34" rx="6" class="c-dark"/><rect x="56" y="170" width="36" height="18" rx="7" class="c-dark"/><rect x="108" y="170" width="36" height="18" rx="7" class="c-dark"/><rect x="28" y="50" width="144" height="130" rx="34" class="c-main"/><rect x="66" y="142" width="68" height="30" rx="10" class="c-light"/><circle cx="84" cy="157" r="5" fill="#ff6b6b"/><circle cx="100" cy="157" r="5" fill="#ffd447"/><circle cx="116" cy="157" r="5" fill="#5fd38c"/>`},
   {id:'estrella',name:'Estrellita',cond:{t:'mix'},
    back:`<path d="${starPath(100,116,86,50)}" class="starb"/><ellipse cx="100" cy="148" rx="24" ry="13" class="c-light"/>`}
@@ -535,13 +535,16 @@ const SOAP_PRICE=8;
 /* ---------- Estado ---------- */
 function defState(){return{v:2,name:'',coins:30,xp:0,level:1,needs:{hambre:80,higiene:80,energia:80,diversion:80},sleeping:false,last:Date.now(),
   owned:['col:lila','eye:normal','mou:normal'],char:'bolita',unlocked:['bolita'],color:'lila',eyes:'normal',mouth:'normal',hat:null,glasses:null,
-  sweets:0,sickUntil:0,voice:'ardilla',sound:true,music:true,tables:{},fields:{},classTh:55,pickT:[2],wSpeed:'normal',catchT:2,
+  sweets:0,sickUntil:0,voice:'ardilla',sound:true,music:true,tables:{},tg:{ninja:{},write:{},catch:{}},fields:{},classTh:55,pickT:[2],wSpeed:'normal',catchT:2,
   mistakes:{},mixPerfect:false,streak:{n:0,last:''},achievements:[],stats:{healthy:0,showers:0,talks:0,silentBest:0,earned:0,bestCombo:0,spellPerfect:0,proPerfect:0}};}
 function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r),d=defState();return Object.assign(d,o,{needs:Object.assign(d.needs,o.needs||{}),stats:Object.assign(d.stats,o.stats||{}),streak:Object.assign(d.streak,o.streak||{})});}}catch(e){}return null;}
 function save(){S.last=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 let S=load();
 const firstRun=!S;
 if(!S)S=defState();
+// cada juego tiene su propio progreso de tablas; lo que se hubiera dominado antes pasa a Tablas ninja
+S.tg=Object.assign({ninja:{},write:{},catch:{}},S.tg||{});
+if(!S.tgMig){ALLT.forEach(n=>{if(S.tables[n]&&S.tables[n].perfect&&!S.tg.ninja[n])S.tg.ninja[n]={perfect:true,plays:S.tables[n].plays||1};});S.tgMig=1;}
 
 let installEvt=null;
 let room='cocina',busy=false,soapOn=false,game=null,tempFace=null,tempTimer=null;
@@ -549,13 +552,16 @@ let touchBudget=15,tickCount=0,nagCount=0,walkCount=0,lastTick=Date.now();
 const isSick=()=>S.sickUntil&&Date.now()<S.sickUntil;
 const xpNeed=l=>40+l*20;
 const overlayOpen=()=>!$('#overlay').classList.contains('hidden');
-const tDone=n=>!!(S.tables[n]&&S.tables[n].perfect);
-const nTables=()=>ALLT.filter(tDone).length;
-// una tabla se abre cuando se domina la anterior (la del 2 está siempre abierta)
-const tOpen=n=>n===TMIN||tDone(n)||tDone(n-1);
-const openTs=()=>ALLT.filter(tOpen);
+// progreso independiente en cada juego: dominar la del 3 en Tablas ninja no la abre en Escribe ni en Atrapa
+const TGAMES=['ninja','write','catch'],GNAME={ninja:'⚔️ Tablas ninja',write:'✍️ Escribe',catch:'🔢 Atrapa números'};
+const tDone=(k,n)=>!!(S.tg[k]&&S.tg[k][n]&&S.tg[k][n].perfect);
+const nDone=k=>ALLT.filter(n=>tDone(k,n)).length;
+const nTables=()=>TGAMES.reduce((s,k)=>s+nDone(k),0);   // distintivos de tablas: 8 por juego, 24 en total
+// en cada juego, una tabla se abre cuando se domina la anterior (la del 2 está siempre abierta)
+const tOpen=(k,n)=>n===TMIN||tDone(k,n)||tDone(k,n-1);
+const openTs=k=>ALLT.filter(n=>tOpen(k,n));
 const condMet=c=>!c||(c.t==='mix'?!!S.mixPerfect:nTables()>=c.n);
-const condText=c=>!c?'':c.t==='mix'?'Haz todas las tablas (2–9) juntas sin fallos':c.n>=ALLT.length?'Domina todas las tablas (2–9)':`Domina ${c.n} tablas`;
+const condText=c=>!c?'':c.t==='mix'?'Haz todas las tablas (2–9) juntas sin fallos':c.n>=ALLT.length*TGAMES.length?'Consigue los 24 distintivos de tablas':`Consigue ${c.n} distintivos de tablas 🏅`;
 
 /* ---------- Audio ---------- */
 let actx=null,noiseBuf=null;
@@ -1087,30 +1093,30 @@ const GINFO={ninja:{t:'⚔️ Tablas ninja',d:'Corta la fruta con el resultado c
 const allMix=opt=>opt.mode==='multi'&&ALLT.every(n=>opt.ts.includes(n));
 const titleFor=opt=>opt.mode==='table'?`Tabla del ${opt.n}`:opt.mode==='review'?'Repaso':allMix(opt)?'Todas las tablas':'Tablas del '+opt.ts.join(', ');
 function openPicker(kind){
-  const info=GINFO[kind],open=openTs(),weak=weakFacts();
-  let sel=new Set((S.pickT||[]).filter(tOpen));if(!sel.size)sel.add(open[open.length-1]);
+  const info=GINFO[kind],open=openTs(kind),weak=weakFacts();
+  let sel=new Set((S.pickT||[]).filter(n=>tOpen(kind,n)));if(!sel.size)sel.add(open[open.length-1]);
   const infoTxt=()=>{const a=[...sel].sort((x,y)=>x-y);
     if(!a.length)return'Elige al menos una tabla';
-    if(a.length===1){const n=a[0];return tDone(n)?`Tabla del ${n} · ya dominada 🏅`:`Tabla del ${n} · hazla sin fallos para dominarla${n<TMAX?` y desbloquear la del ${n+1} 🔓`:' 🏅'}`;}
+    if(a.length===1){const n=a[0];return tDone(kind,n)?`Tabla del ${n} · ya dominada 🏅`:`Tabla del ${n} · hazla sin fallos para dominarla${n<TMAX?` y desbloquear la del ${n+1} 🔓`:' 🏅'}`;}
     if(open.length===ALLT.length&&a.length===ALLT.length)return'Todas las tablas (2–9) · sin fallos ganas la medalla 🥇';
     return`${a.length} tablas mezcladas: ${a.map(n=>'×'+n).join(' ')}`;};
   const draw=()=>{
     openPanel(`<div class="ghead"><b>${info.t}</b><button class="x" data-x>✕</button></div>
       <div class="sub">${info.d} Elige <b>una tabla</b> para dominarla y desbloquear la siguiente, o junta <b>varias</b> o <b>todas</b>. Cuanto más alta la tabla, más monedas.</div>
       ${kind==='write'?`<div class="seg" id="pSpeed"><button data-s="normal" class="${S.wSpeed!=='pro'?'on':''}">🐢 Normal<br><small>5 segundos</small></button><button data-s="pro" class="${S.wSpeed==='pro'?'on':''}">⚡ Pro<br><small>3 segundos · 🪙×2</small></button></div>`:''}
-      <div class="tpick">${ALLT.map(n=>{const o=tOpen(n),on=sel.has(n);return`<button class="tp ${on?'on':''} ${o?'':'lock'} ${tDone(n)?'gold':''}" data-n="${n}">${on?'<span class="ck">✔</span>':''}<b>×${n}</b><small>${o?(tDone(n)?'🏅 ':'')+'🪙'+tableRate(n):'🔒'}</small></button>`;}).join('')}</div>
+      <div class="tpick">${ALLT.map(n=>{const o=tOpen(kind,n),on=sel.has(n);return`<button class="tp ${on?'on':''} ${o?'':'lock'} ${tDone(kind,n)?'gold':''}" data-n="${n}">${on?'<span class="ck">✔</span>':''}<b>×${n}</b><small>${o?(tDone(kind,n)?'🏅 ':'')+'🪙'+tableRate(n):'🔒'}</small></button>`;}).join('')}</div>
       <div class="pickbar"><button class="btn" id="pAll">✅ Todas</button><button class="btn" id="pNone">Ninguna</button><button class="btn" id="pRev" ${weak.length?'':'disabled'}>🔁 Repaso${weak.length?` (${weak.length})`:''}</button></div>
       <div class="pickinfo">${infoTxt()}</div>
       <div class="btns"><button class="btn primary" id="pGo" ${sel.size?'':'disabled'}>▶ Empezar</button></div>`);
     $$('#panel .tp').forEach(b=>b.onclick=()=>{const n=+b.dataset.n;
-      if(!tOpen(n)){sfx('bad');toast(`🔒 Domina la tabla del ${n-1} para desbloquearla`);return;}
+      if(!tOpen(kind,n)){sfx('bad');toast(`🔒 Domina la tabla del ${n-1} para desbloquearla`);return;}
       sfx('click');if(sel.has(n))sel.delete(n);else sel.add(n);draw();});
     $$('#pSpeed button').forEach(b=>b.onclick=()=>{S.wSpeed=b.dataset.s;sfx('click');save();draw();});
-    $('#pAll').onclick=()=>{sfx('click');sel=new Set(openTs());draw();};
+    $('#pAll').onclick=()=>{sfx('click');sel=new Set(openTs(kind));draw();};
     $('#pNone').onclick=()=>{sfx('click');sel.clear();draw();};
-    $('#pRev').onclick=()=>{if(!weak.length)return;sfx('pop');const opt={mode:'review',pro:S.wSpeed==='pro'};tryPlay(()=>kind==='ninja'?startNinja(opt):startWrite(opt));};
+    $('#pRev').onclick=()=>{if(!weak.length)return;sfx('pop');const opt={mode:'review',kind,pro:S.wSpeed==='pro'};tryPlay(()=>kind==='ninja'?startNinja(opt):startWrite(opt));};
     $('#pGo').onclick=()=>{if(!sel.size)return;sfx('pop');const ts=[...sel].sort((x,y)=>x-y);S.pickT=ts;save();
-      const opt=ts.length===1?{mode:'table',n:ts[0],ts}:{mode:'multi',ts};opt.pro=S.wSpeed==='pro';
+      const opt=ts.length===1?{mode:'table',n:ts[0],ts}:{mode:'multi',ts};opt.pro=S.wSpeed==='pro';opt.kind=kind;
       tryPlay(()=>kind==='ninja'?startNinja(opt):startWrite(opt));};
   };
   draw();
@@ -1124,10 +1130,10 @@ function factsFor(opt,count){
 function tableResult(opt,perfect){
   let bonus=0,badge=null;
   if(opt.mode==='table'){
-    const n=opt.n,t=S.tables[n]||{perfect:false,plays:0};t.plays++;
-    const isNew=perfect&&!t.perfect;if(perfect)t.perfect=true;S.tables[n]=t;
+    const n=opt.n,k=opt.kind||'ninja',rec=S.tg[k]=S.tg[k]||{},t=rec[n]||{perfect:false,plays:0};t.plays++;
+    const isNew=perfect&&!t.perfect;if(perfect)t.perfect=true;rec[n]=t;
     bonus=perfect?tableRate(n)*5:0;
-    badge=isNew?`🏅 ¡Ya te sabes la tabla del ${n}!<br>${n<TMAX?`🔓 Has desbloqueado la tabla del ${n+1}`:'🎓 ¡Has desbloqueado todas las tablas!'}`:perfect?`🏅 Tabla del ${n} perfecta otra vez`:null;
+    badge=isNew?`🏅 ¡Ya te sabes la tabla del ${n}!<br>${n<TMAX?`🔓 Tabla del ${n+1} desbloqueada en ${GNAME[k]}`:`🎓 ¡Todas las tablas dominadas en ${GNAME[k]}!`}`:perfect?`🏅 Tabla del ${n} perfecta otra vez`:null;
   }else if(allMix(opt)&&perfect){
     bonus=40;badge=S.mixPerfect?'🥇 Todas las tablas perfectas otra vez':'🥇 ¡Eres el rey de las tablas!';S.mixPerfect=true;
   }
@@ -1315,15 +1321,15 @@ function startWrite(opt){
 
 /* ---------- Atrapa números: una tabla; caen números y solo hay que coger los de esa tabla ---------- */
 function openCatch(){
-  let n=tOpen(S.catchT)?S.catchT:openTs().slice(-1)[0];
+  let n=tOpen('catch',S.catchT)?S.catchT:openTs('catch').slice(-1)[0];
   const draw=()=>{
     openPanel(`<div class="ghead"><b>🔢 Atrapa números</b><button class="x" data-x>✕</button></div>
       <div class="sub">Elige una tabla. Caerán números: atrapa solo los de esa tabla y deja caer los demás. Tienes 3 vidas ❤️. Atrapa los 10 sin fallar para dominar la tabla.</div>
-      <div class="tpick">${ALLT.map(t=>{const o=tOpen(t),on=t===n;return`<button class="tp ${on?'on':''} ${o?'':'lock'} ${tDone(t)?'gold':''}" data-n="${t}">${on?'<span class="ck">✔</span>':''}<b>×${t}</b><small>${o?(tDone(t)?'🏅 ':'')+'🪙'+tableRate(t):'🔒'}</small></button>`;}).join('')}</div>
+      <div class="tpick">${ALLT.map(t=>{const o=tOpen('catch',t),on=t===n;return`<button class="tp ${on?'on':''} ${o?'':'lock'} ${tDone('catch',t)?'gold':''}" data-n="${t}">${on?'<span class="ck">✔</span>':''}<b>×${t}</b><small>${o?(tDone('catch',t)?'🏅 ':'')+'🪙'+tableRate(t):'🔒'}</small></button>`;}).join('')}</div>
       <div class="pickinfo">Tabla del ${n}: ${[1,2,3].map(k=>n*k).join(', ')}… hasta ${n*10}</div>
       <div class="btns"><button class="btn primary" id="cGo">▶ Empezar</button></div>`);
     $$('#panel .tp').forEach(b=>b.onclick=()=>{const t=+b.dataset.n;
-      if(!tOpen(t)){sfx('bad');toast(`🔒 Domina la tabla del ${t-1} para desbloquearla`);return;}
+      if(!tOpen('catch',t)){sfx('bad');toast(`🔒 Domina la tabla del ${t-1} para desbloquearla`);return;}
       sfx('click');n=t;draw();});
     $('#cGo').onclick=()=>{sfx('pop');S.catchT=n;save();tryPlay(()=>startCatch(n));};
   };
@@ -1347,7 +1353,7 @@ function startCatch(n){
   function end(win){
     if(!g.running)return;g.running=false;window.removeEventListener('keydown',g.key);
     g.items.forEach(it=>it.el.remove());g.items=[];
-    const perfect=win&&g.errors===0,r=tableResult({mode:'table',n},perfect);
+    const perfect=win&&g.errors===0,r=tableResult({mode:'table',n,kind:'catch'},perfect);
     setTimeout(()=>{if(game!==g)return;finishGame({title:`🔢 Atrapa · Tabla del ${n}`,ratio:perfect?1:Math.max(0,Math.min(.98,g.caught/10-g.errors*.1)),
       detail:`Atrapados: ${g.caught} de 10 · Fallos: ${g.errors}${win?'':' · 💔 Te quedaste sin vidas'}${r.bonus?` · Bonus sin fallos: +${r.bonus} 🪙`:''}`,
       coins:g.coins+r.bonus,fun:15,xp:10+(perfect?10:0),badge:r.badge,again:()=>startCatch(n),menu:openCatch});},win?300:900);
@@ -1404,8 +1410,9 @@ function openBadges(){
   const st=streakNow();
   openPanel(`<div class="ghead"><b>🏅 Distintivos y logros</b><button class="x" data-x>✕</button></div>
     <div class="streakbox">🔥 Racha: <b>${st} ${st===1?'día':'días'}</b>${S.streak.last===dayKey()?' · ✅ Reto de hoy hecho':' · Juega a cualquier juego para el reto de hoy'}</div>
-    <div class="sec">✖️ Tablas (${nTables()}/${ALLT.length}) ${S.mixPerfect?'· 🥇 Todas juntas':''}</div>
-    <div class="tpick">${ALLT.map(n=>`<div class="tp ${tDone(n)?'gold':''} ${tOpen(n)?'':'lock'}" style="cursor:default"><b>×${n}</b><small>${tDone(n)?'🏅 Dominada':tOpen(n)?'Por dominar':'🔒'}</small></div>`).join('')}</div>
+    ${TGAMES.map(k=>`<div class="sec">${GNAME[k]} (${nDone(k)}/${ALLT.length})</div>
+    <div class="tpick">${ALLT.map(n=>`<div class="tp ${tDone(k,n)?'gold':''} ${tOpen(k,n)?'':'lock'}" style="cursor:default"><b>×${n}</b><small>${tDone(k,n)?'🏅 Dominada':tOpen(k,n)?'Por dominar':'🔒'}</small></div>`).join('')}</div>`).join('')}
+    ${S.mixPerfect?'<div class="sub" style="text-align:center;margin-top:10px">🥇 Todas las tablas juntas sin fallos</div>':''}
     <div class="sec">🏆 Logros (${ACHS.filter(a=>S.achievements.includes(a.id)).length}/${ACHS.length})</div>
     <div class="grid">${ACHS.map(a=>{const u=S.achievements.includes(a.id);return`<div class="item ${u?'eq':'locked'}" style="cursor:default"><div class="thumb"><span class="ie">${u?a.e:'❔'}</span></div><div class="iname">${a.name}</div><div class="tag">${a.desc}</div></div>`;}).join('')}</div>
     <div class="sec">🧸 Muñecos</div>
