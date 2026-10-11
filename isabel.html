@@ -2348,7 +2348,7 @@ function openSettings(){
       <div>Si no aparece el botón de instalar, pulsa ⋮ y luego <b>«Instalar aplicación»</b> o <b>«Añadir a la pantalla de inicio»</b>.</div>
       <div class="inote">Si ya la tenías instalada y da error, desinstálala antes (mantén pulsado su icono → Desinstalar).</div>
       <div class="inote">En iPhone o iPad: abre el enlace en Safari, pulsa Compartir y luego «Añadir a pantalla de inicio».</div></div>`:''}
-    ${cloudOn?(cloudLinked()?`<label class="lbl">☁️ Mi cuenta</label><div class="ibox"><div>Conectado como <b>${esc(CC.name||CC.u)}</b></div><div class="inote" id="cSt">${cloudStatus()}</div><button class="btn" id="cSync" style="width:100%">🔄 Sincronizar ahora</button><button class="btn" id="cOut" style="width:100%">🚪 Salir de esta cuenta</button></div>`:`<label class="lbl">☁️ Mi cuenta</label><button class="btn" id="cIn" style="width:100%">☁️ Entrar con mi usuario</button><div class="inote">Para seguir en casa lo que juegas en clase.</div>`):''}
+    ${cloudOn?(cloudLinked()?`<label class="lbl">☁️ Mi cuenta</label><div class="ibox"><div>${CLOUD_AUTO?'Guardado en la nube para':'Conectado como'} <b>${esc(CC.name||CC.u)}</b></div><div class="inote" id="cSt">${cloudStatus()}</div><button class="btn" id="cSync" style="width:100%">🔄 Sincronizar ahora</button>${CLOUD_AUTO?'':'<button class="btn" id="cOut" style="width:100%">🚪 Salir de esta cuenta</button>'}</div>`:`<label class="lbl">☁️ Mi cuenta</label><button class="btn" id="cIn" style="width:100%">☁️ Entrar con mi usuario</button><div class="inote">Para seguir en casa lo que juegas en clase.</div>`):''}
     <label class="lbl">👩‍🏫 Para el profe</label><button class="btn" id="sRep" style="width:100%">📊 Informe de progreso</button>
     ${allMaster()?'<label class="lbl">🏆 Maestro/a de las tablas</label><button class="btn" id="sDip" style="width:100%">📜 Mi diploma</button>':''}
     <label class="lbl">Versión ${APP_VERSION}</label><button class="btn" id="sUpd" style="width:100%">🔄 Buscar actualizaciones</button>
@@ -2447,10 +2447,12 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout
 fitApp();
 
 /* ---------- Nube (Hojas de cálculo de Google) ---------- */
-const CLOUD_URL='';   // URL de la aplicación web de Apps Script. Vacío = sin nube
+const CLOUD_URL='https://script.google.com/macros/s/AKfycbzY76zANaHeumr1kUEurRQi9WB-tucZW5zkCFRwHfE0VNL80ofxSkwKSQkHdU1u2bXGQQ/exec';   // URL de la aplicación web de Apps Script. Vacío = sin nube
 const CK='mascota-cloud-v1';
 const cloudOn=!!CLOUD_URL;
+const CLOUD_AUTO={u:'isabel',k:'isabel'};   // cuenta fija (entra sin pedir usuario): {u:'…',k:'…'}
 let CC=null;try{CC=JSON.parse(localStorage.getItem(CK)||'null');}catch(e){}
+if(cloudOn&&CLOUD_AUTO)CC=Object.assign({},CC||{},CLOUD_AUTO);
 let cloudSig=null,cloudBusy=false,cloudErr=false,cloudLast=0,cloudPending=false,cloudWarned=false;
 const cloudLinked=()=>!!(cloudOn&&CC&&CC.u&&CC.k);
 function cloudStore(){try{localStorage.setItem(CK,JSON.stringify(CC));}catch(e){}}
@@ -2476,7 +2478,8 @@ async function cloudSync(o={}){
   if(!cloudLinked()||cloudBusy)return null;
   cloudBusy=true;let r=null;
   try{
-    const sig=cloudSigOf(),dirty=!!o.force||cloudSig===null||sig!==cloudSig;
+    const fresh=!S.name&&!o.force;   // mascota sin nacer: solo se descarga, nunca se sube
+    const sig=cloudSigOf(),dirty=!fresh&&(!!o.force||cloudSig===null||sig!==cloudSig);
     const body={a:'sync',u:CC.u,k:CC.k};
     if(dirty){
       const c=Object.assign({},S);let js=JSON.stringify(c);
@@ -2494,7 +2497,7 @@ async function cloudSync(o={}){
     if(r.saved){cloudSig=sig;cloudLast=Date.now();cloudPending=false;}
     else if(r.data){
       const ro=JSON.parse(r.data),rp=progOf(ro),lp=progOf(S);
-      if(rp>lp){
+      if(rp>lp||fresh){
         if(o.login||cloudAllowed()){cloudAdopt(ro);cloudPending=false;r.adopted=true;cloudLast=Date.now();if(!o.login)toast('☁️ Progreso cargado desde tu cuenta');}
         else cloudPending=true;
       }else if(rp<lp)cloudSig=null;   // lo de la nube es más antiguo: se sube en la próxima vuelta
