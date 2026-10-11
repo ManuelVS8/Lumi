@@ -2165,8 +2165,11 @@ function shareBox(cv,file,title){   // imagen con botones Guardar / Compartir
   },'image/png');
 }
 const slug=t=>(t||'').toLowerCase().replace(/[^a-z0-9áéíóúñü]+/gi,'-');
+// Con cuenta conectada, el nombre del diploma y del informe es el registrado por el profe (no se puede cambiar)
+function syncKidName(){if(cloudLinked()&&CC.name&&(S.kidName!==CC.name||!S.nameFixed)){S.kidName=CC.name;S.nameFixed=true;save();}}
 function openDiploma(){
   if(!allMaster()){openPanel(`<div class="ghead"><b>📜 Mi diploma</b><button class="x" data-x>✕</button></div><div class="sub">Consigue las 8 tablas maestras para ganar tu diploma 🏆</div>`);return;}
+  syncKidName();
   if(!S.nameFixed&&S.dipDone&&S.kidName)S.nameFixed=true;
   if(!S.nameFixed){askName('📜 Mi diploma','¡Enhorabuena! Escribe tu nombre para tu diploma.',openDiploma);return;}
   if(!S.dipDone){
@@ -2186,6 +2189,7 @@ function openDiploma(){
 }
 /* ---------- 📊 Informe para el profe ---------- */
 function openReport(){
+  syncKidName();
   if(!S.nameFixed&&S.dipDone&&S.kidName)S.nameFixed=true;
   if(!S.nameFixed){askName('📊 Informe para el profe','Escribe tu nombre para que tu profe sepa de quién es el informe.',openReport);return;}
   openPanel(`<div class="ghead"><b>📊 Informe para el profe</b><button class="x" data-x>✕</button></div>
@@ -2201,7 +2205,7 @@ function makeReport(){
   x.fillStyle='#faf7ff';x.fillRect(0,0,W,H);
   rr(0,0,W,190,0,'#5b45a8');
   T('📊 Informe de progreso · Mi Mascota',50,58,40,'800','#fff');
-  T(S.kidName||'',50,120,44,'800','#ffd23f');
+  {let nf=44;x.font=`800 ${nf}px ${SANS}`;while(x.measureText(S.kidName||'').width>W-100&&nf>24){nf-=2;x.font=`800 ${nf}px ${SANS}`;}T(S.kidName||'',50,120,nf,'800','#ffd23f');}
   T(new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),50,165,26,'500','#e8e0ff');
   const chips=[`🐾 ${S.name||'Mascota'} · nivel ${S.level}`,`🔥 Racha: ${streakNow()} días`,`🪙 Ganadas: ${S.stats.earned||0}`,`📜 Diploma: ${allMaster()?'sí':'aún no'}`];
   let cx=50,cy=215;chips.forEach(c=>{x.font=`600 26px ${SANS}`;const w=x.measureText(c).width+36;if(cx+w>W-50){cx=50;cy+=62;}rr(cx,cy,w,50,25,'#ece6fb');T(c,cx+18,cy+25,26);cx+=w+14;});
