@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota de Isabel</title>
-<meta name="app-version" content="1.8.4">
+<meta name="app-version" content="1.8.5">
 <link rel="manifest" href="manifest-isabel.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -2529,7 +2529,7 @@ async function cloudSync(o={}){
       else{cloudSig=sig;cloudLast=Date.now();}
     }else{cloudSig=sig;}
     cloudGod=r.mode==='todo';{const gb=$('#godBtn');if(gb)gb.classList.toggle('hidden',!cloudGod);}
-    if(cloudGod&&(S.coins<999000||!S.celebAllD||NEEDS.some(k=>S.needs[k]<100))){godApply();cloudSig=null;}
+    if(cloudGod&&(S.coins<999000||!S.celebAllD)){godApply();cloudSig=null;}
     return r;
   }catch(e){cloudErr=true;return r;}
   finally{cloudBusy=false;}
