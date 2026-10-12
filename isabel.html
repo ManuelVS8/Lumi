@@ -2479,6 +2479,16 @@ function cloudAdopt(ro){
   firstRun=false;save();cloudSig=cloudSigOf();
   $('#bubbles').innerHTML='';applyLook();applyGrow();goRoom(S.sleeping?'dormitorio':'cocina',true);updateUI();refreshFace();
 }
+/* Modo profe: si la hoja pone «todo» en la columna «modo (profe)», esa cuenta lo tiene todo desbloqueado y 999999 monedas */
+let cloudGod=false;
+function godApply(){
+  TGAMES.forEach(k=>{S.tg[k]=S.tg[k]||{};S.tg['d'+k]=S.tg['d'+k]||{};for(let n=2;n<=9;n++){S.tg[k][n]={perfect:true,plays:Math.max(1,(S.tg[k][n]||{}).plays||0)};S.tg['d'+k][n]={perfect:true,plays:Math.max(1,(S.tg['d'+k][n]||{}).plays||0)};}});
+  S.mixPerfect=S.mixPerfectD=true;S.celebAll=S.celebHalf=S.celebAllD=S.celebHalfD=true;
+  S.unlocked=CHARS.map(c=>c.id);
+  [...COLORS.map(c=>'col:'+c.id),...Object.keys(EYES).map(k=>'eye:'+k),...Object.keys(MOUTHS).map(k=>'mou:'+k),...ACCS.map(a=>'acc:'+a.id),...ALLM().map(a=>'acc:'+a.id)].forEach(k=>{if(!S.owned.includes(k))S.owned.push(k);});
+  S.level=Math.max(S.level,8);S.coins=999999;save();updateUI();
+}
+setInterval(()=>{if(cloudGod&&S.coins<900000){S.coins=999999;updateUI();}},1500);
 async function cloudSync(o={}){
   if(!cloudLinked()||cloudBusy)return null;
   cloudBusy=true;let r=null;
@@ -2508,6 +2518,8 @@ async function cloudSync(o={}){
       }else if(rp<lp)cloudSig=null;   // lo de la nube es más antiguo: se sube en la próxima vuelta
       else{cloudSig=sig;cloudLast=Date.now();}
     }else{cloudSig=sig;}
+    cloudGod=r.mode==='todo';
+    if(cloudGod&&(S.coins<900000||!S.celebAllD)){godApply();cloudSig=null;}
     return r;
   }catch(e){cloudErr=true;return r;}
   finally{cloudBusy=false;}
