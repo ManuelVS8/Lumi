@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota de Isabel</title>
-<meta name="app-version" content="1.8.5">
+<meta name="app-version" content="1.8.6">
 <link rel="manifest" href="manifest-isabel.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -2355,7 +2355,7 @@ function openSettings(){
       <div>Si no aparece el botón de instalar, pulsa ⋮ y luego <b>«Instalar aplicación»</b> o <b>«Añadir a la pantalla de inicio»</b>.</div>
       <div class="inote">Si ya la tenías instalada y da error, desinstálala antes (mantén pulsado su icono → Desinstalar).</div>
       <div class="inote">En iPhone o iPad: abre el enlace en Safari, pulsa Compartir y luego «Añadir a pantalla de inicio».</div></div>`:''}
-    ${cloudOn?(cloudLinked()?`<label class="lbl">☁️ Mi cuenta</label><div class="ibox"><div>${CLOUD_AUTO?'Guardado en la nube para':'Conectado como'} <b>${esc(CC.name||CC.u)}</b></div><div class="inote" id="cSt">${cloudStatus()}</div><button class="btn" id="cSync" style="width:100%">🔄 Sincronizar ahora</button>${CLOUD_AUTO?'':'<button class="btn" id="cOut" style="width:100%">🚪 Salir de esta cuenta</button>'}</div>`:`<label class="lbl">☁️ Mi cuenta</label><button class="btn" id="cIn" style="width:100%">☁️ Entrar con mi usuario</button><div class="inote">Para seguir en casa lo que juegas en clase.</div>`):''}
+    ${cloudOn?(cloudLinked()?`<label class="lbl">☁️ Mi cuenta</label><div class="ibox"><div>${CLOUD_AUTO?'Guardado en la nube para':'Conectado como'} <b>${esc(CC.name||CC.u)}</b></div><div class="inote" id="cSt">${cloudStatus()}</div>${cloudGod?'<div class="inote">🛠️ Modo profe activo (todo desbloqueado y al máximo)</div>':''}<button class="btn" id="cSync" style="width:100%">🔄 Sincronizar ahora</button>${CLOUD_AUTO?'':'<button class="btn" id="cOut" style="width:100%">🚪 Salir de esta cuenta</button>'}</div>`:`<label class="lbl">☁️ Mi cuenta</label><button class="btn" id="cIn" style="width:100%">☁️ Entrar con mi usuario</button><div class="inote">Para seguir en casa lo que juegas en clase.</div>`):''}
     <label class="lbl">👩‍🏫 Para el profe</label><button class="btn" id="sRep" style="width:100%">📊 Informe de progreso</button>
     ${allMaster()?'<label class="lbl">🏆 Maestro/a de las tablas</label><button class="btn" id="sDip" style="width:100%">📜 Mi diploma</button>':''}
     <label class="lbl">Versión ${APP_VERSION}</label><button class="btn" id="sUpd" style="width:100%">🔄 Buscar actualizaciones</button>
