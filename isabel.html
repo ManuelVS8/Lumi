@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota de Isabel</title>
-<meta name="app-version" content="1.8.0">
+<meta name="app-version" content="1.8.3">
 <link rel="manifest" href="manifest-isabel.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -1636,7 +1636,7 @@ function startCatchQ(opt){
   const facts=table?shuffle([1,2,3,4,5,6,7,8,9,10]).map(k=>[opt.n,k]):shuffle(weakFacts(op).slice(0,10));
   if(!facts.length){toast('¡No hay nada que repasar! 🎉');openCatch();return;}
   const total=facts.length,title=table?(op==='d'?`Dividir entre ${opt.n}`:`Tabla del ${opt.n}`):`Repaso ${O.sym}`;
-  const g={id:'catch',opt,facts,fi:0,caught:0,errors:0,lives:3,coins:0,items:[],running:true,x:.5,spawn:0,since:0,elapsed:0,intro:2.2,last:0};game=g;
+  const g={id:'catch',opt,facts,fi:0,caught:0,errors:0,lives:3,coins:0,items:[],running:true,x:.5,spawn:0,since:0,slot:Math.floor(Math.random()*3),elapsed:0,intro:2.2,last:0};game=g;
   openPanel(`<div class="ghead"><b>🔢 ${title}</b><button class="x" data-x>✕</button></div>
     <div class="qsub">Atrapa el <b>resultado</b> de la operación · evita los demás</div>
     <div id="cArea"><div id="cScore">0/${total}</div><div id="cLives">❤️❤️❤️</div><div id="cQ"></div><div id="catcher"></div>
@@ -1671,7 +1671,7 @@ function startCatchQ(opt){
     const f=curF(),goodFalling=g.items.some(it=>it.good);
     if(f&&g.spawn<=0){
       g.spawn=Math.max(.6,1.15-g.elapsed*.008);
-      const good=!goodFalling&&(g.since>=2||Math.random()<.45);g.since=good?0:g.since+1;
+      const good=!goodFalling&&g.since>=g.slot;g.since=good?0:g.since+1;   // el resultado correcto sale en el 1.º, 2.º o 3.º objeto (al azar en cada pregunta)
       const ans=O.a(f[0],f[1]),v=good?ans:pick(distractOp(op,f[0],f[1]).concat([ans+1,Math.max(1,ans-1)]).filter(x=>x!==ans)),el=document.createElement('div');
       el.className='fnum';el.textContent=v;area.appendChild(el);
       g.items.push({el,good,v,x:rnd(30,W-30),y:-56,sp:110+g.elapsed*2.5+rnd(0,40)});
@@ -1682,7 +1682,7 @@ function startCatchQ(opt){
       if(it.y+50>=top&&it.y<H-30&&Math.abs(it.x-cx)<46){
         it.el.remove();g.items.splice(i,1);
         if(it.good){const fc=curF(),c=earnRate(kind,fc[0]);hit(O.key(fc[0],fc[1]));g.caught++;g.coins+=c;sfx('coin');pop(`+${c} 🪙`,it.x,top-10,'#2fbf71');
-          g.fi++;clearItems();hud();showQ();g.spawn=.5;if(g.fi>=total){end(true);return;}break;}
+          g.fi++;clearItems();g.since=0;g.slot=Math.floor(Math.random()*3);hud();showQ();g.spawn=.5;if(g.fi>=total){end(true);return;}break;}
         else{sfx('bad');pop(`✗ ${it.v}`,it.x,top-10,'#ef5350');lose();if(!g.running)return;}
       }else if(it.y>H){
         it.el.remove();g.items.splice(i,1);
@@ -2349,6 +2349,7 @@ function openSettings(){
       <div>Abre el enlace en tu navegador (Chrome, Opera u otro que tengas):</div>
       <code class="ilink">https://manuelvs8.github.io/Lumi/</code>
       <button class="btn" id="sCopy" style="width:100%">📋 Copiar enlace</button>
+      ${/Android/i.test(navigator.userAgent)?'<a class="btn" id="sOpenChrome" href="intent://manuelvs8.github.io/Lumi/#Intent;scheme=https;package=com.android.chrome;end" style="display:block;width:100%;text-align:center;text-decoration:none;box-sizing:border-box">🌐 Abrir en Chrome</a>':''}
       <div>Si no aparece el botón de instalar, pulsa ⋮ y luego <b>«Instalar aplicación»</b> o <b>«Añadir a la pantalla de inicio»</b>.</div>
       <div class="inote">Si ya la tenías instalada y da error, desinstálala antes (mantén pulsado su icono → Desinstalar).</div>
       <div class="inote">En iPhone o iPad: abre el enlace en Safari, pulsa Compartir y luego «Añadir a pantalla de inicio».</div></div>`:''}
@@ -2621,6 +2622,8 @@ function showUpdate(v){
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkUpdate(false);});
 setInterval(()=>checkUpdate(false),15*60000);
 // Si acabamos de actualizar (?v=…), no se vuelve a actualizar sola en esta carga: así nunca entra en bucle
+// Se calcula ANTES de limpiar la URL (si no, ?pwa=1 ya no existe y nunca se detecta la app instalada)
+const LANZADA_COMO_APP=(()=>{const f=/[?&]pwa=1/.test(location.search);try{if(f)sessionStorage.setItem('lumiApp','1');return sessionStorage.getItem('lumiApp')==='1';}catch(e){return f;}})();
 const justUpdated=/[?&]v=\d+/.test(location.search);
 if(/[?&](v=\d+|pwa=1)/.test(location.search))history.replaceState(null,'',location.pathname);
 
@@ -2628,7 +2631,9 @@ if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{}));
 }
 // Instalable desde el menú del navegador (Chrome: ⋮ → Instalar). Si el navegador ofrece su botón, se muestra.
-const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
+// Solo cuenta como "app instalada" si se lanzó desde su propio icono (start_url con ?pwa=1).
+// Si se abre desde un enlace dentro de otra PWA (p. ej. siurot.net), el navegador también dice "standalone", pero esta app NO está instalada.
+const isStandalone=()=>LANZADA_COMO_APP&&(matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true);
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if($('#splash'))renderSplashBtns();else showInstallBar();});
 window.addEventListener('appinstalled',()=>{installEvt=null;const b=$('#instBar');if(b)b.remove();});
 
