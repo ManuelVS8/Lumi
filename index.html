@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
-<meta name="app-version" content="1.8.3">
+<meta name="app-version" content="1.8.4">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -197,6 +197,8 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
 .cbtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 #danceBtn{position:absolute;left:12px;top:48px;z-index:4;border:none;border-radius:999px;padding:6px 14px;font-weight:700;font-size:15px;background:linear-gradient(#fff6b0,#ffc400);color:#2b2340;box-shadow:0 3px 0 rgba(0,0,0,.15);cursor:pointer}
 .classmode #danceBtn{display:none}
+#godBtn{position:absolute;right:12px;top:48px;z-index:4;border:none;border-radius:999px;padding:6px 14px;font-weight:700;font-size:15px;background:linear-gradient(#c8f7d4,#35c46a);color:#12351f;box-shadow:0 3px 0 rgba(0,0,0,.15);cursor:pointer}
+.classmode #godBtn{display:none}
 #petFx.dance{animation:cdance 2.4s ease-in-out 2;transform-origin:50% 60%}
 .dip img{width:100%;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.2);margin-top:12px}
 .dip .btn{text-decoration:none;display:inline-block}
@@ -435,7 +437,7 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
     <div class="wall"></div><div class="floor"></div>
     <div id="decor"></div>
     <div id="roomTitle"></div>
-    <button id="danceBtn" class="hidden">💃 Bailar</button>
+    <button id="danceBtn" class="hidden">💃 Bailar</button><button id="godBtn" class="hidden">🔋 Restaurar todo</button>
     <button id="dailyChip"></button>
     <div id="petWrap"><div id="petFx"><div id="petBob">
       <svg id="petSvg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -2486,9 +2488,17 @@ function godApply(){
   S.mixPerfect=S.mixPerfectD=true;S.celebAll=S.celebHalf=S.celebAllD=S.celebHalfD=true;
   S.unlocked=CHARS.map(c=>c.id);
   [...COLORS.map(c=>'col:'+c.id),...Object.keys(EYES).map(k=>'eye:'+k),...Object.keys(MOUTHS).map(k=>'mou:'+k),...ACCS.map(a=>'acc:'+a.id),...ALLM().map(a=>'acc:'+a.id)].forEach(k=>{if(!S.owned.includes(k))S.owned.push(k);});
-  S.level=Math.max(S.level,8);S.coins=999999;save();updateUI();
+  S.level=Math.max(S.level,10);S.achievements=ACHS.map(a=>a.id);
+  godKeep();save();applyGrow();updateUI();
 }
-setInterval(()=>{if(cloudGod&&S.coins<900000){S.coins=999999;updateUI();}},1500);
+// Mientras el modo profe esté activo: monedas y necesidades siempre al máximo
+function godKeep(){S.coins=999999;S.sickUntil=0;S.sweets=0;NEEDS.forEach(k=>{S.needs[k]=100;});}
+setInterval(()=>{if(!cloudGod)return;const low=S.coins<999000||NEEDS.some(k=>S.needs[k]<100);if(low){godKeep();updateUI();}},1000);
+$('#godBtn').onclick=()=>{
+  NEEDS.forEach(k=>S.needs[k]=100);S.sickUntil=0;S.sweets=0;
+  if(S.sleeping)wake('¡Listo! Todo restaurado ☀️');
+  sfx('level');clearTempFace();refreshFace();updateUI();save();toast('🔋 Todo restaurado');
+};
 async function cloudSync(o={}){
   if(!cloudLinked()||cloudBusy)return null;
   cloudBusy=true;let r=null;
@@ -2518,8 +2528,8 @@ async function cloudSync(o={}){
       }else if(rp<lp)cloudSig=null;   // lo de la nube es más antiguo: se sube en la próxima vuelta
       else{cloudSig=sig;cloudLast=Date.now();}
     }else{cloudSig=sig;}
-    cloudGod=r.mode==='todo';
-    if(cloudGod&&(S.coins<900000||!S.celebAllD)){godApply();cloudSig=null;}
+    cloudGod=r.mode==='todo';{const gb=$('#godBtn');if(gb)gb.classList.toggle('hidden',!cloudGod);}
+    if(cloudGod&&(S.coins<999000||!S.celebAllD||NEEDS.some(k=>S.needs[k]<100))){godApply();cloudSig=null;}
     return r;
   }catch(e){cloudErr=true;return r;}
   finally{cloudBusy=false;}
