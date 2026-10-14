@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota de Isabel</title>
-<meta name="app-version" content="1.8.8">
+<meta name="app-version" content="1.8.9">
 <link rel="manifest" href="manifest-isabel.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -106,6 +106,13 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
 #water{position:absolute;inset:0;pointer-events:none;z-index:4;opacity:0;transition:opacity .3s;background:repeating-linear-gradient(100deg,transparent 0 22px,rgba(110,190,255,.55) 22px 25px);background-size:100% 200%}
 #water.on{opacity:1;animation:rain .3s linear infinite}
 @keyframes rain{to{background-position:0 100%}}
+#poop{position:absolute;left:13%;bottom:8%;font-size:46px;line-height:1;z-index:3;pointer-events:none;display:none}
+#poop.on{display:block}
+#poop i{position:absolute;left:50%;top:40%;font-style:normal;font-size:20px}
+#poop i:nth-child(1){animation:pf1 1.7s linear infinite}
+#poop i:nth-child(2){animation:pf2 2.3s linear infinite}
+@keyframes pf1{0%,100%{transform:translate(-30px,-30px)}25%{transform:translate(10px,-50px)}50%{transform:translate(28px,-14px)}75%{transform:translate(-6px,-6px)}}
+@keyframes pf2{0%,100%{transform:translate(24px,-44px)}33%{transform:translate(-26px,-20px)}66%{transform:translate(4px,-58px)}}
 #flies{position:absolute;inset:0;pointer-events:none;z-index:4;display:none}
 #flies.on{display:block}
 #flies span{position:absolute;left:50%;top:55%;font-size:22px}
@@ -470,6 +477,7 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
         <text id="hatEl" x="100" y="60" text-anchor="middle" font-size="54"></text>
       </svg>
     </div></div></div>
+    <div id="poop"><span>💩</span><i>🪰</i><i>🪰</i></div>
     <div id="flies"><span>🪰</span><span>🪰</span></div>
     <div id="bubble" class="hidden"></div>
     <div id="fx"></div>
@@ -756,6 +764,16 @@ const SFX={
   yawn:()=>tone(500,.6,{vol:.1,to:250}),
   alarm:()=>{tone(880,.12,{type:'square',vol:.1});tone(660,.12,{type:'square',vol:.1,at:.14});tone(880,.12,{type:'square',vol:.1,at:.28});}
 };
+const FART_URL='https://github.com/ManuelVS8/Lumi/raw/refs/heads/main/Pedo.mp3';
+let fartAu=null;
+function playFart(){
+  if(!S.sound)return;
+  try{
+    if(!fartAu){fartAu=new Audio(FART_URL);fartAu.preload='auto';}
+    fartAu.currentTime=0;const p=fartAu.play();
+    if(p&&p.catch)p.catch(()=>SFX.burp());
+  }catch(e){SFX.burp();}
+}
 function sfx(n){try{ensureAudio();SFX[n]&&SFX[n]();}catch(e){}}
 
 /* ---------- UI general ---------- */
@@ -811,7 +829,7 @@ function updateUI(){
     i.style.width=v+'%';i.style.background=v<25?'var(--bad)':v<50?'#ffb547':'var(--ok)';el.classList.toggle('low',v<25);});
   const h=S.needs.higiene,n=h>=65?0:Math.min(5,Math.ceil((65-h)/12));
   $$('#dirt .dirt').forEach((d,i)=>d.style.display=i<n?'':'none');
-  $('#flies').classList.toggle('on',h<25);
+  $('#flies').classList.toggle('on',h<25);$('#poop').classList.toggle('on',h<25);
 }
 function applyLook(){
   const ch=CHARS.find(c=>c.id===S.char)||CHARS[0];
@@ -999,7 +1017,7 @@ function afterEat(f){
     S.needs.diversion=clamp(S.needs.diversion+(f.fun||0),0,100);S.sweets+=1;
     if(S.sweets>=3){S.sweets=0;S.sickUntil=Date.now()+3*60000;tempFace=null;refreshFace();sfx('bad');say('Uf… demasiadas chuches. Me duele la barriga 🤢',3800);save();updateUI();return;}
   }else{if(isSick())S.sickUntil-=60000;S.stats.healthy++;addXP(2);}
-  if(Math.random()<.22){setTempFace('happy');setTimeout(()=>{sfx('burp');setTempFace('eat',500);fxPet('💨',100,130);say('¡Uy, perdón! 😅');},350);}
+  if(Math.random()<.22){setTempFace('happy');setTimeout(()=>{playFart();setTempFace('eat',500);fxPet('💨',100,130);say('¡Uy, perdón! 😅');},350);}
   else{setTempFace('love',900);say(pick(f.sweet?['¡Qué rico! 😋','¡Dulce, dulce! 🍬']:['¡Ñam! Qué sano 💪','¡Delicioso! 😋','¡Me encanta!']));}
   save();updateUI();
 }
