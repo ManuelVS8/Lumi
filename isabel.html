@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota de Isabel</title>
-<meta name="app-version" content="1.8.7">
+<meta name="app-version" content="1.8.8">
 <link rel="manifest" href="manifest-isabel.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -2309,7 +2309,8 @@ function shopItems(tab){
     equip:()=>{if(a.season&&!S.owned.includes('acc:'+a.id))S.owned.push('acc:'+a.id);S[a.slot]=S[a.slot]===a.id?null:a.id;}}));
 }
 function openShop(tab){shopTab=tab||shopTab;renderShop();}
-function renderShop(){
+function renderShop(keep){
+  const pn=$('#panel'),y0=keep&&pn&&pn.querySelector('.shopPrev')&&!$('#overlay').classList.contains('hidden')?pn.scrollTop:0;
   const items=shopItems(shopTab);
   openPanel(`<div class="ghead"><b>👕 Armario</b><span>🪙 ${S.coins}</span><button class="x" data-x>✕</button></div>
     <div class="tabs">${SHOP_TABS.map(([id,l])=>`<button class="tab ${shopTab===id?'on':''}" data-t="${id}">${l}</button>`).join('')}</div>
@@ -2324,8 +2325,9 @@ function renderShop(){
       const tag=it.locked?'🔒 '+it.lockText:it.eq?(it.toggle?'Puesto ✓ (quitar)':'Puesto ✓'):owned?'Elegir':'🪙 '+it.price;
       return`<button class="item ${it.eq?'eq':''} ${it.locked?'locked':''}" data-i="${i}"><div class="thumb">${it.thumb}</div><div class="iname">${it.name}</div><div class="tag">${tag}</div></button>`;}).join('')}</div>`);
   $('.shopPrev').appendChild(cleanClone());
+  if(y0)$('#panel').scrollTop=y0;
   $$('#panel .tab').forEach(b=>b.onclick=()=>{shopTab=b.dataset.t;sfx('click');renderShop();});
-  $$('#panel .cc').forEach(b=>b.onclick=()=>{S.capeCol=b.dataset.c;sfx('click');applyLook();save();renderShop();});
+  $$('#panel .cc').forEach(b=>b.onclick=()=>{S.capeCol=b.dataset.c;sfx('click');applyLook();save();renderShop(true);});
   $$('#panel .item').forEach(b=>b.onclick=()=>{
     const it=items[+b.dataset.i];
     if(it.locked){sfx('bad');toast('🔒 '+it.lockText);return;}
@@ -2335,7 +2337,7 @@ function renderShop(){
       S.coins-=it.price;S.owned.push(it.key);sfx('coin');toast(`¡Has comprado: ${it.name}!`);
     }else sfx('click');
     if(!(it.eq&&!it.toggle))it.equip();
-    applyLook();save();updateUI();renderShop();
+    applyLook();save();updateUI();renderShop(true);
   });
 }
 
