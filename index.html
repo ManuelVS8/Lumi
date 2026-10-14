@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
-<meta name="app-version" content="1.8.6">
+<meta name="app-version" content="1.8.7">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -437,7 +437,7 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
     <div class="wall"></div><div class="floor"></div>
     <div id="decor"></div>
     <div id="roomTitle"></div>
-    <button id="danceBtn" class="hidden">💃 Bailar</button><button id="godBtn" class="hidden">🔋 Restaurar todo</button>
+    <button id="danceBtn" class="hidden">💃 Bailar</button><button id="godBtn" class="hidden">🔋 Rellenar todo</button>
     <button id="dailyChip"></button>
     <div id="petWrap"><div id="petFx"><div id="petBob">
       <svg id="petSvg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -1254,7 +1254,7 @@ function getDaily(){
   const ops=divOpen()?['x','d']:['x'],cands=[];
   ops.forEach(op=>TGAMES.forEach(base=>{const kind=pk(base,op),n=ALLT.find(t=>tOpen(kind,t)&&!tDone(kind,t));if(n)cands.push({base,op,n});}));
   let h=hashStr(day+(S.name||''));
-  const c=cands.length?cands[h%cands.length]:{base:TGAMES[h%4],op:ops[(h>>3)%ops.length],n:ALLT[(h>>5)%ALLT.length]};
+  const c=cands.length?cands[h%cands.length]:{base:TGAMES[h%4],op:ops[(h>>>3)%ops.length],n:ALLT[(h>>>5)%ALLT.length]};
   S.daily={day,base:c.base,op:c.op,n:c.n,done:false};save();return S.daily;
 }
 const dailyText=d=>`${GSHORT[d.base].split(' ')[0]} ${d.op==='d'?'÷':'×'}${d.n}`;
@@ -2493,11 +2493,10 @@ function godApply(){
 }
 // Mientras el modo profe esté activo: monedas y necesidades siempre al máximo
 function godKeep(){S.coins=999999;S.sickUntil=0;S.sweets=0;NEEDS.forEach(k=>{S.needs[k]=100;});}
-setInterval(()=>{if(!cloudGod)return;const low=S.coins<999000||NEEDS.some(k=>S.needs[k]<100);if(low){godKeep();updateUI();}},1000);
 $('#godBtn').onclick=()=>{
-  NEEDS.forEach(k=>S.needs[k]=100);S.sickUntil=0;S.sweets=0;
-  if(S.sleeping)wake('¡Listo! Todo restaurado ☀️');
-  sfx('level');clearTempFace();refreshFace();updateUI();save();toast('🔋 Todo restaurado');
+  godApply();cloudSig=null;
+  if(S.sleeping)wake('¡Listo! Todo rellenado ☀️');
+  sfx('level');clearTempFace();refreshFace();updateUI();save();toast('🔋 Todo rellenado (modo profe)');
 };
 async function cloudSync(o={}){
   if(!cloudLinked()||cloudBusy)return null;
@@ -2529,7 +2528,6 @@ async function cloudSync(o={}){
       else{cloudSig=sig;cloudLast=Date.now();}
     }else{cloudSig=sig;}
     cloudGod=r.mode==='todo';{const gb=$('#godBtn');if(gb)gb.classList.toggle('hidden',!cloudGod);}
-    if(cloudGod&&(S.coins<999000||!S.celebAllD)){godApply();cloudSig=null;}
     return r;
   }catch(e){cloudErr=true;return r;}
   finally{cloudBusy=false;}
