@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota de Isabel</title>
-<meta name="app-version" content="1.8.9">
+<meta name="app-version" content="1.9.2">
 <link rel="manifest" href="manifest-isabel.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -61,6 +61,18 @@ button{font-family:inherit;color:inherit}
 
 #petWrap{position:absolute;left:var(--px,50%);bottom:6%;transform:translateX(-50%);width:calc(min(62vw,46vh,340px)*var(--grow,1));width:calc(min(78cqw,62cqh,360px)*var(--grow,1));aspect-ratio:1;z-index:3;transition:left 2.2s ease-in-out,width .8s ease}
 #petFx{width:100%;height:100%;transform-origin:50% 100%}
+#petSvg .ft1{transform-box:fill-box;transform-origin:70% 50%;transition:transform .25s ease-out}
+#petSvg.fartpose .ft1{opacity:0}
+.ftup{display:none}
+#petSvg.fartpose .ftup{display:block}
+.gas circle{opacity:0;fill:#c3cf72;transform-box:fill-box;transform-origin:center}
+#petSvg.fartgas .gas circle{animation:gasp 1.4s ease-out forwards}
+#petSvg.fartgas .gas circle:nth-child(2){animation-delay:.12s}
+#petSvg.fartgas .gas circle:nth-child(3){animation-delay:.25s}
+#petSvg.fartgas .gas circle:nth-child(4){animation-delay:.38s}
+@keyframes gasp{0%{opacity:.9;transform:translate(0,0) scale(.35)}100%{opacity:0;transform:translate(-62px,-16px) scale(1.9)}}
+#petFx.fartlean{transform-origin:62% 100%;animation:fartlean 2.3s ease-in-out}
+@keyframes fartlean{0%{transform:rotate(0)}15%,80%{transform:rotate(8deg) translateX(6px)}100%{transform:rotate(0)}}
 #petFx.squish{animation:squish .35s ease}
 #petFx.wobble{animation:wobble .5s ease-in-out infinite}
 #petBob{width:100%;height:100%;animation:bob 2.6s ease-in-out infinite;transform-origin:50% 100%}
@@ -461,6 +473,7 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
         <ellipse cx="62" cy="124" rx="10" ry="6" class="cheek"/>
         <ellipse cx="138" cy="124" rx="10" ry="6" class="cheek"/>
         <g id="charFront"></g>
+        <ellipse class="c-dark ftup" cx="36" cy="156" rx="21" ry="10" transform="rotate(-48 36 156)"/>
         <g id="accMid"></g>
         <g id="eyesOpen"></g>
         <g id="eyesClosed" class="hide"><path d="M64 101 Q78 112 92 101" class="line"/><path d="M108 101 Q122 112 136 101" class="line"/></g>
@@ -473,6 +486,7 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
         <g id="mouthDeco"></g>
         <g id="accFront"></g>
         <g id="bubbles"></g>
+        <g class="gas"><circle cx="38" cy="170" r="9"/><circle cx="30" cy="177" r="11"/><circle cx="40" cy="183" r="8"/><circle cx="26" cy="168" r="7"/></g>
         <text id="glassesEl" x="100" y="127" text-anchor="middle" font-size="74"></text>
         <text id="hatEl" x="100" y="60" text-anchor="middle" font-size="54"></text>
       </svg>
@@ -523,7 +537,7 @@ const stripIds=s=>s.replace(/\sid="[^"]*"/g,'');
 function starPath(cx,cy,R,r,n=5){let d='';for(let i=0;i<n*2;i++){const a=-Math.PI/2+i*Math.PI/n,rad=i%2?r:R;d+=(i?'L':'M')+(cx+rad*Math.cos(a)).toFixed(1)+' '+(cy+rad*Math.sin(a)).toFixed(1)+' ';}return d+'Z';}
 function heartPath(cx,cy,s){return`M${cx} ${cy+s} C${cx-s*1.8} ${cy-s*.2} ${cx-s*.7} ${cy-s*1.5} ${cx} ${cy-s*.4} C${cx+s*.7} ${cy-s*1.5} ${cx+s*1.8} ${cy-s*.2} ${cx} ${cy+s} Z`;}
 const ARMS=`<ellipse cx="34" cy="134" rx="12" ry="19" class="c-dark" transform="rotate(20 34 134)"/><ellipse cx="166" cy="134" rx="12" ry="19" class="c-dark" transform="rotate(-20 166 134)"/>`;
-const FEET=`<ellipse cx="72" cy="181" rx="21" ry="10" class="c-dark"/><ellipse cx="128" cy="181" rx="21" ry="10" class="c-dark"/>`;
+const FEET=`<ellipse cx="72" cy="181" rx="21" ry="10" class="c-dark ft1"/><ellipse cx="128" cy="181" rx="21" ry="10" class="c-dark"/>`;
 const BODY=`<ellipse cx="100" cy="117" rx="70" ry="64" class="c-main"/><ellipse cx="100" cy="156" rx="40" ry="21" class="c-light"/>`;
 
 /* ---------- Muñecos (se desbloquean dominando tablas) ---------- */
@@ -611,6 +625,7 @@ const FOODS=[
   {e:'🥦',name:'Brócoli',price:12,food:28},{e:'🥛',name:'Leche',price:8,food:15},{e:'🥪',name:'Bocadillo',price:16,food:35},
   {e:'🍩',name:'Donut',price:12,food:8,fun:12,sweet:true},{e:'🍭',name:'Piruleta',price:8,food:5,fun:12,sweet:true}
 ];
+const MIN_FOOD=Math.min(...FOODS.filter(f=>!f.sweet).map(f=>f.price)),BREAD_CD=60*60000;
 const ROOMS={
   cocina:{name:'Cocina',icon:'🍳',decor:[['🪟',8,8,62],['🕰️',78,8,42],['🪴',3,58,56],['🧺',86,64,38]]},
   bano:{name:'Baño',icon:'🛁',decor:[['🪞',10,10,56],['🚿',80,6,52],['🧴',5,64,40],['🦆',86,70,34]]},
@@ -747,7 +762,6 @@ const SFX={
   pop:()=>tone(500,.09,{to:900,vol:.14}),
   coin:()=>{tone(988,.08,{type:'square',vol:.07});tone(1319,.18,{type:'square',vol:.07,at:.08});},
   chomp:()=>noise(.09,{freq:700,vol:.25,q:.8}),
-  burp:()=>{tone(120,.45,{type:'sawtooth',vol:.16,to:70});noise(.4,{freq:300,vol:.1,type:'lowpass'});},
   laugh:()=>[0,.13,.26,.39,.52].forEach((a,i)=>tone(i%2?560:640,.09,{type:'triangle',vol:.16,at:a,to:i%2?500:600})),
   love:()=>{tone(660,.15,{vol:.12});tone(880,.25,{vol:.12,at:.12});},
   sneeze:()=>{tone(380,.35,{type:'triangle',vol:.12,to:820});noise(.25,{freq:3500,vol:.3,at:.38,type:'highpass'});},
@@ -771,8 +785,14 @@ function playFart(){
   try{
     if(!fartAu){fartAu=new Audio(FART_URL);fartAu.preload='auto';}
     fartAu.currentTime=0;const p=fartAu.play();
-    if(p&&p.catch)p.catch(()=>SFX.burp());
-  }catch(e){SFX.burp();}
+    if(p&&p.catch)p.catch(()=>{});
+  }catch(e){}
+}
+function fartAct(){
+  const sv=$('#petSvg'),pf=$('#petFx');
+  setTempFace('fart',2300);sv.classList.add('fartpose');pf.classList.remove('fartlean');void pf.offsetWidth;pf.classList.add('fartlean');
+  setTimeout(()=>{sv.classList.add('fartgas');playFart();fxPet('💨',45,165);setTimeout(()=>fxPet('💨',30,150),260);},520);
+  setTimeout(()=>{sv.classList.remove('fartpose','fartgas');pf.classList.remove('fartlean');say('¡Uy, perdón! 😅');},2300);
 }
 function sfx(n){try{ensureAudio();SFX[n]&&SFX[n]();}catch(e){}}
 
@@ -860,6 +880,7 @@ function applyFace(f){
     case'love':e='happy';break;case'dizzy':e='dizzy';m='wavy';break;case'sick':m='wavy';break;
     case'listen':open=4;break;case'talk':open=3;break;case'eat':e='happy';open=9;break;case'sneeze':e='happy';open=7;break;
     case'angry':m='wavy';break;
+    case'fart':e='closed';m='happy';break;
   }
   const eyes={open:'#eyesOpen',closed:'#eyesClosed',happy:'#eyesHappy',dizzy:'#eyesDizzy'};
   Object.entries(eyes).forEach(([k,s])=>$(s).classList.toggle('hide',k!==e));
@@ -945,6 +966,13 @@ function renderActions(){
     return;
   }
   if(room==='cocina'){
+    if(S.coins<MIN_FOOD&&S.needs.hambre<97){
+      const wait=Math.ceil((BREAD_CD-(Date.now()-(S.breadAt||0)))/60000),b=document.createElement('button');b.className='food';
+      b.title='Pan de emergencia';
+      if(wait>0){b.style.opacity='.55';b.innerHTML=`<span class="fe">🍞</span><span class="price">en ${wait} min</span>`;b.onclick=()=>{sfx('bad');toast(`🍞 El pan de emergencia estará listo en ${wait} min. ¡Gana monedas en Juegos!`);};}
+      else{b.innerHTML=`<span class="fe">🍞</span><span class="price">¡Gratis!</span>`;b.onclick=()=>{if(busy)return;S.breadAt=Date.now();feed({e:'🍞',name:'Pan',price:0,food:25},b);setTimeout(renderActions,50);};}
+      a.appendChild(b);
+    }
     FOODS.forEach(f=>{const b=document.createElement('button');b.className='food'+(f.sweet?' sweet':'');b.title=f.name;
       b.innerHTML=`<span class="fe">${f.e}</span><span class="price">🪙 ${f.price}</span>`;b.onclick=()=>feed(f,b);a.appendChild(b);});
   }else if(room==='bano'){
@@ -1017,9 +1045,9 @@ function afterEat(f){
     S.needs.diversion=clamp(S.needs.diversion+(f.fun||0),0,100);S.sweets+=1;
     if(S.sweets>=3){S.sweets=0;S.sickUntil=Date.now()+3*60000;tempFace=null;refreshFace();sfx('bad');say('Uf… demasiadas chuches. Me duele la barriga 🤢',3800);save();updateUI();return;}
   }else{if(isSick())S.sickUntil-=60000;S.stats.healthy++;addXP(2);}
-  if(Math.random()<.22){setTempFace('happy');setTimeout(()=>{playFart();setTempFace('eat',500);fxPet('💨',100,130);say('¡Uy, perdón! 😅');},350);}
+  if(Math.random()<.22){setTempFace('happy');setTimeout(fartAct,350);}
   else{setTempFace('love',900);say(pick(f.sweet?['¡Qué rico! 😋','¡Dulce, dulce! 🍬']:['¡Ñam! Qué sano 💪','¡Delicioso! 😋','¡Me encanta!']));}
-  save();updateUI();
+  save();updateUI();if(room==='cocina')renderActions();
 }
 
 /* Baño */
@@ -1260,7 +1288,7 @@ function checkAchievements(){
 function tryPlay(start){
   if(S.needs.energia<15&&!S.tiredSaid){S.tiredSaid=1;say('Estoy un poco cansado… ¡pero vamos! 🥱',2600);}
   if(S.needs.energia>=15)S.tiredSaid=0;
-  if(S.needs.hambre<10){closePanel();say('Tengo demasiada hambre para jugar… 🍽️');return false;}
+  if(S.needs.hambre<10){closePanel();say('Tengo demasiada hambre para jugar… 🍽️ Ve a la cocina');return false;}
   start();return true;
 }
 // tras dominar una tabla (o repetirla sin fallos), botón directo a la siguiente
