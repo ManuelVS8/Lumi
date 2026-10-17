@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota de Isabel</title>
-<meta name="app-version" content="1.9.4">
+<meta name="app-version" content="1.9.7">
 <link rel="manifest" href="manifest-isabel.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -812,10 +812,29 @@ const SFX={
   alarm:()=>{tone(880,.12,{type:'square',vol:.1});tone(660,.12,{type:'square',vol:.1,at:.14});tone(880,.12,{type:'square',vol:.1,at:.28});}
 };
 const FART_URL='https://github.com/ManuelVS8/Lumi/raw/refs/heads/main/Pedo.mp3';
-let fartAu=null;
+let fartAu=null,fartAB=null,fartBuf=null;
+// Precarga: el MP3 se descarga al abrir la app (y se guarda en caché para la próxima vez / sin conexión).
+// Se reproduce con Web Audio (el mismo sistema que el resto de sonidos), que en iPhone/iPad no exige un gesto por cada sonido.
+function fartDecode(){
+  if(fartBuf||!fartAB||!actx)return;
+  try{const p=actx.decodeAudioData(fartAB.slice(0),b=>{fartBuf=b;},()=>{});if(p&&p.catch)p.catch(()=>{});}catch(e){}
+}
+async function loadFart(){
+  try{
+    const ca=('caches' in window)?await caches.open('lumi-audio'):null;
+    let r=ca?await ca.match(FART_URL):null;
+    if(!r){const net=await fetch(FART_URL);if(!net.ok)throw 0;if(ca)try{await ca.put(FART_URL,net.clone());}catch(e){}r=net;}
+    fartAB=await r.arrayBuffer();
+    fartAu=new Audio(URL.createObjectURL(new Blob([fartAB],{type:'audio/mpeg'})));fartAu.preload='auto';
+    fartDecode();
+  }catch(e){}
+}
+document.addEventListener('pointerdown',()=>setTimeout(fartDecode,60),{passive:true});
 function playFart(){
   if(!S.sound)return;
   try{
+    ensureAudio();fartDecode();
+    if(fartBuf&&actx){const src=actx.createBufferSource(),g=actx.createGain();src.buffer=fartBuf;g.gain.value=1;src.connect(g).connect(actx.destination);src.start(0);return;}
     if(!fartAu){fartAu=new Audio(FART_URL);fartAu.preload='auto';}
     fartAu.currentTime=0;const p=fartAu.play();
     if(p&&p.catch)p.catch(()=>{});
@@ -2736,7 +2755,7 @@ applyLook();applyGrow();
 goRoom(S.sleeping?'dormitorio':'cocina',true);
 updateUI();refreshFace();blinkLoop();
 if(cloudLinked()&&!firstRun)setTimeout(()=>cloudSync(),1200+Math.random()*2800);
-setInterval(tick,1000);setInterval(musicTick,380);
+setInterval(tick,1000);setInterval(musicTick,380);setTimeout(loadFart,1200);
 /* ---------- PWA: actualizaciones, splash e instalación ---------- */
 const APP_VERSION=(document.querySelector('meta[name="app-version"]')||{}).content||'0';
 const isNewer=(a,b)=>{const x=a.split('.').map(Number),y=b.split('.').map(Number);for(let i=0;i<Math.max(x.length,y.length);i++){const p=x[i]||0,q=y[i]||0;if(p!==q)return p>q;}return false;};
@@ -2818,7 +2837,7 @@ function renderSplashBtns(){
   const b=$('#spBtns');if(!b||!splashReady)return;
   b.innerHTML=`<button class="spBtn primary" id="spGo">▶ ¡A jugar!</button>${cloudOn&&!cloudLinked()?'<button class="spBtn link" id="spCloud">☁️ Entrar con mi usuario</button>':''}${installEvt&&!isStandalone()?'<button class="spBtn link" id="spInstall">📲 Instalar la app</button>':''}`;
   const cb=$('#spCloud');if(cb)cb.onclick=()=>{closeSplash(true);openCloudLogin(()=>startApp());};
-  $('#spGo').onclick=closeSplash;
+  $('#spGo').onclick=()=>{ensureAudio();fartDecode();closeSplash();};
   const ib=$('#spInstall');if(ib)ib.onclick=async()=>{closeSplash(true);await doInstall();startApp();};
 }
 let appStarted=false;
