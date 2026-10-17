@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota de Isabel</title>
-<meta name="app-version" content="1.9.3">
+<meta name="app-version" content="1.9.4">
 <link rel="manifest" href="manifest-isabel.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -71,6 +71,29 @@ button{font-family:inherit;color:inherit}
 @keyframes gasp{0%{opacity:.9;transform:translate(0,0) scale(.35)}100%{opacity:0;transform:translate(-62px,-16px) scale(1.9)}}
 #petFx.fartlean{transform-origin:62% 100%;animation:fartlean 2.3s ease-in-out}
 @keyframes fartlean{0%{transform:rotate(0)}15%,80%{transform:rotate(8deg) translateX(6px)}100%{transform:rotate(0)}}
+.snotb{display:none;fill:rgba(180,225,255,.8);stroke:#fff;stroke-width:1.5;transform-box:fill-box;transform-origin:center}
+#petSvg.snot .snotb{display:block;animation:snotg 2.4s ease-in-out forwards}
+@keyframes snotg{0%{transform:scale(.2)}25%{transform:scale(.9)}45%{transform:scale(.45)}75%{transform:scale(1.6)}100%{transform:scale(1.8);opacity:0}}
+.stink{display:none;fill:none;stroke:#8bc34a;stroke-width:4;stroke-linecap:round}
+#petSvg.stinkon .stink{display:block}
+#petSvg.stinkon .stink path{animation:stk 1.1s ease-in-out infinite}
+#petSvg.stinkon .stink path:nth-child(2){animation-delay:.25s}
+#petSvg.stinkon .stink path:nth-child(3){animation-delay:.5s}
+@keyframes stk{0%,100%{transform:translateY(5px);opacity:.25}50%{transform:translateY(-6px);opacity:1}}
+.headfly{transform-box:fill-box;transform-origin:center}
+#petSvg.flyland .headfly{animation:hfl .3s ease-in-out infinite alternate}
+@keyframes hfl{from{transform:translate(-7px,0) rotate(-14deg)}to{transform:translate(7px,-2px) rotate(14deg)}}
+#eyesOpen.lookup{transform:translateY(-7px)}
+#petFx.nod{animation:nodq 2.6s ease-in-out}
+@keyframes nodq{0%{transform:rotate(0)}30%,42%{transform:rotate(7deg) translateY(5px)}50%{transform:rotate(-2deg)}58%,66%{transform:rotate(8deg) translateY(6px)}72%{transform:rotate(0) translateY(-6px)}100%{transform:rotate(0)}}
+#petFx.spin{animation:spinq 1s ease-in-out}
+@keyframes spinq{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+#petFx.scratch{animation:scrq .9s ease-in-out}
+@keyframes scrq{0%,100%{transform:rotate(0)}15%{transform:rotate(-5deg)}30%{transform:rotate(4deg)}45%{transform:rotate(-5deg)}60%{transform:rotate(4deg)}75%{transform:rotate(-3deg)}}
+#petFx.press{animation:prsq 2.2s ease-in-out}
+@keyframes prsq{0%,100%{transform:scale(1)}20%,80%{transform:scale(1.28,1.12) translateY(-6px)}}
+#petFx.shake{animation:shkq .1s linear 11}
+@keyframes shkq{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
 #petFx.squish{animation:squish .35s ease}
 #petFx.wobble{animation:wobble .5s ease-in-out infinite}
 #petBob{width:100%;height:100%;animation:bob 2.6s ease-in-out infinite;transform-origin:50% 100%}
@@ -486,6 +509,9 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
         <g class="gas"><circle cx="38" cy="170" r="9"/><circle cx="30" cy="177" r="11"/><circle cx="40" cy="183" r="8"/><circle cx="26" cy="168" r="7"/></g>
         <text id="glassesEl" x="100" y="127" text-anchor="middle" font-size="74"></text>
         <text id="hatEl" x="100" y="60" text-anchor="middle" font-size="54"></text>
+        <text class="headfly hide" id="headFly" x="100" y="46" text-anchor="middle" font-size="22">🪰</text>
+        <circle class="snotb" cx="107" cy="121" r="7"/>
+        <g class="stink"><path d="M62 52 q-7 -9 0 -18 q7 -9 0 -18"/><path d="M100 36 q-7 -9 0 -18 q7 -9 0 -18"/><path d="M138 52 q-7 -9 0 -18 q7 -9 0 -18"/></g>
       </svg>
     </div></div></div>
     <div id="poop"><span>💩</span><i>🪰</i><i>🪰</i></div>
@@ -773,6 +799,16 @@ const SFX={
   swish:()=>noise(.14,{freq:2400,vol:.22,q:.6}),
   click:()=>tone(1200,.04,{type:'square',vol:.06}),
   yawn:()=>tone(500,.6,{vol:.1,to:250}),
+  burp:()=>{tone(120,.45,{type:'sawtooth',vol:.16,to:70});noise(.4,{freq:300,vol:.1,type:'lowpass'});},
+  scratch:()=>[0,.12,.24,.36].forEach(a=>noise(.08,{freq:3000,vol:.18,at:a,type:'highpass'})),
+  buah:()=>tone(300,.5,{type:'sawtooth',vol:.1,to:150}),
+  buzz:()=>{tone(220,.8,{type:'sawtooth',vol:.05,to:270});tone(228,.8,{type:'sawtooth',vol:.04,to:262});},
+  sigh:()=>{noise(.6,{freq:1800,vol:.08,type:'lowpass'});tone(420,.6,{vol:.06,to:260});},
+  hum:()=>[392,440,415,330,349].forEach((fr,i)=>tone(fr,.28,{type:'triangle',vol:.1,at:i*.45})),
+  thud:()=>tone(90,.2,{type:'sine',vol:.22,to:60}),
+  rumble:()=>{tone(70,.9,{type:'sawtooth',vol:.14,to:45});noise(.8,{freq:180,vol:.12,type:'lowpass'});},
+  hic:()=>tone(700,.06,{type:'square',vol:.08,to:1100}),
+  snore:()=>tone(110,.8,{type:'sawtooth',vol:.05,to:85}),
   alarm:()=>{tone(880,.12,{type:'square',vol:.1});tone(660,.12,{type:'square',vol:.1,at:.14});tone(880,.12,{type:'square',vol:.1,at:.28});}
 };
 const FART_URL='https://github.com/ManuelVS8/Lumi/raw/refs/heads/main/Pedo.mp3';
@@ -884,6 +920,8 @@ function applyFace(f){
     case'listen':open=4;break;case'talk':open=3;break;case'eat':e='happy';open=9;break;case'sneeze':e='happy';open=7;break;
     case'angry':m='wavy';break;
     case'fart':e='closed';m='happy';break;
+    case'yawn':e='closed';open=16;break;
+    case'peste':e='closed';m='wavy';break;
   }
   const eyes={open:'#eyesOpen',closed:'#eyesClosed',happy:'#eyesHappy',dizzy:'#eyesDizzy'};
   Object.entries(eyes).forEach(([k,s])=>$(s).classList.toggle('hide',k!==e));
@@ -1014,6 +1052,7 @@ function touchPet(p){
   const now=Date.now();taps.push(now);while(taps.length&&now-taps[0]>3000)taps.shift();
   squish();
   if(S.sleeping){say('Zzz… ¡déjame dormir! 😴',1800);return;}
+  if(S.needs.higiene<25&&Math.random()<.4&&!quirkBusy){QUIRKS.olor();return;}
   if(taps.length>=7){taps.length=0;setTempFace('dizzy',2600);const pf=$('#petFx');pf.classList.add('wobble');setTimeout(()=>pf.classList.remove('wobble'),2600);sfx('dizzy');say('¡Me mareo! 😵‍💫',2200);return;}
   if(Math.hypot(p.x-100,p.y-117)<12){sfx('sneeze');setTempFace('sneeze');setTimeout(()=>{setTempFace('happy',900);fxPet('💦',100,118);},380);funTouch();return;}
   if(p.y<92){setTempFace('love',1300);sfx('love');for(let i=0;i<3;i++)setTimeout(()=>fxPet('💜',100,45),i*150);funTouch();}
@@ -1048,7 +1087,8 @@ function afterEat(f){
     S.needs.diversion=clamp(S.needs.diversion+(f.fun||0),0,100);S.sweets+=1;
     if(S.sweets>=3){S.sweets=0;S.sickUntil=Date.now()+3*60000;tempFace=null;refreshFace();sfx('bad');say('Uf… demasiadas chuches. Me duele la barriga 🤢',3800);save();updateUI();return;}
   }else{if(isSick())S.sickUntil-=60000;S.stats.healthy++;addXP(2);}
-  if(Math.random()<.22){setTempFace('happy');setTimeout(fartAct,350);}
+  if(f.name==='Leche'&&Math.random()<.4){setTempFace('happy');setTimeout(burpAct,350);}
+  else if(Math.random()<.22){setTempFace('happy');setTimeout(fartAct,350);}
   else{setTempFace('love',900);say(pick(f.sweet?['¡Qué rico! 😋','¡Dulce, dulce! 🍬']:['¡Ñam! Qué sano 💪','¡Delicioso! 😋','¡Me encanta!']));}
   save();updateUI();if(room==='cocina')renderActions();
 }
@@ -2465,11 +2505,54 @@ function decay(m,floorOn){
   });
   S.sweets=Math.max(0,S.sweets-m/4);
 }
+/* ---------- Gracias de la mascota: gestos según su estado ---------- */
+let quirkAt=14,quirkLast='',quirkBusy=false;
+const qFx=(cls,ms)=>{const p=$('#petFx');p.classList.remove(cls);void p.offsetWidth;p.classList.add(cls);setTimeout(()=>p.classList.remove(cls),ms);};
+const qStart=ms=>{quirkBusy=true;setTimeout(()=>{quirkBusy=false;},ms);};
+const QUIRKS={
+  rascar(){qStart(1800);setTempFace('happy',1000);qFx('scratch',900);sfx('scratch');say('Qué picazón… 😖',1800);},
+  olor(){qStart(3600);const sv=$('#petSvg');sv.classList.add('stinkon');setTempFace('peste',3200);sfx('buah');say('¡Buah, qué peste! 🤢 ¡Necesito un baño!',3200);setTimeout(()=>sv.classList.remove('stinkon'),3200);},
+  mosca(){qStart(4200);const sv=$('#petSvg'),hf=$('#headFly'),ey=$('#eyesOpen');hf.classList.remove('hide');sv.classList.add('flyland');ey.classList.add('lookup');sfx('buzz');say('Eh… ¿qué hay en mi cabeza? 👀',2800);
+    setTimeout(()=>{hf.classList.add('hide');sv.classList.remove('flyland');ey.classList.remove('lookup');fxPet('🪰',110,30);},3600);},
+  bostezo(){const moco=Math.random()<.45;qStart(moco?4800:2600);setTempFace('yawn',2000);sfx('yawn');say('¡Aaaaah! 🥱',1800);
+    if(moco){const sv=$('#petSvg');setTimeout(()=>{sv.classList.add('snot');setTimeout(()=>sfx('pop'),2000);setTimeout(()=>sv.classList.remove('snot'),2400);},2000);}},
+  cabeceo(){qStart(3200);setTempFace('sleep',1900);qFx('nod',2600);setTimeout(()=>{sfx('boing');say('¡No estaba dormido! 😳',2200);},2300);},
+  girar(){qStart(1400);setTempFace('laugh',1000);qFx('spin',1000);sfx('boing');say('¡Wiiii! 🌀',1400);},
+  suspiro(){qStart(2600);setTempFace('sad',2200);sfx('sigh');say('😮‍💨 …',2400);},
+  tararea(){qStart(3000);setTempFace('happy',2800);sfx('hum');[0,500,1000,1500,2000].forEach(t=>setTimeout(()=>fxPet(pick(['🎵','🎶']),100,40),t));say('♪ La la la… ♪',2800);},
+  pegarse(){qStart(2400);qFx('press',2200);setTempFace('neutral',2200);sfx('thud');say('¡Eh! ¡Mírame! ¡Juega conmigo! 👀',2400);},
+  gafas(){qStart(4000);$('#glassesEl').textContent='🕶️';sfx('ok');say('¡Mira qué guay! 😎',3000);setTimeout(applyLook,3800);},
+  tripa(){qStart(2400);qFx('shake',1100);sfx('rumble');setTempFace('sad',1800);say('¡Grrrr! Me ruge la tripa 🍽️',2400);},
+  hipo(){qStart(3000);let n=0;const iv=setInterval(()=>{n++;jump();sfx('hic');fxPet('¡hip!',100,40);if(n>=3)clearInterval(iv);},800);say('¡Hip! Tengo hipo 😳',2600);}
+};
+function pickQuirk(){
+  const n=S.needs,c=[];
+  if(n.higiene<25)c.push('olor','olor','mosca','rascar');else if(n.higiene<45)c.push('rascar');
+  if(n.energia<35)c.push('bostezo','bostezo','cabeceo');
+  if(n.diversion<35){c.push('girar','suspiro','tararea','pegarse');if(!S.glasses)c.push('gafas');}
+  if(n.hambre<35)c.push('tripa','tripa');
+  if(!c.length)return Math.random()<.25?'hipo':null;
+  const pool=c.filter(x=>x!==quirkLast);return pick(pool.length?pool:c);
+}
+// habla dormido: tablas «a su manera» (mezcla de correctas y disparates, nunca un resultado numérico falso)
+function sleepTalk(){
+  const a=2+Math.floor(Math.random()*8),b=2+Math.floor(Math.random()*8),r=a*b;
+  const rr=pick([`${r}`,`${r}`,'¡una pizza!','¡veinte monos!','¡plátano!','¡mi calcetín!']);
+  say('😴 '+pick([`Zzz… ${a} por ${b}… ${rr}… zzz`,`Mmm… ${a} × ${b} = ${rr}… zzz`,`Zzz… ¿${a} por ${b}? ${rr}… zzz`]),4200);sfx('snore');
+}
+function burpAct(){
+  setTempFace('laugh',1200);sfx('burp');jump();fxPet('💨',100,125);say('¡Burp! Perdón 😳',2200);
+}
 function tick(){
   const now=Date.now(),m=(now-lastTick)/60000;lastTick=now;
   decay(m,false);touchBudget=Math.min(15,touchBudget+m*6);tickCount++;nagCount++;
   if(S.sleeping&&S.needs.energia>=100&&!classMode)wake('¡Buenos días! He dormido genial ☀️');
   if(S.sleeping&&room==='dormitorio'&&tickCount%2===0)fxPet('💤',140,40);
+  if(S.sleeping&&tickCount%20===0&&!overlayOpen()&&!classMode)sleepTalk();
+  if(tickCount>=quirkAt&&!quirkBusy&&!busy&&!S.sleeping&&!classMode&&!overlayOpen()&&!tempFace&&!soapOn&&!dancing&&!talking){
+    quirkAt=tickCount+12+Math.floor(Math.random()*10);
+    const q=pickQuirk();if(q&&QUIRKS[q]){quirkLast=q;QUIRKS[q]();}
+  }
   if(nagCount>=25&&!busy&&!S.sleeping&&!classMode&&!overlayOpen()){
     nagCount=0;
     if(isSick())say('Me duele la barriga… 🤢');
