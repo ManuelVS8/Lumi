@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
-<meta name="app-version" content="1.9.2">
+<meta name="app-version" content="1.9.3">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -63,8 +63,6 @@ button{font-family:inherit;color:inherit}
 #petFx{width:100%;height:100%;transform-origin:50% 100%}
 #petSvg .ft1{transform-box:fill-box;transform-origin:70% 50%;transition:transform .25s ease-out}
 #petSvg.fartpose .ft1{opacity:0}
-.ftup{display:none}
-#petSvg.fartpose .ftup{display:block}
 .gas circle{opacity:0;fill:#c3cf72;transform-box:fill-box;transform-origin:center}
 #petSvg.fartgas .gas circle{animation:gasp 1.4s ease-out forwards}
 #petSvg.fartgas .gas circle:nth-child(2){animation-delay:.12s}
@@ -473,7 +471,6 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
         <ellipse cx="62" cy="124" rx="10" ry="6" class="cheek"/>
         <ellipse cx="138" cy="124" rx="10" ry="6" class="cheek"/>
         <g id="charFront"></g>
-        <ellipse class="c-dark ftup" cx="36" cy="156" rx="21" ry="10" transform="rotate(-48 36 156)"/>
         <g id="accMid"></g>
         <g id="eyesOpen"></g>
         <g id="eyesClosed" class="hide"><path d="M64 101 Q78 112 92 101" class="line"/><path d="M108 101 Q122 112 136 101" class="line"/></g>
@@ -554,12 +551,12 @@ const CHARS=[
   {id:'gotita',name:'Gotita',cond:{t:'tables',n:12},
    back:`<ellipse cx="38" cy="140" rx="10" ry="15" class="c-dark" transform="rotate(20 38 140)"/><ellipse cx="162" cy="140" rx="10" ry="15" class="c-dark" transform="rotate(-20 162 140)"/>`+FEET+`<path d="M100 22 C 122 58, 174 92, 174 130 C 174 168, 140 188, 100 188 C 60 188, 26 168, 26 130 C 26 92, 78 58, 100 22 Z" class="c-main"/><ellipse cx="66" cy="88" rx="7" ry="14" transform="rotate(25 66 88)" fill="#fff" opacity=".45"/><ellipse cx="100" cy="158" rx="38" ry="20" class="c-light"/>`},
   {id:'robotin',name:'Robotín',cond:{t:'tables',n:18},
-   back:`<g id="ears"><path d="M100 52 L100 28" stroke="var(--pet-dark)" stroke-width="5"/><circle cx="100" cy="24" r="8" fill="#ff6b6b"/></g><rect x="12" y="100" width="20" height="34" rx="6" class="c-dark"/><rect x="168" y="100" width="20" height="34" rx="6" class="c-dark"/><rect x="56" y="170" width="36" height="18" rx="7" class="c-dark"/><rect x="108" y="170" width="36" height="18" rx="7" class="c-dark"/><rect x="28" y="50" width="144" height="130" rx="34" class="c-main"/><rect x="66" y="142" width="68" height="30" rx="10" class="c-light"/><circle cx="84" cy="157" r="5" fill="#ff6b6b"/><circle cx="100" cy="157" r="5" fill="#ffd447"/><circle cx="116" cy="157" r="5" fill="#5fd38c"/>`},
+   back:`<g id="ears"><path d="M100 52 L100 28" stroke="var(--pet-dark)" stroke-width="5"/><circle cx="100" cy="24" r="8" fill="#ff6b6b"/></g><rect x="12" y="100" width="20" height="34" rx="6" class="c-dark"/><rect x="168" y="100" width="20" height="34" rx="6" class="c-dark"/><rect x="56" y="170" width="36" height="18" rx="7" class="c-dark ft1"/><rect x="108" y="170" width="36" height="18" rx="7" class="c-dark"/><rect x="28" y="50" width="144" height="130" rx="34" class="c-main"/><rect x="66" y="142" width="68" height="30" rx="10" class="c-light"/><circle cx="84" cy="157" r="5" fill="#ff6b6b"/><circle cx="100" cy="157" r="5" fill="#ffd447"/><circle cx="116" cy="157" r="5" fill="#5fd38c"/>`},
   {id:'pinguino',name:'Pingüino',cond:{t:'dtables',n:4},
-   back:ARMS+`<ellipse cx="78" cy="185" rx="18" ry="7" fill="#ff9800" stroke="#2b2340" stroke-width="2"/><ellipse cx="122" cy="185" rx="18" ry="7" fill="#ff9800" stroke="#2b2340" stroke-width="2"/>`+BODY+`<path id="tuft" d="M98 55 C 95 42, 104 36, 110 42" class="tuft"/>`,
+   back:ARMS+`<ellipse class="ft1" cx="78" cy="185" rx="18" ry="7" fill="#ff9800" stroke="#2b2340" stroke-width="2"/><ellipse cx="122" cy="185" rx="18" ry="7" fill="#ff9800" stroke="#2b2340" stroke-width="2"/>`+BODY+`<path id="tuft" d="M98 55 C 95 42, 104 36, 110 42" class="tuft"/>`,
    front:`<path d="M90 113 L110 113 L100 126 Z" fill="#ff9800" stroke="#2b2340" stroke-width="2" stroke-linejoin="round"/>`},
   {id:'pulpo',name:'Pulpo',cond:{t:'dtables',n:12},
-   back:`<g stroke="var(--pet-dark)" stroke-width="14" stroke-linecap="round" fill="none"><path d="M50 158 Q32 180 48 196"/><path d="M74 170 Q66 190 80 199"/><path d="M126 170 Q134 190 120 199"/><path d="M150 158 Q168 180 152 196"/></g>`+BODY,
+   back:`<g stroke="var(--pet-dark)" stroke-width="14" stroke-linecap="round" fill="none"><path d="M50 158 Q32 180 48 196"/><path class="ft1" d="M74 170 Q66 190 80 199"/><path d="M126 170 Q134 190 120 199"/><path d="M150 158 Q168 180 152 196"/></g>`+BODY,
    front:`<circle cx="70" cy="76" r="7" class="c-dark"/><circle cx="130" cy="72" r="6" class="c-dark"/><circle cx="102" cy="62" r="4.5" class="c-dark"/><circle cx="148" cy="96" r="4" class="c-dark"/>`},
   {id:'unicornio',name:'Unicornio',cond:{t:'dtables',n:24},
    back:`<g id="ears"><path d="M52 76 L56 38 L82 60 Z" class="c-main"/><path d="M58 66 L60 46 L74 60 Z" class="c-light"/><path d="M148 76 L144 38 L118 60 Z" class="c-main"/><path d="M142 66 L140 46 L126 60 Z" class="c-light"/></g><circle cx="70" cy="56" r="11" fill="#ff8a80"/><circle cx="54" cy="68" r="10" fill="#ffd180"/><circle cx="42" cy="84" r="9" fill="#80d8ff"/><circle cx="36" cy="101" r="8" fill="#b388ff"/>`+ARMS+FEET+BODY,
@@ -790,9 +787,15 @@ function playFart(){
 }
 function fartAct(){
   const sv=$('#petSvg'),pf=$('#petFx');
-  setTempFace('fart',2300);sv.classList.add('fartpose');pf.classList.remove('fartlean');void pf.offsetWidth;pf.classList.add('fartlean');
+  setTempFace('fart',2300);
+  const ft=sv.querySelector('.ft1');
+  if(ft){const bb=ft.getBBox(),cx=bb.x+bb.width/2,cy=bb.y+bb.height/2,cl=ft.cloneNode(true);
+    cl.classList.remove('ft1');cl.classList.add('ftup');cl.setAttribute('transform',`translate(-36 -25) rotate(-48 ${cx} ${cy})`);
+    if(cl.tagName==='path'){cl.setAttribute('stroke','var(--pet-dark)');cl.setAttribute('stroke-width','14');cl.setAttribute('stroke-linecap','round');cl.setAttribute('fill','none');}
+    const ref=sv.querySelector('#accMid');sv.insertBefore(cl,ref);}
+  sv.classList.add('fartpose');pf.classList.remove('fartlean');void pf.offsetWidth;pf.classList.add('fartlean');
   setTimeout(()=>{sv.classList.add('fartgas');playFart();fxPet('💨',45,165);setTimeout(()=>fxPet('💨',30,150),260);},520);
-  setTimeout(()=>{sv.classList.remove('fartpose','fartgas');pf.classList.remove('fartlean');say('¡Uy, perdón! 😅');},2300);
+  setTimeout(()=>{sv.classList.remove('fartpose','fartgas');sv.querySelectorAll('.ftup').forEach(x=>x.remove());pf.classList.remove('fartlean');say('¡Uy, perdón! 😅');},2300);
 }
 function sfx(n){try{ensureAudio();SFX[n]&&SFX[n]();}catch(e){}}
 
