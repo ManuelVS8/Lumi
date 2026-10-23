@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mi Mascota</title>
-<meta name="app-version" content="1.9.7">
+<meta name="app-version" content="2.0.2">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b2340">
 <meta name="description" content="Cuida a tu mascota y aprende las tablas de multiplicar jugando">
@@ -451,6 +451,100 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
   .chip{padding:6px 9px;font-size:15px}
   .xpbar{display:none}
 }
+/* ===== Estadio ===== */
+#nav{grid-template-columns:repeat(5,1fr)}
+#nav button.locked{opacity:.55}
+#nav button.locked span::after{content:'🔒';font-size:13px;position:relative;top:-12px;left:-4px}
+.room-estadio .wall{background:linear-gradient(#2c3a6b,#1f2a52)}
+.room-estadio .wall::before{content:'';position:absolute;left:0;right:0;top:0;height:62%;background-image:radial-gradient(circle,#ff8a80 0 4px,transparent 5px),radial-gradient(circle,#ffe082 0 4px,transparent 5px),radial-gradient(circle,#80d8ff 0 4px,transparent 5px),radial-gradient(circle,#c5e1a5 0 4px,transparent 5px);background-size:44px 26px,52px 30px,60px 34px,38px 22px;background-position:0 0,22px 10px,10px 18px,30px 4px;opacity:.8}
+.room-estadio .wall::after{content:'';position:absolute;left:0;right:0;bottom:0;height:13%;background:repeating-linear-gradient(90deg,#fff 0 70px,#e53935 70px 140px,#1e88e5 140px 210px,#ffd23f 210px 280px);border-top:3px solid #fff;opacity:.95}
+.room-estadio .floor{background:repeating-linear-gradient(90deg,#43a047 0 44px,#388e3c 44px 88px);border-top:5px solid #fff}
+#ligaChip{display:none;position:absolute;right:10px;top:52px;z-index:4;border:none;border-radius:999px;padding:6px 12px;font:inherit;font-weight:700;font-size:clamp(12px,3.4vw,15px);background:#ffd23f;color:var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.15);cursor:pointer}
+#ligaChip.show{display:block}
+#godBtn:not(.hidden)~#ligaChip{top:96px}
+.classmode #ligaChip{display:none!important}
+.stlock{text-align:center;font-size:64px;margin:6px 0}
+.fstats{display:flex;gap:8px;margin:8px 0}
+.fstats div{flex:1;background:#f6f1ff;border-radius:14px;padding:8px 4px;text-align:center;font-size:13px;font-weight:600}
+.fstats b{display:block;font-size:24px}
+/* oxidación y récords */
+.tp.rust{border-color:#a1887f;background:#efebe9;filter:saturate(.6)}
+.tp.rust::after{content:'🟤 oxidada';position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;background:#8d6e63;color:#fff;border-radius:999px;padding:1px 6px;white-space:nowrap}
+/* leyenda */
+#stage.legend #petSvg{animation:legendGlow 2.4s ease-in-out infinite}
+@keyframes legendGlow{0%,100%{filter:drop-shadow(0 0 6px rgba(255,214,64,.7))}50%{filter:drop-shadow(0 0 18px rgba(255,214,64,1))}}
+/* accesorios nuevos */
+.kitcol{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:6px 0 10px;font-weight:600}
+.kitcol .kc{width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #cfc6e6;cursor:pointer}
+.kitcol .kc.on{box-shadow:0 0 0 3px var(--ink)}
+.kitnum{display:flex;align-items:center;gap:8px}
+.kitnum button{width:36px;height:36px;border-radius:50%;border:none;background:#eee8fb;font-size:20px;font-weight:700;cursor:pointer}
+.kitnum b{min-width:34px;text-align:center;font-size:22px}
+/* penaltis */
+.pnq{text-align:center;font-size:clamp(28px,8vw,40px);font-weight:800;margin:2px 0 6px;line-height:1.1}
+.pnq small{display:block;font-size:15px;font-weight:600;opacity:.75;margin-bottom:2px}
+.pnq span{color:var(--accent)}
+.pnans{color:#2e7d32;font-size:1.1em}
+.pnf{position:relative;height:min(56vh,430px);border-radius:16px;overflow:hidden;background:repeating-linear-gradient(90deg,#43a047 0 12.5%,#388e3c 12.5% 25%);touch-action:manipulation}
+.pnstands{position:absolute;left:0;right:0;top:0;height:16%;background:#3f4f86;background-image:radial-gradient(circle,#ff8a80 0 3px,transparent 4px),radial-gradient(circle,#ffe082 0 3px,transparent 4px),radial-gradient(circle,#80d8ff 0 3px,transparent 4px);background-size:18px 12px,22px 14px,26px 16px;background-position:0 0,9px 5px,4px 9px;border-bottom:4px solid #fff}
+.pngoal{position:absolute;left:6%;right:6%;top:20%;height:44%;border:7px solid #fff;border-bottom:none;border-radius:4px 4px 0 0;background-color:rgba(255,255,255,.12);background-image:linear-gradient(rgba(255,255,255,.35) 1.5px,transparent 1.5px),linear-gradient(90deg,rgba(255,255,255,.35) 1.5px,transparent 1.5px);background-size:14px 14px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);box-shadow:0 6px 0 rgba(0,0,0,.12)}
+.pngoal.shake{animation:netsh .5s ease-out}
+@keyframes netsh{0%{background-position:0 0}25%{background-position:3px 5px;transform:scale(1.015)}50%{background-position:-3px 2px}100%{background-position:0 0;transform:scale(1)}}
+.pz{border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;position:relative;z-index:3}
+.pz span{min-width:46px;height:46px;padding:0 6px;border-radius:999px;background:rgba(255,255,255,.92);color:var(--ink);font-size:clamp(18px,5.4vw,24px);font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(0,0,0,.2);transition:transform .15s,background .2s}
+.pz:active span{transform:scale(.92)}
+.pz.ok span{background:#69f0ae}.pz.bad span{background:#ff8a80}.pz.ans span{background:#69f0ae;animation:ansq .5s ease 2}
+@keyframes ansq{50%{transform:scale(1.2)}}
+.pnkeep{position:absolute;left:50%;bottom:-6%;width:30%;max-width:120px;aspect-ratio:1;transform:translateX(-50%);transition:transform .3s cubic-bezier(.3,.7,.4,1);z-index:2;pointer-events:none}
+.pnkeep svg,.pnkick svg{width:100%;height:100%;overflow:visible}
+.pnspot{position:absolute;left:50%;top:84%;width:14px;height:6px;border-radius:50%;background:#fff;transform:translate(-50%,-50%)}
+.pnkick{position:absolute;left:26%;top:76%;width:20%;max-width:90px;aspect-ratio:1;z-index:2;pointer-events:none;transform:translate(-50%,-50%)}
+.pnball{position:absolute;left:50%;top:82%;width:10%;max-width:46px;aspect-ratio:1;transform:translate(-50%,-50%);z-index:4;pointer-events:none;transition:left .42s cubic-bezier(.2,.7,.3,1),top .42s cubic-bezier(.2,.7,.3,1),transform .42s,opacity .3s}
+.pnball svg{width:100%;height:100%}
+.pnmsg{position:absolute;left:50%;top:72%;transform:translate(-50%,-50%) scale(.4);opacity:0;font-size:clamp(26px,8vw,46px);font-weight:900;color:#fff;-webkit-text-stroke:2px #2b2340;text-shadow:0 4px 0 rgba(0,0,0,.25);width:94%;text-align:center;line-height:1.05;transition:transform .3s cubic-bezier(.3,1.6,.5,1),opacity .2s;z-index:6;pointer-events:none}
+.pnmsg.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.pnmsg.good{color:#ffd23f}.pnmsg.bad{color:#fff}
+.pntimer{position:absolute;left:8%;right:8%;bottom:4%;height:10px;border-radius:999px;background:rgba(0,0,0,.25);overflow:hidden;z-index:5}
+.pntimer i{display:block;height:100%;width:100%;background:var(--ok)}
+.pndots{display:flex;flex-direction:column;gap:4px;margin-top:8px;font-size:14px}
+.pndots div{display:flex;align-items:center;gap:5px}
+.pndots b{width:72px}
+.pndots i{width:24px;height:24px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:13px}
+.pndots i.g{background:#b9f6ca}.pndots i.r{background:#ffcdd2}
+/* baloncesto */
+.bkc{position:relative;height:min(56vh,430px);border-radius:16px;overflow:hidden;background:linear-gradient(#ffcc80 0 55%,#d7a86e 55%);background-image:linear-gradient(#ffcc80 0 55%,transparent 55%),repeating-linear-gradient(90deg,#d7a86e 0 30px,#c99a5e 30px 32px)}
+.bkboard{position:absolute;left:50%;top:6%;width:42%;max-width:190px;aspect-ratio:1.6;transform:translateX(-50%);background:#fff;border:5px solid #455a64;border-radius:8px}
+.bksq{position:absolute;left:30%;right:30%;top:38%;bottom:22%;border:4px solid #e53935}
+.bkrim{position:absolute;left:28%;right:28%;bottom:-10px;height:10px;border-radius:6px;background:#ff5722;border:2px solid #bf360c;z-index:3}
+.bknet{position:absolute;left:31%;right:31%;bottom:-48px;height:40px;background:repeating-linear-gradient(60deg,transparent 0 6px,rgba(255,255,255,.9) 6px 8px),repeating-linear-gradient(-60deg,transparent 0 6px,rgba(255,255,255,.9) 6px 8px);clip-path:polygon(0 0,100% 0,82% 100%,18% 100%);transform-origin:top}
+.bknet.swish{animation:swishq .45s ease-out}
+@keyframes swishq{40%{transform:scaleY(1.25) scaleX(.9)}100%{transform:scale(1)}}
+.bkq{position:absolute;left:0;right:0;top:52%;text-align:center;font-size:clamp(30px,9vw,44px);font-weight:800;color:var(--ink)}
+.bkq span{color:var(--accent)}
+.bkfire{position:absolute;left:50%;top:44%;transform:translateX(-50%);font-weight:800;color:#d84315;opacity:0;transition:opacity .3s}
+.bkfire.on{opacity:1;animation:ansq .8s ease infinite}
+.bkballs{position:absolute;left:0;right:0;bottom:5%;display:flex;justify-content:space-around;padding:0 4%}
+.bkb{width:min(21vw,84px);aspect-ratio:1;border-radius:50%;border:none;cursor:pointer;background:radial-gradient(circle at 35% 30%,#ffb26b,#f57c00 60%,#e65100);box-shadow:inset 0 0 0 2px #6d2c00,0 4px 0 rgba(0,0,0,.2);position:relative;display:flex;align-items:center;justify-content:center}
+.bkb::before{content:'';position:absolute;inset:0;border-radius:50%;background:linear-gradient(90deg,transparent 48%,#6d2c00 48% 52%,transparent 52%),linear-gradient(transparent 48%,#6d2c00 48% 52%,transparent 52%);opacity:.55}
+.bkb span{position:relative;background:#fff;color:var(--ink);border-radius:999px;min-width:42px;padding:2px 6px;font-size:clamp(18px,5.2vw,24px);font-weight:800}
+.bkb.ok{visibility:hidden}.bkb.bad{opacity:.35}.bkb.ans span{background:#69f0ae}
+.bkb:active{transform:scale(.94)}
+.bkfly{position:absolute;font-size:min(14vw,56px);z-index:5;pointer-events:none;line-height:1}
+.bkmsg{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%) scale(.4);opacity:0;font-size:clamp(30px,9vw,48px);font-weight:900;-webkit-text-stroke:2px #2b2340;transition:transform .25s cubic-bezier(.3,1.6,.5,1),opacity .2s;pointer-events:none;z-index:6}
+.bkmsg.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.bkmsg.good{color:#ffd23f}.bkmsg.bad{color:#fff}
+/* liga */
+.lgreto{background:#fff8dc;border:2px solid var(--gold);border-radius:14px;padding:10px 12px;margin:8px 0;font-size:15px}
+.lgbar{height:14px;border-radius:999px;background:#eee;margin:6px 0 4px;overflow:hidden}
+.lgbar i{display:block;height:100%;background:linear-gradient(90deg,#ffd23f,#ff9100)}
+.lglist{list-style:none;padding:0;margin:8px 0}
+.lglist li{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;font-size:17px}
+.lglist li:nth-child(odd){background:#f6f1ff}
+.lglist li.me{background:#ffe0b2;font-weight:700}
+.lgp{width:34px;text-align:center;font-weight:700}
+.lgn{flex:1}
+.lgx{font-weight:700}
+.lgme{text-align:center;font-size:16px;margin:6px 0}
 </style>
 </head>
 <body>
@@ -478,7 +572,7 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
     <div id="decor"></div>
     <div id="roomTitle"></div>
     <button id="danceBtn" class="hidden">💃 Bailar</button><button id="godBtn" class="hidden">🔋 Rellenar todo</button>
-    <button id="dailyChip"></button>
+    <button id="dailyChip"></button><button id="ligaChip">🏆 Liga</button>
     <div id="petWrap"><div id="petFx"><div id="petBob">
       <svg id="petSvg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
         <ellipse class="shadow" cx="100" cy="190" rx="58" ry="7"/>
@@ -536,6 +630,7 @@ svg.sick .cheek{fill:#9ccc65;opacity:.85}
     <button data-room="bano"><span>🛁</span>Baño</button>
     <button data-room="dormitorio"><span>🛏️</span>Dormitorio</button>
     <button data-room="juegos"><span>🎮</span>Juegos</button>
+    <button data-room="estadio"><span>🏟️</span>Estadio</button>
   </nav>
 </div>
 
@@ -653,7 +748,8 @@ const ROOMS={
   cocina:{name:'Cocina',icon:'🍳',decor:[['🪟',8,8,62],['🕰️',78,8,42],['🪴',3,58,56],['🧺',86,64,38]]},
   bano:{name:'Baño',icon:'🛁',decor:[['🪞',10,10,56],['🚿',80,6,52],['🧴',5,64,40],['🦆',86,70,34]]},
   dormitorio:{name:'Dormitorio',icon:'🛏️',decor:[['🖼️',10,10,48],['🪟',72,8,62],['🛏️',2,56,72],['🧸',84,64,44]]},
-  juegos:{name:'Juegos',icon:'🎮',decor:[['🎈',8,8,52],['🏆',80,10,44],['🧩',5,66,40],['🪀',86,68,36]]}
+  juegos:{name:'Juegos',icon:'🎮',decor:[['🎈',8,8,52],['🏆',80,10,44],['🧩',5,66,40],['🪀',86,68,36]]},
+  estadio:{name:'Estadio',icon:'🏟️',decor:[['📣',4,8,38],['🚩',90,60,34],['⚽',6,70,34]]}
 };
 const VOICES=[
   {id:'ardilla',emoji:'🐿️',label:'Ardilla',rate:1.7},{id:'agudo',emoji:'🐣',label:'Agudo',rate:1.35},
@@ -694,6 +790,7 @@ if(!S)S=defState();
 // cada juego tiene su propio progreso de tablas; lo que se hubiera dominado antes pasa a Tablas ninja
 S.tg=Object.assign({ninja:{},write:{},catch:{},army:{}},S.tg||{});
 if(!S.tgMig){ALLT.forEach(n=>{if(S.tables[n]&&S.tables[n].perfect&&!S.tg.ninja[n])S.tg.ninja[n]={perfect:true,plays:S.tables[n].plays||1};});S.tgMig=1;}
+ensureNew();
 
 let installEvt=null;
 let room='cocina',busy=false,soapOn=false,game=null,tempFace=null,tempTimer=null;
@@ -751,7 +848,7 @@ const DMASTER_LIST=[
   {id:'cometa',t:9,name:'Corona de cometa',slot:'hat',price:320,vb:'44 -14 136 76',svg:()=>`<g><path class="gem" d="M118 8 Q150 -6 176 -10 Q150 4 128 16 Z" fill="#b3e5fc" opacity=".8"/><path class="gem g2" d="M118 14 Q146 8 170 10 Q146 18 126 22 Z" fill="#e1bee7" opacity=".8"/><path d="M62 58 L56 24 L80 40 L100 14 L120 40 L144 24 L138 58 Z" fill="#cfd8dc" stroke="#607d8b" stroke-width="3" stroke-linejoin="round"/><rect x="59" y="50" width="82" height="11" rx="3" fill="#b0bec5" stroke="#607d8b" stroke-width="2.5"/><path class="gem" d="${starPath(100,30,12,5)}" fill="#ffd23f" stroke="#e0a800" stroke-width="1.6"/><circle class="gem g2" cx="56" cy="23" r="4.5" fill="#80deea" stroke="#00838f" stroke-width="1.4"/><circle class="gem g3" cx="144" cy="23" r="4.5" fill="#80deea" stroke="#00838f" stroke-width="1.4"/></g>`}
 ];
 DMASTER=DMASTER_LIST;
-const ALLM=()=>MASTER.concat(DMASTER);
+const ALLM=()=>MASTER.concat(DMASTER,FUT_ACC);
 const nMastersD=()=>ALLT.filter(isMasterD).length,allMasterD=()=>nMastersD()>=ALLT.length;
 // color Arcoíris: va cambiando de tono poco a poco
 let rbH=0;setInterval(()=>{if(S.color!=='arcoiris')return;rbH=(rbH+4)%360;const r=document.documentElement.style;
@@ -865,7 +962,7 @@ function nextToast(){
 }
 let sayT=null;
 function say(t,ms=2800){const b=$('#bubble');b.textContent=t.replace('{n}',S.name||'tu mascota');b.classList.remove('hidden','popin');void b.offsetWidth;b.classList.add('popin');clearTimeout(sayT);sayT=setTimeout(()=>b.classList.add('hidden'),ms);}
-function openPanel(html,cls='',back=null){panelBack=back;ensureGuard();$('#panel').className='panel '+cls;$('#panel').innerHTML=html;$('#overlay').classList.remove('hidden');$('#panel').scrollTop=0;$$('#panel [data-x]').forEach(b=>b.onclick=closePanel);}
+function openPanel(html,cls='',back=null){if(cls==='game')gameT0=Date.now();panelBack=back;ensureGuard();$('#panel').className='panel '+cls;$('#panel').innerHTML=html;$('#overlay').classList.remove('hidden');$('#panel').scrollTop=0;$$('#panel [data-x]').forEach(b=>b.onclick=closePanel);}
 function closePanel(){game=null;panelBack=null;setTimeout(syncHome,60);$('#overlay').classList.add('hidden');$('#panel').innerHTML='';if('speechSynthesis' in window)speechSynthesis.cancel();}
 /* Botón Atrás del móvil: retrocede paso a paso (juego → menú → habitación → cocina) sin salir de la app.
    Chrome se salta las entradas del historial creadas justo después de pulsar «atrás» si no se ha tocado la pantalla
@@ -908,6 +1005,7 @@ function updateUI(){
   const h=S.needs.higiene,n=h>=65?0:Math.min(5,Math.ceil((65-h)/12));
   $$('#dirt .dirt').forEach((d,i)=>d.style.display=i<n?'':'none');
   $('#flies').classList.toggle('on',h<25);$('#poop').classList.toggle('on',h<25);
+  const eb=document.querySelector('#nav [data-room="estadio"]');if(eb)eb.classList.toggle('locked',!stadiumOpen());
 }
 function applyLook(){
   const ch=CHARS.find(c=>c.id===S.char)||CHARS[0];
@@ -921,8 +1019,8 @@ function applyLook(){
   if(gl){g.textContent=gl.e;g.setAttribute('y',gl.y);g.setAttribute('font-size',gl.fs);}else g.textContent='';
   const mOf=sl=>ALLM().find(a=>a.slot===sl&&S[sl]===a.id),mh=mOf('hat');
   $('#accBack').innerHTML=[mOf('aura'),mOf('back')].filter(Boolean).map(a=>a.svg()).join('');
-  $('#accMid').innerHTML=[mOf('body')].filter(Boolean).map(a=>a.svg()).join('');
-  $('#accFront').innerHTML=[mh,mOf('hand'),mOf('pal')].filter(Boolean).map(a=>a.svg()).join('');
+  $('#accMid').innerHTML=[mOf('shirt'),mOf('boots'),mOf('body')].filter(Boolean).map(a=>a.svg()).join('');
+  $('#accFront').innerHTML=[mOf('gloves'),mh,mOf('hand'),mOf('pal'),mOf('ball')].filter(Boolean).map(a=>a.svg()).join('');
   const tuft=$('#tuft');if(tuft)tuft.style.display=((hat&&hat.x===100)||mh)?'none':'';
   const v=VOICES.find(x=>x.id===S.voice)||VOICES[0];$('#voiceBtn').textContent=v.emoji;
   if(tempFace)applyFace(tempFace);else refreshFace();
@@ -982,7 +1080,7 @@ function walkTo(px){
   st.style.setProperty('--px',px+'%');const f=$('#petFx');f.classList.add('walking');setTimeout(()=>f.classList.remove('walking'),2200);
 }
 /* Música de fondo suave, distinta en cada habitación */
-const SCALES={cocina:[523,587,659,784,880],bano:[440,494,554,659,740],dormitorio:[392,440,494,587,659],juegos:[587,659,740,880,988]};
+const SCALES={cocina:[523,587,659,784,880],bano:[440,494,554,659,740],dormitorio:[392,440,494,587,659],juegos:[587,659,740,880,988],estadio:[523,659,784,880,1047]};
 let mStep=0;
 function musicTick(){
   if(!actx||!S.music||!S.sound||classMode||S.sleeping||document.hidden||game)return;
@@ -995,17 +1093,18 @@ const earsWig=on=>{const e=$('#ears');if(e)e.classList.toggle('wig',on);};
 
 /* ---------- Habitaciones ---------- */
 function goRoom(r,init){
+  if(r==='estadio'&&!stadiumOpen()){if(init)r='cocina';else{openStadiumLocked();return;}}
   if(!init&&r===room)return;
   if(room==='dormitorio'&&S.sleeping&&r!=='dormitorio')wake('¡Me has despertado! 🥱');
   if(room==='bano'&&r!=='bano')$('#bubbles').innerHTML='';
   room=r;soapOn=false;
   if(r!=='cocina')ensureGuard();else setTimeout(syncHome,60);
-  const st=$('#stage');st.className='room-'+r;st.classList.toggle('sleeping',S.sleeping);
+  const st=$('#stage');st.className='room-'+r;st.classList.toggle('sleeping',S.sleeping);st.classList.toggle('legend',allMasterD());
   $('#roomTitle').textContent=ROOMS[r].icon+' '+ROOMS[r].name;
   st.classList.toggle('evening',isEvening());
-  $('#decor').innerHTML=ROOMS[r].decor.concat(SEASON_DECOR[season()]||[]).map(([e,l,t,s])=>`<span class="deco" style="left:${l}%;top:${t}%;font-size:${s}px">${e}</span>`).join('');
+  $('#decor').innerHTML=ROOMS[r].decor.concat(r==='estadio'?trophyDeco():[],SEASON_DECOR[season()]||[]).map(([e,l,t,s])=>`<span class="deco" style="left:${l}%;top:${t}%;font-size:${s}px">${e}</span>`).join('');
   $$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.room===r));
-  renderActions();updateNight();
+  renderActions();updateNight();ligaUI();
   if(!init)sfx('pop');
 }
 const GAMES=[
@@ -1045,6 +1144,9 @@ function renderActions(){
     $('#pilaBtn').onclick=usePila;
     $('#classBtn').onclick=enterClass;
     $('#lampBtn').onclick=toggleLamp;$('#wardBtn').onclick=()=>openShop('munecos');
+  }else if(room==='estadio'){
+    a.classList.add('games');
+    STADIUM_GAMES.forEach(g=>{const b=document.createElement('button');b.className='gcard';b.style.background=g.bg;b.innerHTML=`<b>${g.e}</b>${g.name}`;b.onclick=()=>{ensureAudio();sfx('pop');g.open();};a.appendChild(b);});
   }else{
     a.classList.add('games');
     GAMES.forEach(g=>{const b=document.createElement('button');b.className='gcard';b.style.background=g.bg;b.innerHTML=`<b>${g.e}</b>${g.name}`;b.onclick=()=>{ensureAudio();sfx('pop');g.open();};a.appendChild(b);});
@@ -1339,7 +1441,11 @@ const ACHS=[
   {id:'racha3',e:'🔥',name:'Constancia',desc:'Racha de 3 días',test:()=>S.streak.n>=3},
   {id:'racha7',e:'📅',name:'Una semana entera',desc:'Racha de 7 días',test:()=>S.streak.n>=7},
   {id:'coleccion',e:'🧸',name:'Coleccionista',desc:'Desbloquea 3 muñecos',test:()=>S.unlocked.length>=3},
-  {id:'ahorro',e:'💰',name:'Ahorrador',desc:'Gana 300 monedas en total',test:()=>S.stats.earned>=300}
+  {id:'ahorro',e:'💰',name:'Ahorrador',desc:'Gana 300 monedas en total',test:()=>S.stats.earned>=300},
+  {id:'parada',e:'🧤',name:'Paradón',desc:'Para 25 penaltis',test:()=>(S.fut&&S.fut.saves||0)>=25},
+  {id:'campeon',e:'🏆',name:'Campeón',desc:'Gana 5 tandas de penaltis',test:()=>(S.fut&&S.fut.wins||0)>=5},
+  {id:'canasta',e:'🏀',name:'Máquina de encestar',desc:'Consigue 30 puntos en Baloncesto',test:()=>(S.bball&&S.bball.best||0)>=30},
+  {id:'leyenda',e:'🌟',name:'Leyenda',desc:'Domina todas las tablas × y ÷',test:()=>allMasterD()}
 ];
 function checkAchievements(){
   ACHS.forEach(a=>{if(!S.achievements.includes(a.id)&&a.test()){S.achievements.push(a.id);earn(10);toast(`🏆 Logro: ${a.e} ${a.name} · +10 🪙`);sfx('badge');jump();}});
@@ -1398,15 +1504,15 @@ function nextOf(opt,perfect,start){
 }
 function finishGame(r){
   game=null;
-  const dmsg=dailyCheck(r);
+  const dmsg=dailyCheck(r),pmsg=practiceAfter(r);
   earn(r.coins);S.needs.diversion=clamp(S.needs.diversion+r.fun,0,100);
   S.needs.energia=clamp(S.needs.energia-8,0,100);S.needs.hambre=clamp(S.needs.hambre-4,0,100);
   addXP(r.xp);markDaily();save();updateUI();
   const ratio=r.ratio,stars=ratio>=.99?'⭐⭐⭐':ratio>=.7?'⭐⭐':ratio>=.4?'⭐':'';
   const msg=ratio>=.99?'¡Perfecto!':ratio>=.7?'¡Muy bien!':ratio>=.4?'¡Bien hecho!':'¡Sigue practicando!';
   openPanel(`<div class="result"><div class="ptitle">${r.title}</div><div class="stars">${stars}</div><div class="reward">${msg}</div><div>${r.detail}</div>
-    ${r.badge?`<div class="badge">${r.badge}</div>`:''}${dmsg?`<div class="badge daily">${dmsg}</div>`:''}${r.note?`<div class="sub">${r.note}</div>`:''}<div class="reward">+${r.coins} 🪙 · +${r.xp} XP</div>
-    <div class="rbtns"><button class="btn ${r.next?'':'primary wide'}" id="again">🔁 Repetir</button>${r.next?`<button class="btn primary" id="gNext">⏭️ Tabla del ${r.next.n}</button>`:''}${r.menu?'<button class="btn" id="gMenu">📋 Elegir tabla</button>':''}<button class="btn ${r.menu?'':'wide'}" data-x>Volver</button></div></div>`,'',r.menu||null);
+    ${r.badge?`<div class="badge">${r.badge}</div>`:''}${dmsg?`<div class="badge daily">${dmsg}</div>`:''}${pmsg?`<div class="badge daily">${pmsg}</div>`:''}${r.note?`<div class="sub">${r.note}</div>`:''}<div class="reward">+${r.coins} 🪙 · +${r.xp} XP</div>
+    <div class="rbtns"><button class="btn ${r.next?'':'primary wide'}" id="again">🔁 Repetir</button>${r.next?`<button class="btn primary" id="gNext">${r.next.label||'⏭️ Tabla del '+r.next.n}</button>`:''}${r.menu?`<button class="btn" id="gMenu">${r.menuLabel||'📋 Elegir tabla'}</button>`:''}<button class="btn ${r.menu?'':'wide'}" data-x>Volver</button></div></div>`,'',r.menu||null);
   sfx(r.badge?'badge':ratio>=.7?'level':'ok');
   $('#again').onclick=()=>tryPlay(r.again);
   if(r.next)$('#gNext').onclick=()=>tryPlay(r.next.go);
@@ -1443,7 +1549,7 @@ function openPicker(base){
       ${opSegHTML(op)}
       <div class="sub">${info.d}${op==='d'?' Ahora con <b>divisiones</b>: 56 ÷ 7 = 8.':''} Elige <b>una tabla</b> para dominarla y desbloquear la siguiente, o junta <b>varias</b> o <b>todas</b>. Cuanto más alta la tabla, más monedas (las ya dominadas dan la mitad).</div>
       ${base==='write'?`<div class="seg" id="pSpeed"><button data-s="normal" class="${S.wSpeed!=='pro'?'on':''}">🐢 Normal<br><small>5 segundos</small></button><button data-s="pro" class="${S.wSpeed==='pro'?'on':''}">⚡ Pro<br><small>3 segundos · 🪙×2</small></button></div>`:''}
-      <div class="tpick">${ALLT.map(n=>{const o=tOpen(kind,n),on=sel.has(n);return`<button class="tp ${on?'on':''} ${o?'':'lock'} ${tDone(kind,n)?'gold':''}" data-n="${n}">${on?'<span class="ck">✔</span>':''}<b>${O.sym}${n}</b><small>${o?(tDone(kind,n)?'🏅 ':'')+'🪙'+earnRate(kind,n):'🔒'}</small></button>`;}).join('')}</div>
+      <div class="tpick">${ALLT.map(n=>{const o=tOpen(kind,n),on=sel.has(n);return`<button class="tp ${on?'on':''} ${o?'':'lock'} ${tDone(kind,n)?'gold':''}${rustCls(kind,n)}" data-n="${n}">${on?'<span class="ck">✔</span>':''}<b>${O.sym}${n}</b><small>${o?(tDone(kind,n)?recE(kind,n)+' ':'')+'🪙'+earnRate(kind,n):'🔒'}</small></button>`;}).join('')}</div>
       <div class="pickbar"><button class="btn" id="pAll">✅ Todas</button><button class="btn" id="pNone">Ninguna</button><button class="btn" id="pRev" ${weak.length?'':'disabled'}>🔁 Repaso${weak.length?` (${weak.length})`:''}</button></div>
       <div class="pickinfo">${infoTxt()}</div>
       <div class="btns"><button class="btn primary" id="pGo" ${sel.size?'':'disabled'}>▶ Empezar</button></div>`);
@@ -1674,7 +1780,7 @@ function openCatch(){
     openPanel(`<div class="ghead"><b>🔢 Atrapa números</b><button class="x" data-x>✕</button></div>
       ${opSegHTML(op)}
       <div class="sub">${op==='x'?'Elige una tabla. Caerán números: atrapa solo los de esa tabla y deja caer los demás.':'Elige una tabla. Arriba saldrá una división: atrapa su resultado y deja caer los demás números.'} Tienes 3 vidas ❤️. Atrapa los 10 sin fallar para dominar la tabla.</div>
-      <div class="tpick">${ALLT.map(t=>{const o=tOpen(kind,t),on=t===n;return`<button class="tp ${on?'on':''} ${o?'':'lock'} ${tDone(kind,t)?'gold':''}" data-n="${t}">${on?'<span class="ck">✔</span>':''}<b>${O.sym}${t}</b><small>${o?(tDone(kind,t)?'🏅 ':'')+'🪙'+earnRate(kind,t):'🔒'}</small></button>`;}).join('')}</div>
+      <div class="tpick">${ALLT.map(t=>{const o=tOpen(kind,t),on=t===n;return`<button class="tp ${on?'on':''} ${o?'':'lock'} ${tDone(kind,t)?'gold':''}${rustCls(kind,t)}" data-n="${t}">${on?'<span class="ck">✔</span>':''}<b>${O.sym}${t}</b><small>${o?(tDone(kind,t)?recE(kind,t)+' ':'')+'🪙'+earnRate(kind,t):'🔒'}</small></button>`;}).join('')}</div>
       <div class="pickinfo">${n?(op==='x'?`Tabla del ${n}: ${[1,2,3].map(k=>n*k).join(', ')}… hasta ${n*10}`:`Dividir entre ${n}: ${n*3} ÷ ${n}, ${n*7} ÷ ${n}…`)+(tDone(kind,n)?' · ya dominada 🏅 · 🪙 a la mitad':''):'👆 Elige una tabla'}</div>
       <div class="btns"><button class="btn" id="cRev" ${weak.length?'':'disabled'}>🔁 Repaso${weak.length?` (${weak.length})`:''}</button><button class="btn primary" id="cGo" ${n?'':'disabled'}>▶ Empezar</button></div>`);
     bindOpSeg(op,o=>{op=o;n=null;draw();});
@@ -1815,7 +1921,7 @@ function openArmy(){
       ${opSegHTML(op)}
       <div class="sub">Toca el <b>carril</b> con el resultado correcto para que tu ejército pase por esa puerta. Cada acierto suma soldados (¡más con racha 🔥!) y cada fallo los reduce. Al final, vence al monstruo con más soldados que él. Sin fallos dominas la tabla.</div>
       <div class="seg" id="aSpeed"><button data-s="normal" class="${pro?'':'on'}">🐢 Normal<br><small>4 segundos</small></button><button data-s="pro" class="${pro?'on':''}">⚡ Pro<br><small>2,5 segundos · 🪙×2</small></button></div>
-      <div class="tpick">${ALLT.map(t=>{const o=tOpen(kind,t),on=t===n;return`<button class="tp ${on?'on':''} ${o?'':'lock'} ${tDone(kind,t)?'gold':''}" data-n="${t}">${on?'<span class="ck">✔</span>':''}<b>${O.sym}${t}</b><small>${o?(tDone(kind,t)?'🏅 ':'')+'🪙'+earnRate(kind,t):'🔒'}</small></button>`;}).join('')}</div>
+      <div class="tpick">${ALLT.map(t=>{const o=tOpen(kind,t),on=t===n;return`<button class="tp ${on?'on':''} ${o?'':'lock'} ${tDone(kind,t)?'gold':''}${rustCls(kind,t)}" data-n="${t}">${on?'<span class="ck">✔</span>':''}<b>${O.sym}${t}</b><small>${o?(tDone(kind,t)?recE(kind,t)+' ':'')+'🪙'+earnRate(kind,t):'🔒'}</small></button>`;}).join('')}</div>
       <div class="pickinfo">${n?`${op==='d'?`Dividir entre ${n}`:`Tabla del ${n}`}${tDone(kind,n)?' · ya dominada 🏅 · 🪙 a la mitad':n<TMAX?` · hazla sin fallos y desbloquea la del ${n+1} 🔓`:''}`:'👆 Elige una tabla'}</div>
       <div class="btns"><button class="btn" id="aRev" ${weak.length?'':'disabled'}>🔁 Repaso${weak.length?` (${weak.length})`:''}</button><button class="btn primary" id="aGo" ${n?'':'disabled'}>▶ Empezar</button></div>`);
     bindOpSeg(op,o=>{op=o;n=null;draw();});
@@ -2109,6 +2215,7 @@ function startArmy(arg){
 /* ---------- Gran final: 4 y 8 tablas maestras (fiesta, diploma, premios) ---------- */
 const nMasters=()=>ALLT.filter(isMaster).length,allMaster=()=>nMasters()>=ALLT.length;
 function checkCeleb(){
+  applyGrow();if(allMasterD()&&!S.legendSeen){S.legendSeen=true;save();setTimeout(()=>{toast(`🌟 ¡${S.name||'Tu mascota'} ahora es una LEYENDA! Brilla para siempre ✨`);sfx('badge');},4500);}
   if(allMasterD()&&!S.celebAllD){S.celebAllD=true;S.celebHalfD=true;save();updateUI();setTimeout(()=>showCeleb('dall'),900);return;}
   if(nMastersD()>=4&&!S.celebHalfD){S.celebHalfD=true;save();setTimeout(()=>showCeleb('dhalf'),900);return;}
   if(allMaster()&&!S.celebAll){S.celebAll=true;S.celebHalf=true;save();updateUI();setTimeout(()=>showCeleb('all'),900);}
@@ -2361,8 +2468,9 @@ function petDance(){
 /* ---------- Nivel y crecimiento ---------- */
 const GROW=[.78,.9,1],GROW_NAME=['bebé','niño','mayor'];
 const stageOf=l=>l<3?0:l<6?1:2;
-function applyGrow(){$('#stage').style.setProperty('--grow',GROW[stageOf(S.level)]);}
+function applyGrow(){const lg=allMasterD(),st=$('#stage');st.style.setProperty('--grow',lg?1.04:GROW[stageOf(S.level)]);st.classList.toggle('legend',lg);}
 function addXP(n){
+  wk().xp+=n;
   const before=stageOf(S.level);
   S.xp+=n;let up=false;
   while(S.xp>=xpNeed(S.level)){S.xp-=xpNeed(S.level);S.level++;S.coins+=10;up=true;}
@@ -2380,9 +2488,9 @@ function openBadges(){
   openPanel(`<div class="ghead"><b>🏅 Distintivos y logros</b><button class="x" data-x>✕</button></div>
     <div class="streakbox">🔥 Racha: <b>${st} ${st===1?'día':'días'}</b>${S.streak.last===dayKey()?' · ✅ Reto de hoy hecho':' · Juega a cualquier juego para el reto de hoy'}</div>
     ${TGAMES.map(k=>`<div class="sec">${GNAME[k]} (${nDone(k)}/${ALLT.length})</div>
-    <div class="tpick">${ALLT.map(n=>`<div class="tp ${tDone(k,n)?'gold':''} ${tOpen(k,n)?'':'lock'}" style="cursor:default"><b>×${n}</b><small>${tDone(k,n)?'🏅 Dominada':tOpen(k,n)?'Por dominar':'🔒'}</small></div>`).join('')}</div>`).join('')}
+    <div class="tpick">${ALLT.map(n=>`<div class="tp ${tDone(k,n)?'gold':''}${rustCls(k,n)} ${tOpen(k,n)?'':'lock'}" style="cursor:default"><b>×${n}</b><small>${tDone(k,n)?'🏅 Dominada':tOpen(k,n)?'Por dominar':'🔒'}</small></div>`).join('')}</div>`).join('')}
     ${divOpen()?DGAMES.map(k=>`<div class="sec">${GNAME[k]} (${nDone(k)}/${ALLT.length})</div>
-    <div class="tpick">${ALLT.map(n=>`<div class="tp ${tDone(k,n)?'gold':''} ${tOpen(k,n)?'':'lock'}" style="cursor:default"><b>÷${n}</b><small>${tDone(k,n)?'🏅 Dominada':tOpen(k,n)?'Por dominar':'🔒'}</small></div>`).join('')}</div>`).join('')+`<div class="sec">🔮 Tablas ÷ maestras (${nMastersD()}/${ALLT.length})</div>
+    <div class="tpick">${ALLT.map(n=>`<div class="tp ${tDone(k,n)?'gold':''}${rustCls(k,n)} ${tOpen(k,n)?'':'lock'}" style="cursor:default"><b>÷${n}</b><small>${tDone(k,n)?'🏅 Dominada':tOpen(k,n)?'Por dominar':'🔒'}</small></div>`).join('')}</div>`).join('')+`<div class="sec">🔮 Tablas ÷ maestras (${nMastersD()}/${ALLT.length})</div>
     <div class="mrow">${ALLT.map(n=>`<div class="${isMasterD(n)?'ok':''}">÷${n}<small>${isMasterD(n)?'🔮 Maestra':nMasterGD(n)+'/4'}</small></div>`).join('')}</div>`:''}
     <div class="sec">🏆 Tablas maestras (${ALLT.filter(isMaster).length}/${ALLT.length}) · dominadas en los 4 juegos</div>
     <div class="mrow">${ALLT.map(n=>`<div class="${isMaster(n)?'ok':''}">×${n}<small>${isMaster(n)?'🏆 Maestra':nMasterG(n)+'/4'}</small></div>`).join('')}</div>
@@ -2400,13 +2508,14 @@ function openBadges(){
 /* ---------- Armario ---------- */
 function charThumb(c){return`<svg viewBox="0 0 200 200">${stripIds(c.back)}<ellipse cx="62" cy="124" rx="10" ry="6" class="cheek"/><ellipse cx="138" cy="124" rx="10" ry="6" class="cheek"/>${stripIds(c.front||'')}${eyesMarkup('normal',false)}<ellipse cx="100" cy="117" rx="5" ry="3.5" class="c-dark"/><path d="${MOUTH_BASE.happy}" class="line"/></svg>`;}
 function faceThumb(eyes,mouth){const md=MOUTHS[mouth]||{};return`<svg viewBox="52 74 96 76"><rect x="30" y="50" width="140" height="130" rx="40" class="c-main"/><ellipse cx="62" cy="124" rx="10" ry="6" class="cheek"/><ellipse cx="138" cy="124" rx="10" ry="6" class="cheek"/>${eyesMarkup(eyes,false)}<ellipse cx="100" cy="117" rx="5" ry="3.5" class="c-dark"/><path d="${mouthPath(mouth,'happy')}" class="line"/>${md.deco||''}</svg>`;}
-const SHOP_TABS=[['munecos','🧸 Muñecos'],['colores','🎨 Color'],['ojos','👀 Ojos'],['boca','👄 Boca'],['extras','🎩 Extras'],['maestro','🏆 Maestro'],['mago','🔮 Mago ÷']];
+const SHOP_TABS=[['munecos','🧸 Muñecos'],['colores','🎨 Color'],['ojos','👀 Ojos'],['boca','👄 Boca'],['extras','🎩 Extras'],['maestro','🏆 Maestro'],['mago','🔮 Mago ÷'],['futbol','⚽ Fútbol']];
 let shopTab='munecos';
 function shopItems(tab){
   if(tab==='munecos')return CHARS.map(c=>({name:c.name,price:0,thumb:charThumb(c),locked:!S.unlocked.includes(c.id),lockText:condText(c.cond),eq:S.char===c.id,equip:()=>{S.char=c.id;}}));
   if(tab==='colores')return COLORS.map(c=>({key:'col:'+c.id,name:c.name,price:c.price,thumb:`<div class="swatch ${c.gold?'gold':''} ${c.rainbow?'rainbow':''}" style="background:${c.main}"></div>`,locked:(!!c.gold&&!allMaster())||(!!c.rainbow&&!allMasterD()),lockText:c.rainbow?'Consigue las 8 tablas maestras ÷':'Consigue las 8 tablas maestras',eq:S.color===c.id,equip:()=>{S.color=c.id;}}));
   if(tab==='ojos')return Object.entries(EYES).map(([id,e])=>({key:'eye:'+id,name:e.name,price:e.price,thumb:faceThumb(id,S.mouth),eq:S.eyes===id,equip:()=>{S.eyes=id;}}));
   if(tab==='boca')return Object.entries(MOUTHS).map(([id,m])=>({key:'mou:'+id,name:m.name,price:m.price,thumb:faceThumb(S.eyes,id),eq:S.mouth===id,equip:()=>{S.mouth=id;}}));
+  if(tab==='futbol')return FUT_ACC.map(a=>({key:'acc:'+a.id,name:a.name,price:a.price,thumb:`<svg viewBox="${a.vb}" style="overflow:visible">${a.svg()}</svg>`,locked:!a.ok(),lockText:a.lock,eq:S[a.slot]===a.id,toggle:true,equip:()=>{S[a.slot]=S[a.slot]===a.id?null:a.id;}}));
   if(tab==='mago')return DMASTER.map(a=>({key:'acc:'+a.id,name:a.name,price:a.price,thumb:`<svg viewBox="${a.vb}" style="overflow:visible">${a.svg()}</svg>`,
     locked:!isMasterD(a.t),lockText:divOpen()?`Tabla ÷${a.t} en los 4 juegos (${nMasterGD(a.t)}/4)`:'Primero consigue el diploma de multiplicar',eq:S[a.slot]===a.id,toggle:true,
     equip:()=>{S[a.slot]=S[a.slot]===a.id?null:a.id;}}));
@@ -2424,6 +2533,7 @@ function renderShop(keep){
     <div class="tabs">${SHOP_TABS.map(([id,l])=>`<button class="tab ${shopTab===id?'on':''}" data-t="${id}">${l}</button>`).join('')}</div>
     <div class="shopPrev"></div>
     ${shopTab==='munecos'?'<div class="sub" style="text-align:center">Domina tablas para desbloquear muñecos 🏅</div>':''}
+    ${shopTab==='futbol'?`<div class="sub" style="text-align:center">⚽ Gana tandas de penaltis en el 🏟️ Estadio para conseguir la equipación (llevas ${S.fut.wins} 🏆)</div>${FUT_ACC[0].ok()?`<div class="kitcol">Color de la camiseta: ${KIT_COLS.map(c=>`<button class="kc ${S.kit.col===c?'on':''}" data-k="${c}" style="background:${c}" aria-label="Color"></button>`).join('')}</div><div class="kitcol kitnum">Dorsal: <button id="knm">−</button><b>${S.kit.num}</b><button id="knp">+</button></div>`:''}`:''}
     ${shopTab==='mago'?`<div class="sub" style="text-align:center">🔮 Domina una tabla de <b>dividir</b> en los <b>4 juegos</b> para desbloquear su premio mágico</div>
       <div class="mrow">${ALLT.map(n=>`<div class="${isMasterD(n)?'ok':''}">÷${n}<small>${isMasterD(n)?'🔮 Maestra':divOpen()?nMasterGD(n)+'/4':'🔒'}</small></div>`).join('')}</div>`:''}
     ${shopTab==='maestro'?`<div class="sub" style="text-align:center">🏆 Domina una tabla en los <b>4 juegos</b> para desbloquear su premio</div>
@@ -2436,6 +2546,8 @@ function renderShop(keep){
   if(y0)$('#panel').scrollTop=y0;
   $$('#panel .tab').forEach(b=>b.onclick=()=>{shopTab=b.dataset.t;sfx('click');renderShop();});
   $$('#panel .cc').forEach(b=>b.onclick=()=>{S.capeCol=b.dataset.c;sfx('click');applyLook();save();renderShop(true);});
+  $$('#panel .kc').forEach(b=>b.onclick=()=>{S.kit.col=b.dataset.k;sfx('click');applyLook();save();renderShop(true);});
+  [['#knm',-1],['#knp',1]].forEach(([id,d])=>{const b=$(id);if(b)b.onclick=()=>{S.kit.num=((S.kit.num-1+d+99)%99)+1;sfx('click');applyLook();save();renderShop(true);};});
   $$('#panel .item').forEach(b=>b.onclick=()=>{
     const it=items[+b.dataset.i];
     if(it.locked){sfx('bad');toast('🔒 '+it.lockText);return;}
@@ -2524,6 +2636,411 @@ function decay(m,floorOn){
   });
   S.sweets=Math.max(0,S.sweets-m/4);
 }
+/* ====================== TEMPORADA ESTADIO: premios para quien termina ====================== */
+/* --- Estado nuevo (se llama al cargar y al adoptar la nube; solo literales) --- */
+function ensureNew(){
+  S.fut=Object.assign({wins:0,played:0,saves:0,goals:0},S.fut||{});
+  S.kit=Object.assign({col:'#e53935',num:10},S.kit||{});
+  S.bball=Object.assign({best:0,games:0},S.bball||{});
+  S.rec=S.rec||{};
+  if(!S.tAt){   // primera vez: las tablas ya dominadas empiezan a contar desde hoy
+    const now=Date.now();S.tAt={x:{},d:{}};
+    [2,3,4,5,6,7,8,9].forEach(n=>{
+      if(['ninja','write','catch','army'].some(k=>S.tg[k]&&S.tg[k][n]&&S.tg[k][n].perfect))S.tAt.x[n]=now;
+      if(['dninja','dwrite','dcatch','darmy'].some(k=>S.tg[k]&&S.tg[k][n]&&S.tg[k][n].perfect))S.tAt.d[n]=now;
+    });
+  }
+}
+
+/* --- Semana (liga y reto de la clase) --- */
+function weekKey(){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function wk(){const k=weekKey();if(!S.week||S.week.k!==k)S.week={k,xp:0,st:0};return S.week;}
+
+/* --- Tablas que se oxidan (7 días sin practicarlas) y récords de tiempo --- */
+const RUST_DAYS=7,RANK_E=['','🥉','🥈','🥇'];
+const REC_T={ninja:[30,45],write:[24,36],catch:[38,55],army:[38,55]};   // segundos para 🥇 / 🥈 (más = 🥉)
+const tAtGet=(op,n)=>((S.tAt||{})[op]||{})[n]||0;
+function tTouch(op,n){S.tAt=S.tAt||{x:{},d:{}};(S.tAt[op]=S.tAt[op]||{})[n]=Date.now();}
+const doneAny=(op,n)=>(op==='d'?DGAMES:TGAMES).some(k=>tDone(k,n));
+const isRusty=(op,n)=>doneAny(op,n)&&Date.now()-tAtGet(op,n)>RUST_DAYS*864e5;
+const rustCls=(kind,n)=>isRusty(kind.startsWith('d')?'d':'x',n)?' rust':'';
+function rustList(){const o=[];['x','d'].forEach(op=>ALLT.forEach(n=>{if(isRusty(op,n))o.push([op,n]);}));return o;}
+const rankOf=(base,t)=>{const th=REC_T[base];return !th||!t?0:t<=th[0]?3:t<=th[1]?2:1;};
+const recE=(kind,n)=>{const t=((S.rec||{})[kind]||{})[n];return t?RANK_E[rankOf(kind.replace(/^d/,''),t)]:'🏅';};
+let gameT0=0;
+// se llama al principio de finishGame: oxidación, récords y semana
+function practiceAfter(r){
+  const msgs=[];
+  const st=r.ratio>=.99?3:r.ratio>=.7?2:r.ratio>=.4?1:0;wk().st+=st;
+  const touched=[],m=r.meta||{},o=m.opt||{};
+  if(o&&(o.n||o.ts)&&r.ratio>=.7){const op=(m.kind||'').startsWith('d')||o.op==='d'?'d':'x';(o.ts||[o.n]).forEach(n=>touched.push([op,n]));}
+  (r.touched||[]).forEach(t=>touched.push(t));
+  const back=[];
+  touched.forEach(([op,n])=>{if(isRusty(op,n)&&!back.some(b=>b[0]===op&&b[1]===n))back.push([op,n]);tTouch(op,n);});
+  if(back.length){r.coins+=5*back.length;msgs.push(`✨ ${back.map(([op,n])=>(op==='d'?'÷':'×')+n).join(', ')} ${back.length>1?'vuelven':'vuelve'} a brillar · +${5*back.length} 🪙`);}
+  if(o.mode==='table'&&r.ratio>=.99&&gameT0&&m.kind){
+    const base=m.kind.replace(/^d/,'');
+    if(REC_T[base]){
+      const t=Math.max(1,Math.round((Date.now()-gameT0)/1000)),rk=S.rec[m.kind]=S.rec[m.kind]||{},old=rk[o.n],rank=rankOf(base,t);
+      if(!old||t<old){
+        rk[o.n]=t;let b=old?5:0;if(rank===3&&rankOf(base,old)<3)b+=10;r.coins+=b;
+        msgs.push(`⏱️ ${old?'¡Nuevo récord!':'Tu tiempo'}: ${t} s ${RANK_E[rank]}${old?` (antes ${old} s)`:''}${b?` · +${b} 🪙`:''}${rank<3?` · 🥇 en ${REC_T[base][0]} s`:''}`);
+      }else msgs.push(`⏱️ ${t} s · Tu récord: ${old} s ${RANK_E[rankOf(base,old)]}`);
+    }
+  }
+  return msgs.length?msgs.join('<br>'):null;
+}
+
+/* --- Equipación de fútbol (se gana en las tandas de penaltis) --- */
+const KIT_COLS=['#e53935','#1e88e5','#2e7d32','#fdd835','#8e24aa','#263238','#ff8f00','#ffffff'];
+function kitSVG(){
+  const c=(S.kit&&S.kit.col)||KIT_COLS[0],num=(S.kit&&S.kit.num)||10,light=c==='#ffffff'||c==='#fdd835',tc=light?'#2b2340':'#fff';
+  const nm=esc((S.name||'').toUpperCase().slice(0,10));
+  return`<g class="kit"><path d="M38 146 L162 146 A70 64 0 0 1 100 181 A70 64 0 0 1 38 146 Z" fill="${c}" stroke="#2b2340" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M44 152 L156 152" stroke="${light?'#e53935':'#fff'}" stroke-width="3" opacity=".8"/>
+    <text x="100" y="161" text-anchor="middle" font-size="8.5" font-weight="700" fill="${tc}" letter-spacing=".8">${nm}</text>
+    <text x="100" y="176.5" text-anchor="middle" font-size="14.5" font-weight="800" fill="${tc}" stroke="${light?'none':'#2b2340'}" stroke-width=".8">${num}</text></g>`;
+}
+const GLOVE=(x,y)=>`<g><circle cx="${x}" cy="${y}" r="12" fill="#7cd858" stroke="#2b2340" stroke-width="2.5"/><path d="M${x-8} ${y-3} L${x+8} ${y-3}" stroke="#fff" stroke-width="3"/><rect x="${x-9}" y="${y+7}" width="18" height="7" rx="3" fill="#fff" stroke="#2b2340" stroke-width="2"/></g>`;
+const glovesSVG=()=>GLOVE(28,150)+GLOVE(172,150);
+const BOOT=x=>`<g><path d="M${x-23} ${y0b} Q${x-24} ${y0b-12} ${x-6} ${y0b-11} L${x+8} ${y0b-11} Q${x+24} ${y0b-9} ${x+23} ${y0b} Z" fill="#263238" stroke="#111" stroke-width="2" stroke-linejoin="round"/><path d="M${x-8} ${y0b-10} l-4 9 M${x-1} ${y0b-10} l-4 9 M${x+6} ${y0b-10} l-4 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="${x-14}" cy="${y0b+2}" r="1.8" fill="#9e9e9e"/><circle cx="${x}" cy="${y0b+2}" r="1.8" fill="#9e9e9e"/><circle cx="${x+14}" cy="${y0b+2}" r="1.8" fill="#9e9e9e"/></g>`;
+const y0b=191;
+const bootsSVG=()=>BOOT(72)+BOOT(128);
+function ballSVG(cx,cy,r,hop){
+  const pts=a=>[0,1,2,3,4].map(i=>{const t=a+i*1.2566;return`${(cx+Math.cos(t)*r*.42).toFixed(1)},${(cy+Math.sin(t)*r*.42).toFixed(1)}`;}).join(' ');
+  const spokes=[0,1,2,3,4].map(i=>{const t=-1.5708+i*1.2566,x1=cx+Math.cos(t)*r*.42,y1=cy+Math.sin(t)*r*.42,x2=cx+Math.cos(t)*r*.95,y2=cy+Math.sin(t)*r*.95;return`M${x1.toFixed(1)} ${y1.toFixed(1)} L${x2.toFixed(1)} ${y2.toFixed(1)}`;}).join(' ');
+  return`<g${hop?' class="pal-hop"':''}><circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff" stroke="#2b2340" stroke-width="2.2"/><polygon points="${pts(-1.5708)}" fill="#2b2340"/><path d="${spokes}" stroke="#2b2340" stroke-width="1.6"/></g>`;
+}
+const FUT_ACC=[
+  {id:'camiseta',slot:'shirt',name:'Camiseta',price:0,wins:1,vb:'20 108 160 80',svg:()=>kitSVG()},
+  {id:'guantes',slot:'gloves',name:'Guantes de portero',price:0,wins:2,vb:'10 134 180 34',svg:()=>glovesSVG()},
+  {id:'botas',slot:'boots',name:'Botas de fútbol',price:0,wins:3,vb:'44 176 112 22',svg:()=>bootsSVG()},
+  {id:'balon',slot:'ball',name:'Balón',price:0,wins:5,vb:'140 170 32 32',svg:()=>ballSVG(156,186,13,true)}
+];
+FUT_ACC.forEach(a=>{a.ok=()=>(S.fut&&S.fut.wins||0)>=a.wins;a.lock=`Gana ${a.wins} ${a.wins===1?'tanda':'tandas'} de penaltis`;});
+
+/* --- Rival (para penaltis) --- */
+function rivalSVG(keeper){
+  return`<svg viewBox="0 0 200 200"><ellipse cx="100" cy="190" rx="54" ry="7" fill="rgba(0,0,0,.18)"/>
+    <circle cx="52" cy="66" r="19" fill="#e53935"/><circle cx="148" cy="66" r="19" fill="#e53935"/>
+    <ellipse cx="34" cy="134" rx="12" ry="19" fill="#b71c1c" transform="rotate(20 34 134)"/><ellipse cx="166" cy="134" rx="12" ry="19" fill="#b71c1c" transform="rotate(-20 166 134)"/>
+    <ellipse cx="72" cy="181" rx="21" ry="10" fill="#212121"/><ellipse cx="128" cy="181" rx="21" ry="10" fill="#212121"/>
+    <ellipse cx="100" cy="117" rx="70" ry="64" fill="#ef5350"/><ellipse cx="100" cy="156" rx="40" ry="21" fill="#ffcdd2"/>
+    <path d="M34 80 Q100 62 166 80 L164 92 Q100 74 36 92 Z" fill="#212121"/><path d="M38 86 Q100 69 162 86" stroke="#fff" stroke-width="2.5" fill="none"/>
+    <circle cx="78" cy="104" r="12" fill="#fff"/><circle cx="122" cy="104" r="12" fill="#fff"/><circle cx="80" cy="106" r="6" fill="#2b2340"/><circle cx="120" cy="106" r="6" fill="#2b2340"/>
+    <path d="M64 92 L90 98 M136 92 L110 98" stroke="#2b2340" stroke-width="4" stroke-linecap="round"/>
+    <path d="M84 130 Q100 140 116 128" stroke="#2b2340" stroke-width="4" fill="none" stroke-linecap="round"/>
+    ${keeper?GLOVE(28,150).replace('#7cd858','#fff176')+GLOVE(172,150).replace('#7cd858','#fff176'):''}</svg>`;
+}
+function petMini(){const c=cleanClone();c.setAttribute('viewBox','0 0 200 200');c.classList.add('mini');return c.outerHTML;}
+
+/* --- Sonidos del estadio --- */
+function sfxW(n){try{ensureAudio();if(!actx||!S.sound)return;
+  if(n==='whistle'){[0,.09,.18].forEach(a=>tone(2600,.07,{type:'square',vol:.05,at:a}));tone(2600,.35,{type:'square',vol:.05,at:.3});}
+  else if(n==='kick'){tone(110,.12,{type:'sine',vol:.3,to:60});noise(.06,{freq:900,vol:.2});}
+  else if(n==='cheer'){noise(1.4,{freq:1300,vol:.16,q:.6});noise(1.2,{freq:700,vol:.12,q:.5,at:.1});[0,.15,.3].forEach((a,i)=>tone(660+i*110,.18,{type:'triangle',vol:.06,at:a}));}
+  else if(n==='aww'){tone(320,.7,{type:'sawtooth',vol:.05,to:190});noise(.8,{freq:500,vol:.08,q:.6});}
+  else if(n==='net'){noise(.25,{freq:400,vol:.18,type:'lowpass'});}
+  else if(n==='swish'){noise(.3,{freq:5000,vol:.12,type:'highpass'});}
+  else if(n==='clonk'){tone(180,.2,{type:'square',vol:.08,to:120});tone(240,.15,{type:'triangle',vol:.06,at:.05});}
+  else if(n==='buzzer'){tone(150,.9,{type:'sawtooth',vol:.12});}
+}catch(e){}}
+
+/* --- Elegir operación (× · ÷ · mezcla) en los juegos del estadio --- */
+function fOpSeg(op){return`<div class="seg opseg" id="fOp"><button data-op="x" class="${op==='x'?'on':''}">✖️ Multiplicar</button><button data-op="d" class="${op==='d'?'on':''}">➗ Dividir${divOpen()?'':' 🔒'}</button><button data-op="m" class="${op==='m'?'on':''}">🔀 Mezcla${divOpen()?'':' 🔒'}</button></div>`;}
+function bindFOp(cur,set){$$('#fOp button').forEach(b=>b.onclick=()=>{const o=b.dataset.op;
+  if(o!=='x'&&!divOpen()){sfx('bad');toast('🔒 Las divisiones se desbloquean con el diploma de multiplicar 📜');return;}
+  if(o===cur)return;sfx('click');S.fOp=o;save();set(o);});}
+const fOpNow=()=>divOpen()&&(S.fOp==='d'||S.fOp==='m')?S.fOp:'x';
+function fFact(op){
+  const o=op==='m'?(Math.random()<.5?'x':'d'):op;
+  const wkeys=Object.keys(S.mistakes||{}).filter(k=>k.startsWith(o==='d'?'d:':'t:'));
+  let n,k;
+  if(wkeys.length&&Math.random()<.3){const m=pick(wkeys).slice(2).split('x');n=+m[0];k=+m[1];}
+  else{n=rnd(2,9);k=rnd(1,10);}
+  return{o,n,k,a:OPS[o].a(n,k),q:OPS[o].q(n,k),key:OPS[o].key(n,k)};
+}
+function nineOpts(f){
+  const a=f.a;let c=[];
+  if(f.o==='d'){c=[1,2,3,4,5,6,7,8,9,10].filter(v=>v!==a).sort((x,y)=>Math.abs(x-a)-Math.abs(y-a)).slice(0,8);}
+  else{const n=f.n,k=f.k;
+    for(const v of shuffle([n*(k+1),n*(k-1),(n+1)*k,(n-1)*k,a+1,a-1,a+2,a-2,a+10,a-10,a+n,a-n,(n+2)*k,n*(k+2),a+5,a-5]))if(v>0&&v!==a&&v<=100&&!c.includes(v))c.push(v);
+    let g=0;while(c.length<8&&g++<300){const v=rnd(Math.max(1,a-20),a+20);if(v!==a&&!c.includes(v))c.push(v);}c=c.slice(0,8);}
+  return shuffle([a,...c]);
+}
+
+/* --- Sala del estadio --- */
+const stadiumOpen=()=>allMaster()&&allMasterD();
+function trophyDeco(){const w=(S.fut&&S.fut.wins)||0;if(!w)return[];return[['🏆',80,38,Math.min(92,30+w*4)]];}
+function openStadiumLocked(){
+  sfx('bad');
+  openPanel(`<div class="ghead"><b>🏟️ El estadio</b><button class="x" data-x>✕</button></div>
+    <div class="stlock">🔒</div>
+    <div class="sub" style="text-align:center;font-size:18px">El estadio se abre cuando consigas el <b>diploma completo</b>: las 8 tablas maestras de <b>multiplicar</b> y las 8 de <b>dividir</b>, en los 4 juegos.</div>
+    <div class="sub" style="text-align:center;margin:4px 0"><b>✖️ Multiplicar</b> · ${nMasters()}/8</div>
+    <div class="mrow">${ALLT.map(n=>`<div class="${isMaster(n)?'ok':''}">×${n}<small>${isMaster(n)?'🏆':nMasterG(n)+'/4'}</small></div>`).join('')}</div>
+    <div class="sub" style="text-align:center;margin:10px 0 4px"><b>➗ Dividir</b> · ${nMastersD()}/8${allMaster()?'':' 🔒'}</div>
+    <div class="mrow">${ALLT.map(n=>`<div class="${isMasterD(n)?'ok':''}">÷${n}<small>${isMasterD(n)?'🔮':allMaster()?nMasterGD(n)+'/4':'🔒'}</small></div>`).join('')}</div>
+    <div class="sub" style="text-align:center">Dentro te esperan ⚽ los penaltis, 🏀 el baloncesto, la equipación de fútbol y mucho más.</div>
+    <div class="btns"><button class="btn primary" data-x>¡A por ello!</button></div>`);
+}
+const STADIUM_GAMES=[
+  {id:'penalty',e:'⚽',name:'Penaltis',bg:'#2e7d32',open:()=>openPenalty()},
+  {id:'basket',e:'🏀',name:'Baloncesto',bg:'#ef6c00',open:()=>openBasket()},
+  {id:'kit',e:'🎽',name:'Equipación',bg:'#c62828',open:()=>openShop('futbol')}
+];
+
+/* ====================== ⚽ PENALTIS ====================== */
+function openPenalty(){
+  let op=fOpNow();
+  const draw=()=>{
+    const f=S.fut,nextKit=FUT_ACC.find(a=>!a.ok());
+    openPanel(`<div class="ghead"><b>⚽ Penaltis</b><button class="x" data-x>✕</button></div>
+      ${fOpSeg(op)}
+      <div class="sub">Tanda de <b>5 penaltis</b> contra el rival. Cuando él chuta, tú eres el portero 🧤: <b>toca el resultado correcto</b> y pararás el balón. Cuando chutas tú ⚽, toca el resultado correcto para marcar. Si hay empate… ¡muerte súbita! Cada ronda hay menos tiempo.</div>
+      <div class="fstats"><div><b>${f.wins}</b>🏆 tandas ganadas</div><div><b>${f.saves}</b>🧤 paradas</div><div><b>${f.goals}</b>⚽ goles</div></div>
+      <div class="pickinfo">${nextKit?`🎽 Próximo premio: <b>${nextKit.name}</b> (${nextKit.lock.toLowerCase()})`:'🎽 ¡Tienes toda la equipación! Póntela en el Armario'}</div>
+      <div class="btns"><button class="btn primary" id="pnGo">▶ Empezar la tanda</button></div>`,'',()=>closePanel());
+    bindFOp(op,o=>{op=o;draw();});
+    $('#pnGo').onclick=()=>{sfx('pop');tryPlay(()=>startPenalty(op));};
+  };
+  draw();
+}
+function startPenalty(op){
+  const g={id:'penalty',op,turn:'keep',you:0,riv:0,ys:[],rs:[],hits:0,errors:0,saves:0,goals:0,coins:0,lock:true,running:true,raf:0,f:null,opts:null,t0:0,lim:6,shot:0,touched:[]};game=g;
+  const zones=[0,1,2,3,4,5,6,7,8];
+  openPanel(`<div class="ghead"><b>⚽ Penaltis</b><span id="pnSc"></span><button class="x" data-x>✕</button></div>
+    <div class="pnq" id="pnQ"></div>
+    <div class="pnf" id="pnF">
+      <div class="pnstands"></div>
+      <div class="pngoal" id="pnG">${zones.map(i=>`<button class="pz" data-z="${i}"><span></span></button>`).join('')}<div class="pnkeep" id="pnK"></div></div>
+      <div class="pnspot"></div>
+      <div class="pnkick" id="pnKick"></div>
+      <div class="pnball" id="pnB">${'<svg viewBox="0 0 40 40">'+ballSVG(20,20,18,false)+'</svg>'}</div>
+      <div class="pnmsg" id="pnM"></div>
+      <div class="pntimer"><i id="pnT"></i></div>
+    </div>
+    <div class="pndots" id="pnD"></div>`,'game',()=>{stop();game=null;openPenalty();});
+  const F=$('#pnF'),G=$('#pnG'),K=$('#pnK'),KI=$('#pnKick'),B=$('#pnB'),M=$('#pnM');
+  const stop=()=>{g.running=false;cancelAnimationFrame(g.raf);};
+  const score=()=>{const el=$('#pnSc');if(el)el.textContent=`Tú ${g.you} – ${g.riv} Rival`;
+    const row=(arr,mine)=>{const n=Math.max(5,arr.length);let h='';for(let i=0;i<n;i++){const v=arr[i];h+=`<i class="${v===undefined?'':(v?(mine?'g':'r'):(mine?'r':'g'))}">${v===undefined?'':(v?'⚽':'✕')}</i>`;}return h;};
+    $('#pnD').innerHTML=`<div><b>Tú ⚽</b>${row(g.ys,true)}</div><div><b>Rival ⚽</b>${row(g.rs,false)}</div>`;};
+  const msg=(t,cls)=>{M.textContent=t;M.className='pnmsg show '+(cls||'');};
+  const zoneCenter=i=>{const gr=G.getBoundingClientRect(),fr=F.getBoundingClientRect(),c=i%3,r=Math.floor(i/3);
+    return{x:gr.left-fr.left+gr.width*(c+.5)/3,y:gr.top-fr.top+gr.height*(r+.5)/3,c,r,gx:gr.width*(c+.5)/3,gy:gr.height*(r+.5)/3,gw:gr.width,gh:gr.height};};
+  function resetScene(){
+    K.style.transition='none';K.style.transform='translateX(-50%)';
+    B.style.transition='none';B.style.left='50%';B.style.top='82%';B.style.transform='translate(-50%,-50%) scale(1)';B.style.opacity=1;
+    KI.style.transition='none';KI.style.left='26%';KI.style.top='76%';
+    G.classList.remove('shake');M.className='pnmsg';
+    $$('#pnG .pz').forEach(z=>z.className='pz');
+    void F.offsetWidth;
+    K.style.transition='';B.style.transition='';KI.style.transition='';
+  }
+  function decided(){const ys=g.ys.length,rs=g.rs.length;
+    if(ys<=5&&rs<=5){if(g.you+(5-ys)<g.riv||g.riv+(5-rs)<g.you)return true;if(ys===5&&rs===5)return g.you!==g.riv;return false;}
+    return ys===rs&&(g.you!==g.riv||ys>=15);}
+  function next(){
+    if(game!==g)return;
+    if(decided()){end();return;}
+    g.turn=g.rs.length<=g.ys.length?'keep':'shoot';
+    resetScene();
+    const keep=g.turn==='keep';
+    K.innerHTML=keep?petMini():rivalSVG(true);
+    KI.innerHTML=keep?rivalSVG(false):petMini();
+    g.f=fFact(g.op);g.opts=nineOpts(g.f);
+    $$('#pnG .pz').forEach((z,i)=>{z.querySelector('span').textContent=g.opts[i];});
+    $('#pnQ').innerHTML=`<small>${keep?'🧤 ¡Para el penalti! Toca el resultado':'⚽ ¡Te toca chutar! Toca el resultado para marcar'}</small>${g.f.q} = <span>?</span>`;
+    const round=Math.min(g.ys.length,g.rs.length);
+    g.lim=Math.max(2.8,6.5-round*.4);
+    score();sfxW('whistle');
+    setTimeout(()=>{if(game!==g)return;g.lock=false;g.t0=performance.now();g.raf=requestAnimationFrame(tickT);},450);
+  }
+  function tickT(){
+    if(game!==g||g.lock)return;
+    const left=1-(performance.now()-g.t0)/(g.lim*1000),bar=$('#pnT');if(!bar)return;
+    bar.style.width=Math.max(0,left*100)+'%';bar.style.background=left<.34?'var(--bad)':left<.67?'#ffb547':'var(--ok)';
+    KI.style.left=(26+(1-left)*14)+'%';KI.style.top=(76+(1-left)*5)+'%';
+    if(left<=0){choose(-1);return;}
+    g.raf=requestAnimationFrame(tickT);
+  }
+  function dive(i){
+    const z=zoneCenter(i),kr=K.getBoundingClientRect(),gr=G.getBoundingClientRect();
+    const kx=kr.left-gr.left+kr.width/2,ky=kr.top-gr.top+kr.height/2;
+    const dx=z.gx-kx,dy=z.gy-ky,rot=z.c===0?-55:z.c===2?55:0;
+    K.style.transform=`translateX(-50%) translate(${dx.toFixed(0)}px,${dy.toFixed(0)}px) rotate(${rot}deg)`;
+  }
+  function shootTo(i,save,out){
+    sfxW('kick');
+    const z=zoneCenter(i);
+    B.style.left=(out?z.x+(z.c===1?0:z.c===0?-30:30):z.x)+'px';B.style.top=(out?z.y-z.gh*.75:z.y)+'px';
+    B.style.transform=`translate(-50%,-50%) scale(${out?.5:.62}) rotate(540deg)`;
+    if(save)setTimeout(()=>{if(game!==g)return;B.style.transition='left .5s ease-out,top .5s ease-in,transform .5s,opacity .5s';const side=z.c===2?1:-1;B.style.left=(z.x+side*70)+'px';B.style.top=(z.y+60)+'px';B.style.opacity=.2;},420);
+    else if(!out)setTimeout(()=>{if(game!==g)return;G.classList.add('shake');sfxW('net');},400);
+  }
+  function choose(i){
+    if(g.lock||game!==g)return;g.lock=true;cancelAnimationFrame(g.raf);ensureAudio();
+    const f=g.f,ci=g.opts.indexOf(f.a),ok=i===ci,zs=$$('#pnG .pz');
+    if(i>=0)zs[i].classList.add(ok?'ok':'bad');
+    if(!ok)zs[ci].classList.add('ans');
+    if(ok){g.hits++;hit(f.key);g.touched.push([f.o,f.n]);}else{g.errors++;miss(f.key);}
+    if(g.turn==='keep'){
+      dive(i>=0?i:pick([0,1,2,3,5,6,7,8].filter(x=>x!==ci)));
+      setTimeout(()=>shootTo(ci,ok,false),120);
+      g.rs.push(!ok);if(!ok)g.riv++;else{g.saves++;g.coins+=2;}
+      setTimeout(()=>{if(game!==g)return;if(ok){msg('¡PARADÓN! 🧤','good');sfxW('cheer');}else{msg(i<0?'⏰ ¡Gol del rival!':'¡Gol del rival!','bad');sfxW('aww');}score();},520);
+    }else{
+      const target=i>=0?i:ci;
+      if(ok){dive(pick(zones.filter(x=>x!==target)));}else if(i>=0)dive(i);
+      setTimeout(()=>shootTo(target,!ok&&i>=0,i<0),120);
+      g.ys.push(ok);if(ok){g.you++;g.goals++;g.coins+=3;}
+      setTimeout(()=>{if(game!==g)return;if(ok){msg('¡GOOOL! ⚽','good');sfxW('cheer');}else{msg(i<0?'⏰ ¡Fuera!':'¡Te la ha parado!','bad');sfxW('aww');}score();},520);
+    }
+    if(!ok)setTimeout(()=>{if(game!==g)return;$('#pnQ').innerHTML=`<small>La respuesta era…</small>${f.q} = <b class="pnans">${f.a}</b>`;},700);
+    setTimeout(next,ok?1700:2600);
+  }
+  $$('#pnG .pz').forEach((z,i)=>z.onclick=()=>choose(i));
+  function end(){
+    stop();const win=g.you>g.riv,draw=g.you===g.riv;
+    const before=FUT_ACC.filter(a=>a.ok()).length;
+    S.fut.played++;S.fut.saves+=g.saves;S.fut.goals+=g.goals;if(win)S.fut.wins++;
+    const newKit=FUT_ACC.filter(a=>a.ok()).slice(before);
+    let badge=win?`🏆 ¡Has ganado la tanda ${g.you}–${g.riv}!`:null;
+    if(newKit.length)badge=(badge?badge+'<br>':'')+`🎽 ¡Premio nuevo: ${newKit.map(a=>a.name).join(' y ')}! Póntelo en Armario › ⚽ Fútbol`;
+    if(win){fanfare(newKit.length>0);setTimeout(()=>sfxW('cheer'),300);}
+    finishGame({title:'⚽ Tanda de penaltis',ratio:g.hits/Math.max(1,g.hits+g.errors),
+      detail:`Resultado: <b>Tú ${g.you} – ${g.riv} Rival</b> · 🧤 Paradas: ${g.saves} · ⚽ Goles: ${g.goals}`,
+      note:win?'':draw?'¡Empate! Casi lo tienes.':'¡Casi! Las que fallaste se guardan en Repaso.',
+      coins:g.coins+(win?25:0),fun:18,xp:12+(win?12:0),badge,touched:g.touched,meta:{kind:'penalty',opt:{mode:'fut'}},
+      again:()=>startPenalty(op),menu:openPenalty,menuLabel:'📋 Menú'});
+    if(win&&room==='estadio')setTimeout(()=>goRoom('estadio',true),60);
+  }
+  score();next();
+}
+
+/* ====================== 🏀 BALONCESTO: 60 segundos de tiros libres ====================== */
+function openBasket(){
+  let op=fOpNow();
+  const draw=()=>{
+    openPanel(`<div class="ghead"><b>🏀 Baloncesto</b><button class="x" data-x>✕</button></div>
+      ${fOpSeg(op)}
+      <div class="sub">Tienes <b>60 segundos</b>. Sale una operación y abajo cuatro balones: <b>toca el balón con el resultado</b> para encestar (+2). Con <b>3 seguidas</b> te pones 🔥 en racha y cada canasta vale 3. ¡Bate tu récord!</div>
+      <div class="fstats"><div><b>${S.bball.best}</b>🏅 récord</div><div><b>${S.bball.games}</b>🏀 partidos</div></div>
+      <div class="btns"><button class="btn primary" id="bkGo">▶ ¡A jugar!</button></div>`,'',()=>closePanel());
+    bindFOp(op,o=>{op=o;draw();});
+    $('#bkGo').onclick=()=>{sfx('pop');tryPlay(()=>startBasket(op));};
+  };
+  draw();
+}
+function startBasket(op){
+  const DUR=60;
+  const g={id:'basket',op,score:0,streak:0,hits:0,errors:0,lock:true,running:true,t0:0,raf:0,f:null,opts:null,touched:[]};game=g;
+  openPanel(`<div class="ghead"><b>🏀 Baloncesto</b><span id="bkInfo"></span><button class="x" data-x>✕</button></div>
+    <div class="bkc" id="bkC">
+      <div class="bkboard"><div class="bksq"></div><div class="bkrim" id="bkRim"></div><div class="bknet" id="bkNet"></div></div>
+      <div class="bkq" id="bkQ"></div>
+      <div class="bkfire" id="bkFire">🔥 ¡En racha! ×3</div>
+      <div class="bkballs" id="bkBalls">${[0,1,2,3].map(i=>`<button class="bkb" data-i="${i}"><span></span></button>`).join('')}</div>
+      <div class="bkmsg" id="bkM"></div>
+    </div>
+    <div class="tbar"><i id="bkT"></i></div>`,'game',()=>{stop();game=null;openBasket();});
+  const C=$('#bkC');
+  const stop=()=>{g.running=false;cancelAnimationFrame(g.raf);$$('.bkfly').forEach(x=>x.remove());};
+  const info=()=>{const el=$('#bkInfo');if(!el)return;const left=Math.max(0,DUR-(performance.now()-g.t0)/1000);el.textContent=`⏱️${Math.ceil(left)} · ${g.score} pts`;};
+  function q(){
+    if(game!==g)return;
+    g.f=fFact(g.op);const d=g.f.o==='d'?shuffle([1,2,3,4,5,6,7,8,9,10].filter(v=>v!==g.f.a)).slice(0,3):distractOp(g.f.o,g.f.n,g.f.k);
+    g.opts=shuffle([g.f.a,...d]);
+    $('#bkQ').innerHTML=`${g.f.q} = <span>?</span>`;
+    $$('#bkBalls .bkb').forEach((b,i)=>{b.className='bkb';b.querySelector('span').textContent=g.opts[i];});
+    $('#bkFire').classList.toggle('on',g.streak>=3);
+    g.lock=false;
+  }
+  function timer(){
+    if(game!==g||!g.running)return;
+    const left=1-(performance.now()-g.t0)/(DUR*1000),bar=$('#bkT');
+    if(bar){bar.style.width=Math.max(0,left*100)+'%';bar.style.background=left<.2?'var(--bad)':left<.5?'#ffb547':'var(--ok)';}
+    info();
+    if(left<=0){g.lock=true;sfxW('buzzer');setTimeout(end,700);return;}
+    g.raf=requestAnimationFrame(timer);
+  }
+  function fly(btn,ok){
+    const cr=C.getBoundingClientRect(),br=btn.getBoundingClientRect(),rr=$('#bkRim').getBoundingClientRect();
+    const s={x:br.left-cr.left+br.width/2,y:br.top-cr.top+br.height/2},e={x:rr.left-cr.left+rr.width/2+(ok?0:rr.width*.42),y:rr.top-cr.top+(ok?4:0)};
+    const peak={x:(s.x+e.x)/2,y:Math.min(s.y,e.y)-cr.height*.28};
+    const el=document.createElement('div');el.className='bkfly';el.textContent='🏀';C.appendChild(el);
+    const T=650,t0=performance.now();
+    const step=t=>{if(!el.isConnected)return;let u=Math.min(1,(t-t0)/T);
+      const x=(1-u)*(1-u)*s.x+2*(1-u)*u*peak.x+u*u*e.x,y=(1-u)*(1-u)*s.y+2*(1-u)*u*peak.y+u*u*e.y;
+      el.style.left=x+'px';el.style.top=y+'px';el.style.transform=`translate(-50%,-50%) scale(${1-.4*u}) rotate(${u*400}deg)`;
+      if(u<1){requestAnimationFrame(step);return;}
+      if(ok){sfxW('swish');$('#bkNet').classList.remove('swish');void C.offsetWidth;$('#bkNet').classList.add('swish');
+        el.style.transition='top .35s ease-in,opacity .35s';el.style.top=(e.y+46)+'px';el.style.opacity=0;}
+      else{sfxW('clonk');el.style.transition='left .5s ease-out,top .5s ease-in,opacity .5s';el.style.left=(e.x+60)+'px';el.style.top=(e.y+90)+'px';el.style.opacity=0;}
+      setTimeout(()=>el.remove(),600);};
+    requestAnimationFrame(step);
+  }
+  const bkMsg=(t,c)=>{const m=$('#bkM');if(!m)return;m.textContent=t;m.className='bkmsg show '+c;setTimeout(()=>{if(m)m.className='bkmsg';},700);};
+  $$('#bkBalls .bkb').forEach((b,i)=>b.onclick=()=>{
+    if(g.lock||game!==g)return;g.lock=true;ensureAudio();
+    const ok=g.opts[i]===g.f.a;b.classList.add(ok?'ok':'bad');b.querySelector('span').textContent='';
+    fly(b,ok);
+    if(ok){g.hits++;hit(g.f.key);g.touched.push([g.f.o,g.f.n]);const pts=g.streak>=3?3:2;g.streak++;g.score+=pts;
+      setTimeout(()=>{bkMsg(`+${pts}`,'good');if(g.streak===3){sfx('level');}info();},650);
+      setTimeout(q,900);}
+    else{g.errors++;miss(g.f.key);g.streak=0;$('#bkFire').classList.remove('on');
+      const ci=g.opts.indexOf(g.f.a);$$('#bkBalls .bkb')[ci].classList.add('ans');
+      setTimeout(()=>bkMsg('¡Clonk!','bad'),650);
+      $('#bkQ').innerHTML=`${g.f.q} = <b class="pnans">${g.f.a}</b>`;
+      setTimeout(q,1500);}
+  });
+  function end(){
+    stop();const old=S.bball.best,rec=g.score>old;
+    S.bball.games++;if(rec)S.bball.best=g.score;
+    const coins=Math.ceil(g.score/2)+(rec&&old>0?10:0);
+    if(rec&&old>0)fanfare(false);
+    finishGame({title:'🏀 Baloncesto · 60 s',ratio:g.hits/Math.max(1,g.hits+g.errors),
+      detail:`Puntos: <b>${g.score}</b> · Canastas: ${g.hits} · Fallos: ${g.errors}`,
+      badge:rec?(old>0?`🏅 ¡Nuevo récord: ${g.score} puntos! (antes ${old}) +10 🪙`:`🏅 Tu primer récord: ${g.score} puntos`):null,
+      note:rec?'':`Tu récord: ${old} puntos`,
+      coins,fun:18,xp:10+Math.floor(g.score/4),touched:g.touched,meta:{kind:'basket',opt:{mode:'fut'}},
+      again:()=>startBasket(op),menu:openBasket,menuLabel:'📋 Menú'});
+  }
+  q();g.t0=performance.now();g.raf=requestAnimationFrame(timer);
+}
+
+/* ====================== 🏆 LIGA DE LA CLASE + RETO SEMANAL ====================== */
+let ligaCache=null;
+async function ligaFetch(){
+  if(!cloudLinked())return null;
+  try{const r=await cloudCall({a:'liga',u:CC.u,k:CC.k},false,15000);
+    if(r&&r.ok){ligaCache=r;
+      if(r.reto&&r.reto.meta>0&&r.reto.st>=r.reto.meta&&S.retoWon!==r.semana){S.retoWon=r.semana;earn(30);save();updateUI();
+        setTimeout(()=>{toast('🎉 ¡Reto de la clase conseguido! +30 🪙 para todos');sfx('badge');},400);}
+    }
+    return r;
+  }catch(e){return null;}
+}
+function openLiga(){
+  openPanel(`<div class="ghead"><b>🏆 Liga de la clase</b><button class="x" data-x>✕</button></div><div id="lgBody"><div class="sub" style="text-align:center">Cargando la liga… ⏳</div></div>`);
+  ligaFetch().then(r=>{
+    const box=$('#lgBody');if(!box)return;
+    if(!r){box.innerHTML='<div class="sub" style="text-align:center">☁️ No hay conexión. Inténtalo más tarde.</div>';return;}
+    if(!r.ok){box.innerHTML=`<div class="sub" style="text-align:center">${r.err==='bad'?'🛠️ La liga todavía no está activada. Tu profe tiene que actualizar el servidor.':'☁️ No se pudo cargar la liga.'}</div>`;return;}
+    if(!r.grupo){box.innerHTML='<div class="sub" style="text-align:center">Tu cuenta no tiene grupo, así que no está en ninguna liga.</div>';return;}
+    const rt=r.reto||{st:0,meta:0},pc=rt.meta?Math.min(100,Math.round(rt.st/rt.meta*100)):0,medal=['🥇','🥈','🥉'];
+    box.innerHTML=`<div class="sub">Grupo <b>${esc(r.grupo)}</b> · semana del ${esc(String(r.semana||'').split('-').reverse().slice(0,2).join('/'))}. Gana puntos (XP) jugando: la liga se reinicia cada lunes.</div>
+      <div class="lgreto"><b>🤝 Reto de la clase:</b> entre todos, <b>${rt.meta} ⭐</b> esta semana<div class="lgbar"><i style="width:${pc}%"></i></div><small>${rt.st} / ${rt.meta} ⭐ ${rt.st>=rt.meta&&rt.meta?'· ✅ ¡Conseguido! +30 🪙 para todos':'· Premio: +30 🪙 para todos'}</small></div>
+      <ol class="lglist">${(r.top||[]).map((p,i)=>`<li class="${p.me?'me':''}"><span class="lgp">${medal[i]||(i+1)+'.'}</span><span class="lgn">${esc(p.n)}${p.me?' (tú)':''}</span><span class="lgx">${p.p} XP</span></li>`).join('')}</ol>
+      ${r.pos&&r.pos>(r.top||[]).length?`<div class="lgme">Tu puesto: <b>${r.pos}º</b> de ${r.total} · ${r.myp} XP</div>`:''}
+      <div class="sub" style="text-align:center">Solo se ven los nombres de pila de tu grupo.</div>`;
+  });
+}
+
+function ligaUI(){try{const c=$('#ligaChip');if(c)c.classList.toggle('show',cloudLinked()&&!CLOUD_AUTO&&(room==='juegos'||room==='estadio'));}catch(e){}}
+$('#ligaChip').onclick=()=>{ensureAudio();sfx('pop');openLiga();};
+
 /* ---------- Gracias de la mascota: gestos según su estado ---------- */
 let quirkAt=14,quirkLast='',quirkBusy=false;
 const qFx=(cls,ms)=>{const p=$('#petFx');p.classList.remove(cls);void p.offsetWidth;p.classList.add(cls);setTimeout(()=>p.classList.remove(cls),ms);};
@@ -2578,7 +3095,7 @@ function tick(){
     else{const k=NEEDS.reduce((a,b)=>S.needs[a]<=S.needs[b]?a:b);
       if(S.needs[k]<35)say(NEED_MSG[k]);
       else if(isEvening()&&S.needs.energia<70&&Math.random()<.5)say('Es tarde… ¿me llevas a dormir? 🌙');
-      else if(Math.random()<.4)say(pick(HAPPY_LINES));}
+      else{const rl=rustList();if(rl.length&&Math.random()<.5){const[op,n]=pick(rl);say(`🟤 ¡La tabla ${op==='d'?'de dividir entre ':'del '}${n} se está oxidando! ¿La repasamos?`,3600);}else if(Math.random()<.4)say(pick(HAPPY_LINES));}}
   }
   walkCount++;
   if(walkCount>=14&&!busy&&!S.sleeping&&!classMode&&!overlayOpen()&&!tempFace&&!soapOn){walkCount=0;if(Math.random()<.6)walkTo(pick([36,42,50,58,64]));}
@@ -2617,7 +3134,7 @@ let cloudSig=null,cloudBusy=false,cloudErr=false,cloudLast=0,cloudPending=false,
 const cloudLinked=()=>!!(cloudOn&&CC&&CC.u&&CC.k);
 function cloudStore(){try{localStorage.setItem(CK,JSON.stringify(CC));}catch(e){}}
 function progOf(s){let p=(s.level||1)*1000+(s.xp||0);const tg=s.tg||{};for(const g in tg)for(const t in tg[g]){const o=tg[g][t]||{};p+=(o.plays||0)*3+(o.perfect?5:0);}
-  return Math.round(p+((s.owned||[]).length+(s.unlocked||[]).length+(s.achievements||[]).length)*20);}
+  return Math.round(p+((s.owned||[]).length+(s.unlocked||[]).length+(s.achievements||[]).length)*20+((s.fut&&s.fut.wins)||0)*10);}
 function cloudSigOf(){const c=Object.assign({},S);delete c.needs;delete c.last;delete c.sleeping;delete c.sickUntil;return JSON.stringify(c);}
 async function cloudCall(body,keep,ms){
   const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),ms||15000);
@@ -2628,7 +3145,7 @@ const cloudAllowed=()=>!overlayOpen()&&!classMode&&!game&&!busy;
 function cloudAdopt(ro){
   const d=defState();
   S=Object.assign(d,ro,{needs:Object.assign(d.needs,ro.needs||{}),stats:Object.assign(d.stats,ro.stats||{}),streak:Object.assign(d.streak,ro.streak||{})});
-  S.tg=Object.assign({ninja:{},write:{},catch:{},army:{}},S.tg||{});
+  S.tg=Object.assign({ninja:{},write:{},catch:{},army:{}},S.tg||{});ensureNew();
   const mins=Math.min((Date.now()-S.last)/60000,60*24*7);
   if(mins>.1){const e0=S.needs.energia;decay(mins,true);S.needs.energia=clamp(e0+mins*RECOV_H/60,0,100);}
   firstRun=false;save();cloudSig=cloudSigOf();
@@ -2641,7 +3158,7 @@ function godApply(){
   S.mixPerfect=S.mixPerfectD=true;S.celebAll=S.celebHalf=S.celebAllD=S.celebHalfD=true;
   S.unlocked=CHARS.map(c=>c.id);
   [...COLORS.map(c=>'col:'+c.id),...Object.keys(EYES).map(k=>'eye:'+k),...Object.keys(MOUTHS).map(k=>'mou:'+k),...ACCS.map(a=>'acc:'+a.id),...ALLM().map(a=>'acc:'+a.id)].forEach(k=>{if(!S.owned.includes(k))S.owned.push(k);});
-  S.level=Math.max(S.level,10);S.achievements=ACHS.map(a=>a.id);
+  S.level=Math.max(S.level,10);ensureNew();S.fut.wins=Math.max(S.fut.wins,10);S.achievements=ACHS.map(a=>a.id);
   godKeep();save();applyGrow();updateUI();
 }
 // Mientras el modo profe esté activo: monedas y necesidades siempre al máximo
@@ -2662,7 +3179,7 @@ async function cloudSync(o={}){
       const c=Object.assign({},S);let js=JSON.stringify(c);
       if(js.length>45000){delete c.mistakes;js=JSON.stringify(c);}
       body.data=js;body.prog=progOf(S);body.force=!!o.force;
-      body.sum={coins:S.coins,level:S.level,tx:ALLT.filter(isMaster).length,td:ALLT.filter(isMasterD).length};
+      body.sum={coins:S.coins,level:S.level,tx:ALLT.filter(isMaster).length,td:ALLT.filter(isMasterD).length,wk:wk().k,wxp:S.week.xp,wst:S.week.st,fw:S.fut.wins};
     }
     r=await cloudCall(body,o.keep,o.ms);
     cloudErr=false;
@@ -2737,7 +3254,7 @@ function confirmCloudOut(){
     wipeLocal();toast('Has salido de tu cuenta');
   };
 }
-function wipeLocal(){try{localStorage.removeItem(KEY);}catch(e){}S=defState();cloudSig=null;$('#bubbles').innerHTML='';applyLook();applyGrow();goRoom('cocina',true);updateUI();clearTempFace();welcome();}
+function wipeLocal(){try{localStorage.removeItem(KEY);}catch(e){}S=defState();ensureNew();cloudSig=null;$('#bubbles').innerHTML='';applyLook();applyGrow();goRoom('cocina',true);updateUI();clearTempFace();welcome();}
 if(cloudOn){
   setInterval(()=>{if(!cloudLinked()||document.hidden)return;if(cloudPending||cloudSig===null||cloudSigOf()!==cloudSig)cloudSync();},20000);
   document.addEventListener('visibilitychange',()=>{
@@ -2755,7 +3272,9 @@ applyLook();applyGrow();
 goRoom(S.sleeping?'dormitorio':'cocina',true);
 updateUI();refreshFace();blinkLoop();
 if(cloudLinked()&&!firstRun)setTimeout(()=>cloudSync(),1200+Math.random()*2800);
-setInterval(tick,1000);setInterval(musicTick,380);setTimeout(loadFart,1200);
+setInterval(tick,1000);setInterval(musicTick,380);
+setTimeout(()=>{try{ligaUI();if(cloudLinked()&&!CLOUD_AUTO)ligaFetch();}catch(e){}},8000);
+setInterval(()=>{try{if(cloudLinked()&&!CLOUD_AUTO&&!document.hidden)ligaFetch();}catch(e){}},10*60000);setTimeout(loadFart,1200);
 /* ---------- PWA: actualizaciones, splash e instalación ---------- */
 const APP_VERSION=(document.querySelector('meta[name="app-version"]')||{}).content||'0';
 const isNewer=(a,b)=>{const x=a.split('.').map(Number),y=b.split('.').map(Number);for(let i=0;i<Math.max(x.length,y.length);i++){const p=x[i]||0,q=y[i]||0;if(p!==q)return p>q;}return false;};
